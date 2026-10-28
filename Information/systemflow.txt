@@ -1,0 +1,173 @@
+================================================================================
+BIZWOKE REVIEW MANAGEMENT SAAS - COMPLETE SYSTEM FLOW & ROLE ARCHITECTURE
+================================================================================
+
+1. CORE CONCEPT & ROLES (Bizwoke vs Client Business)
+--------------------------------------------------------------------------------
+Yeh ek B2B SaaS (Software as a Service) Platform hai jise "BIZWOKE" ne banaya hai.
+Isme 4 alag-alag types ke log/roles hote hain:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. BIZWOKE (SUPER_ADMIN)                                                    │
+│    -> Aap (Platform Creator / SaaS Owner / Company Admin).                  │
+│    -> Pure system ka master control aapke paas hai.                         │
+│                                                                             │
+│ 2. CLIENT BUSINESS (BRANCH_ADMIN) - e.g. "Kashish's Business", "Harsh ENT"  │
+│    -> Yeh log aapke customers hain jinhone Bizwoke ka subscription buy       │
+│       kiya hai ya 7-Day Free Trial use kar rahe hain.                       │
+│    -> Yeh apna Google Review grow karna chahte hain aur bad reviews se      │
+│       apne business ko bachana chahte hain.                                 │
+│                                                                             │
+│ 3. BRANCH USER / STAFF (BRANCH_USER)                                        │
+│    -> Client Business ke employees, receptionists, counter billing staff.   │
+│    -> Yeh sirf reviews dekh sakte hain ya QR/WhatsApp share bhej sakte hain.│
+│                                                                             │
+│ 4. END CUSTOMER (Patient / Diner / Visitor)                                 │
+│    -> Jo counter par aakar QR code scan karta hai aur star review deta hai. │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+================================================================================
+2. FEATURE & DETAIL COMPARISON (Kisko Kya Dikhna Chahiye?)
+================================================================================
+
+--------------------------------------------------------------------------------
+FEATURE / DETAIL             BIZWOKE (SUPER ADMIN)      CLIENT (Kashish's Business)
+--------------------------------------------------------------------------------
+Top Navbar Branding          "Bizwoke SaaS Admin"       Unka apna Business Name 
+                             (Aapka master portal)       & Logo ("Kashish's Business")
+
+Main Dashboard               Global Platform Stats:     Unke Business ke Stats:
+                             - Total Businesses         - Total Reviews Received
+                             - Total Reviews across all - Average Rating (e.g. 4.9★)
+                             - Total Revenue / MRR      - Negative Feedback Alerts
+                             - Platform System Health   - Weekly Review Velocity
+
+Platforms Setup              Global Platform Integrations Unka apna Google Review Link,
+                             (Google API, WhatsApp API,   TripAdvisor Link, Zomato URL
+                             Payment Gateways)
+
+Share & QR (Flyer/Standee)   Master Template Preview    Unke Business Name + Center Logo
+                                                        ke sath Downloadable 300 DPI
+                                                        Acrylic Counter Standee Flyer,
+                                                        WhatsApp Link & SMS invites
+
+Reviews & Reports            Platform-wide Review Logs  Sirf UNKE customers ke reviews,
+                             (Sabhi businesses ke)      1-3 star negative complaints,
+                             Data export permission     CSV/PDF report download
+
+Business Profile / Account   SaaS Company Settings &    Unke business details change:
+                             Admin Profile              - Business Name
+                                                        - Upload Logo
+                                                        - Phone / Address
+                                                        - Category & Google link
+
+Branches / Locations         All Clients ke sabhi       Agar multi-branch plan liya hai:
+                             branches dekhna & manage   - Branch 1 (Main Office)
+                             karna                      - Branch 2 (Mall Outlet)
+
+Team / User Management       Global RBAC:               Staff Management:
+                             - Sabhi users dekhna       - Apne receptionist/staff add
+                             - SUPER_ADMIN assign       - Staff ko BRANCH_USER role
+                             - Client accounts block    - (Client SUPER_ADMIN nahi bana
+                                                         sakta!)
+
+Pricing Plans & Packages     MASTER CONTROL:            CLIENT VIEW ONLY:
+                             - + New Plan banana        - Current Active Plan dekhna
+                             - Price set karna (₹999)   - Remaining Review Quota dekhna
+                             - Quotas set karna (500)   - "Upgrade Plan" button
+                             - Edit / Delete Packages   - (Client New Plan ya Price edit
+                                                         NAHI kar sakta!)
+
+Audit Logs                   Global Security Logs       Hidden (Client ko nahi dikhta)
+                             (Login activity, IPs)
+
+Survey Settings              Global Rating Logic &      Hidden / Read-only
+                             Star Thresholds            (Bizwoke ke master rules)
+--------------------------------------------------------------------------------
+
+
+================================================================================
+3. COMPLETE END-TO-END FLOW (Kaam Kaise Karta Hai?)
+================================================================================
+
+STEP 1: CLIENT ONBOARDING (Aapke Customer ka Signup)
+--------------------------------------------------------------------------------
+1. Client (e.g. Kashish's Business) aapki website par aata hai aur Register karta hai.
+2. Form me apna Business Name, Category, Phone, aur Google Review Link fill karta hai.
+3. Account bante hi system use automatically:
+   - "Free Trial (7 Days)" plan assign karta hai (100 reviews quota).
+   - Ek unique review URL generate karta hai: e.g. /wtr/kashis82391
+   - Client ka Role "BRANCH_ADMIN" ban jaata hai.
+
+STEP 2: STANDEE & QR CODE GENERATION
+--------------------------------------------------------------------------------
+1. Client apne portal me "Share & QR" page par jaata hai.
+2. Waha photorealistic Acrylic Counter Standee ready milta hai:
+   - Header: "Kashish's Business"
+   - Smiling Hearts & Modern UI: "We would love to hear from you."
+   - Center QR Code: High-density scannable QR jiske beech me unka uploaded 
+     Company Logo embedded hota hai.
+   - Footer: "Powered by Bizwoke" (Bizwoke ki branding).
+3. Client "Download High-Res Standee" par click karta hai:
+   - 1200 x 1800 px (300 DPI) print-ready PNG download hota hai.
+4. Client ise print karke apne clinic/restaurant ke reception counter par rakh deta hai.
+
+STEP 3: CUSTOMER VISIT & SCANNING (Smart Review Gate)
+--------------------------------------------------------------------------------
+1. Receptionist ya Table par baitha customer standee ka QR code scan karta hai.
+2. Customer ke phone me Kashish's Business ka Live Review Page open hota hai:
+   "How was your experience at Kashish's Business?"
+   [ ★ ★ ★ ★ ★ ] (5 Smileys)
+
+3. SMART REVIEW FILTERING (Most Important Business Value):
+   
+   A) AGAR CUSTOMER NE 4 YA 5 STARS DIYE (Happy Customer):
+      -> System use turant redirect kar deta hai Client ke official Google Maps
+         Review link par!
+      -> Happy customer Google par 5-star review aur photo post karta hai.
+      -> Result: Client ka Google rating & SEO rank upar chala jaata hai!
+
+   B) AGAR CUSTOMER NE 1, 2 YA 3 STARS DIYE (Unhappy Customer):
+      -> System use Google par NAHI bhejta!
+      -> Ek private feedback modal open hota hai:
+         "We are extremely sorry! Please let us know what went wrong so our 
+          management can fix it immediately."
+      -> Customer ka complaint, phone number aur reason private save ho jaata hai.
+      -> Result: Bad reviews Google par public hone se bach jaate hain!
+
+STEP 4: CLIENT DASHBOARD & NOTIFICATION
+--------------------------------------------------------------------------------
+1. Kashish's Business apne portal me Dashboard kholta hai.
+2. Real-time updates:
+   - 5-Star reviews count badh gaya.
+   - "Negative Alerts" me 1 alert aaya jisme customer ka phone aur shikayat hai.
+3. Business owner turant customer ko call karke issue resolve karta hai aur unhe
+   loyal customer bana leta hai.
+
+STEP 5: SUBSCRIPTION & BIZWOKE REVENUE (Monetization Flow)
+--------------------------------------------------------------------------------
+1. Free Trial me client ko 100 reviews milte hain.
+2. Jab 100 reviews complete hote hain ya 7 din pure hote hain, client ke portal me
+   "Review Quota Exceeded / Trial Expired" alert aata hai.
+3. Client "My Subscription & Upgrade" page par jata hai.
+4. Client ko Bizwoke ke packages dikhte hain:
+   - Starter Plan: ₹999/month (500 reviews, 1 location)
+   - Growth Professional: ₹1499/month (1000 reviews, 1 location)
+   - Enterprise Supreme: ₹2999/month (2500 reviews, multi-location)
+5. Client online pay karta hai (Razorpay/Stripe ke through) aur plan active ho jaata hai.
+6. Bizwoke ko monthly recurring revenue (MRR) milta hai!
+
+
+================================================================================
+4. TECHNICAL SECURITY & DATA ISOLATION (Kashish vs Other Clients)
+================================================================================
+- Multi-Tenancy Data Isolation:
+  Kashish's Business sirf apna data, apne reviews aur apne staff dekh sakti hai.
+  Kisi aur hospital ya hotel ka data Kashish's Business ko bilkul nahi dikhega.
+
+- Role Separation (RBAC):
+  1. SUPER_ADMIN (Bizwoke): Sabhi packages, users, settings aur global stats.
+  2. BRANCH_ADMIN (Client Owner): Apne reviews, standee, staff aur subscription.
+  3. BRANCH_USER (Staff): Only review check and customer invitation.
+================================================================================

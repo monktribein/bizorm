@@ -1,0 +1,135 @@
+================================================================================
+BIZWOKE REVIEW MANAGEMENT SYSTEM - FRONTEND DOCUMENTATION & DETAILS
+================================================================================
+
+1. OVERVIEW & OBJECTIVE:
+--------------------------------------------------------------------------------
+Next.js aur Convex bindings ko completely replace karke ek clean, ultra-fast 
+Single Page Application (SPA) React.js (Vite + React 19) me build kiya gaya hai.
+Frontend hamare new Node.js + Express backend (localhost:5000/api) ke sath 
+seamlessly communicate karta hai.
+
+2. PACKAGES INSTALLED (Dependencies & Kyun Install Hue):
+--------------------------------------------------------------------------------
+- react (^19.0.0) & react-dom (^19.0.0)
+  -> Core UI framework components, state management aur reactive re-rendering ke liye.
+
+- react-router-dom (^6.28.0)
+  -> SPA client-side routing, protected route guards, navigation, aur dynamic URL
+     parameter matching (/wtr/:formKey) ke liye.
+
+- lucide-react (^0.460.0)
+  -> Premium icon set (Stars, Buildings, Shield, Globe, QR, ThumbsUp, Alerts, etc.)
+     jo application ko modern look deta hai.
+
+- qrcode (^1.5.4)
+  -> Client-side dynamic QR code generator jo restaurant table stands, receipts aur
+     billing counters ke liye High-Res PNG download karne ki suvidha deta hai.
+
+- canvas-confetti (^1.9.4)
+  -> Customer jab 4 ya 5 Star positive review deta hai tab celebratory confetti 
+     animations trigger karne ke liye.
+
+- vite (^6.4.4)
+  -> Next-generation bundler aur dev server jo instant Hot Module Replacement (HMR)
+     aur optimized production bundle create karta hai.
+
+
+3. FRONTEND ARCHITECTURE & DIRECTORY STRUCTURE:
+--------------------------------------------------------------------------------
+review/frontend/
+├── src/
+│   ├── services/
+│   │   └── api.js                -> Unified API client; automatically attaches
+│   │                                Authorization: Bearer <token> from localStorage
+│   ├── context/
+│   │   └── AuthContext.jsx       -> Global authentication provider (user, login,
+│   │                                logout, register, isSuperAdmin, isBranchAdmin)
+│   ├── components/
+│   │   ├── common/
+│   │   │   └── ProtectedRoute.jsx -> Role-based access control & unauthenticated redirect
+│   │   └── layout/
+│   │       ├── AppLayout.jsx     -> Shell wrapper uniting Navbar, Sidebar & Outlet
+│   │       ├── Navbar.jsx        -> User profile badge, active branch, live review link, logout
+│   │       └── Sidebar.jsx       -> Navigation links (Dashboard, Platforms, Share, Reports, Admin)
+│   ├── pages/
+│   │   ├── auth/
+│   │   │   ├── LoginPage.jsx     -> Pre-filled super admin credentials, modern card layout
+│   │   │   ├── RegisterPage.jsx  -> Company check, dynamic pricing packages, 3-day trial
+│   │   │   └── EmailVerifyPage.jsx -> 6-digit verification code input & resend code
+│   │   ├── dashboard/
+│   │   │   ├── DashboardPage.jsx -> Super Admin branch slider, KPI cards, rating bars, feed
+│   │   │   ├── PlatformsPage.jsx -> Add/manage review sites (Google Reviews, TripAdvisor, FB)
+│   │   │   ├── SharePage.jsx     -> Table stand QR code download, direct link copy, embed code
+│   │   │   ├── ReportsPage.jsx   -> Customer review logs, star filter (5★-1★), sentiment badges
+│   │   │   └── AccountPage.jsx   -> Profile info, company details & quota counters (SMS/WhatsApp/Web)
+│   │   ├── admin/
+│   │   │   ├── BranchesPage.jsx  -> Branch CRUD, branch codes & isolation management
+│   │   │   ├── UsersPage.jsx     -> Provision staff users, assign branches, role management
+│   │   │   ├── PricingPage.jsx   -> Subscription packages management (features, pricing, tiers)
+│   │   │   ├── LogsPage.jsx      -> System audit security trail
+│   │   │   └── SettingsPage.jsx  -> Private survey question ordering, adding & deleting
+│   │   └── public/
+│   │       └── CustomerReviewPage.jsx -> Customer-facing rating page (/wtr/:formKey) with 
+│   │                                     star-gating, smart tag suggestions & private survey
+│   ├── App.jsx                   -> Top-level router definition
+│   ├── main.jsx                  -> React entry point
+│   └── index.css                 -> Vanilla CSS design system (tokens, cards, buttons, badges)
+├── index.html                    -> SEO meta tags & viewport setup
+├── package.json
+└── vite.config.js
+
+
+4. NEW FEATURES & WORK DONE (Kya Kya Nayi Cheezein Add Hui):
+--------------------------------------------------------------------------------
+1) Pure React.js (Zero Next.js / Convex):
+   - Pure React 19 + Vite me convert kiya gaya hai jo bohot lightweight aur fast hai.
+
+2) Dynamic Customer Review & Star-Gating Page (/wtr/:formKey):
+   - Interactive star rating component (1 se 5 stars).
+   - "Smart Suggestion Tags" (e.g., Delicious Food, Fast Service, Courteous Staff)
+     jispe tap karne se review text automatically generate ho jata hai.
+   - Positive Flow (4-5 Stars): Confetti burst hota hai aur customer ko direct
+     Google Review link par redirect/prompt kiya jata hai.
+   - Negative Flow (1-3 Stars): Google par redirect nahi hota; instead internal Step 2
+     survey khulta hai taaki customer complaint private handle ho sake!
+
+3) Super Admin Interactive Branch Summary Slider:
+   - Dashboard ke top par horizontally scrollable slider hai jo har branch ki
+     average rating, total review count aur active status live dikhata hai.
+   - Kisi bhi branch par click karke global metrics ko us specific branch ke 
+     data par filter kiya ja sakta hai.
+
+4) Instant QR Code Generation & High-Res Download:
+   - Share page par live QR Code render hota hai jise Table Stand, Restaurant Bill, 
+     ya Counter Display ke liye 1-click me high-res PNG me download kiya ja sakta hai.
+   - Saath hi Website Embed Widget snippet bhi generate hota hai.
+
+5) Role-Based Protected Navigation:
+   - Super Admin users ko Branches, Users, Pricing, Logs aur Survey Settings tabs
+     dikhayi dete hain.
+   - Branch Admin aur Staff users ko sirf unke scoped dashboard aur reports dikhte hain.
+
+6) Pravixo Official Branding & Image-2 Visual Styling:
+   - Official Pravixo 3D gradient emblem & logo (`/pravixo-logo.png`) seamlessly integrated 
+     into public customer review pages (/wtr/:formKey), Admin Navbar, and Account profile.
+   - Inspired by pravixo.com/reviews (Image 2): Pravixo header navigation bar, Google Fonts 
+     'Outfit' & 'Plus Jakarta Sans', gradient headline ("What Our Guests Say"), verified 
+     business badge, and Pravixo sunset gradient interactive buttons (.btn-pravixo).
+
+
+5. HOW TO RUN FRONTEND:
+--------------------------------------------------------------------------------
+1. Directory me jayein:
+   cd c:\Users\kashi\OneDrive\Desktop\PROJECTS\review\frontend
+
+2. Start development server:
+   npm run dev
+
+3. Open browser:
+   http://localhost:5173
+
+4. Login Credentials (Default):
+   - Username: nktech (ya nktech@gmail.com)
+   - Password: 123456
+================================================================================

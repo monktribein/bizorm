@@ -1,0 +1,138 @@
+================================================================================
+BIZWOKE REVIEW MANAGEMENT SYSTEM - BACKEND DOCUMENTATION & DETAILS
+================================================================================
+
+1. OVERVIEW & OBJECTIVE:
+--------------------------------------------------------------------------------
+Is backend me Convex ko completely hata kar 100% pure Node.js + Express.js + 
+MongoDB (Mongoose) architecture build kiya gaya hai. Backend standard ES Modules
+("type": "module") par based hai aur production-grade security, RBAC aur data
+isolation provide karta hai.
+
+2. PACKAGES INSTALLED (Dependencies & Kyun Install Hue):
+--------------------------------------------------------------------------------
+- express (^4.21.1)
+  -> Main REST API web framework routing aur HTTP request-response handling ke liye.
+  
+- mongoose (^8.8.2)
+  -> MongoDB ODM data modeling, strict schema validation, indexes aur relational 
+     queries (.populate) ke liye.
+
+- jsonwebtoken (^9.0.2)
+  -> Secure, stateless JWT token generation aur verification ke liye (login session).
+
+- bcryptjs (^2.4.3)
+  -> Passwords aur email verification codes ko one-way salt hashing (BCrypt) ke sath
+     securely encrypt aur verify karne ke liye.
+
+- cors (^2.8.5)
+  -> Cross-Origin Resource Sharing enable karne ke liye taaki React frontend 
+     (localhost:5173) smoothly backend (localhost:5000) se API call kar sake.
+
+- dotenv (^16.4.5)
+  -> Environment variables (.env file) secure configure karne ke liye.
+
+- nodemailer (^6.9.16)
+  -> Email verification aur review invite dispatches ke liye. Isme built-in fallback
+     simulation mode hai: agar SMTP credentials configure nahi hain toh email codes
+     terminal log me print ho jaate hain.
+
+- qrcode (^1.5.4)
+  -> Table stand / billing counter QR code generation ke liye.
+
+- razorpay (^2.9.4)
+  -> Subscription checkout aur online payment verification ke liye.
+
+
+3. BACKEND ARCHITECTURE & DIRECTORY STRUCTURE:
+--------------------------------------------------------------------------------
+review/backend/
+├── config/
+│   └── db.js                 -> Mongoose MongoDB connection & error guidance
+├── models/                   -> 12 Core Mongoose Models (Convex Schema Migration)
+│   ├── User.js               -> RBAC roles (SUPER_ADMIN, BRANCH_ADMIN, BRANCH_USER), formKey, trial
+│   ├── Branch.js             -> Multi-branch entity, tenant code, soft deletes
+│   ├── Rating.js             -> Reviews, star ratings (1-5), customer info, survey status
+│   ├── Website.js            -> Review destinations (Google Reviews, TripAdvisor, FB)
+│   ├── SurveyQuestion.js     -> Hospital/Restaurant custom rating questions
+│   ├── SurveyAnswer.js       -> Private feedback question-wise ratings
+│   ├── Plan.js               -> Core subscription plans & quotas
+│   ├── Pricing.js            -> Dynamic tier pricing packages
+│   ├── Quota.js              -> SMS, Email, WhatsApp & Web platform allowances
+│   ├── CompanyDetail.js      -> Company branding, logos, details
+│   ├── Activity.js           -> Chronological security audit trail
+│   ├── Transaction.js        -> Razorpay payments & order status
+│   └── Setting.js            -> System settings (meta titles, protocols)
+├── middleware/
+│   ├── auth.js               -> JWT Bearer token protection & session attachment
+│   ├── rbac.js               -> Role-based access control & cross-branch isolation
+│   └── errorHandler.js       -> Centralized error handler & privacy scrubber
+├── utils/
+│   ├── jwt.js                -> JWT token sign & verify functions
+│   ├── logger.js             -> Masks passwords, tokens & cardIds from console logs
+│   ├── reviewGenerator.js    -> Smart review text suggestion generator
+│   ├── email.js              -> Nodemailer dispatcher with console simulation
+│   └── seed.js               -> Automatic database seeding on first startup
+├── controllers/              -> Business logic for all endpoints
+│   ├── authController.js     -> Register, Login, Verify Email, Resend, Me
+│   ├── userController.js     -> CRUD users, staff provisioning, check duplicates
+│   ├── branchController.js   -> Branch CRUD & Super Admin summary metrics
+│   ├── reviewController.js   -> Star-gating, submit feedback, review metrics
+│   ├── platformController.js -> Manage connected review websites
+│   ├── surveyController.js   -> Private survey questions & answer submission
+│   ├── planController.js     -> Plans & pricing package management
+│   ├── quotaController.js    -> Quota inspection & balance tracking
+│   ├── activityController.js -> Activity logs & audit trail
+│   ├── transactionController.js -> Payment order creation & signature verification
+│   └── settingController.js  -> Global system settings
+├── routes/                   -> Modular Express API routes
+├── server.js                 -> Main Express server entry point & bootloader
+├── package.json
+└── .env                      -> Port (5000), Mongo URI, JWT Secret
+
+
+4. NEW FEATURES & WORK DONE (Kya Kya Nayi Cheezein Add Hui):
+--------------------------------------------------------------------------------
+1) Complete Convex Replacement:
+   - Convex ke saare Queries, Mutations aur Actions ko standard REST API endpoints
+     me rewrite kiya gaya hai.
+   - Convex Auth ko standard JWT + BCrypt authentication system me convert kiya gaya.
+
+2) Core Star-Gating Logic (1-3 Stars vs 4-5 Stars):
+   - Agar customer 4 ya 5 Star rating deta hai:
+     -> System ise "Positive" mark karta hai aur customer ko direct Google Reviews /
+        external URL par redirect/prompt karta hai.
+   - Agar customer 1, 2 ya 3 Star rating deta hai:
+     -> System ise "Gated (Private)" mark karta hai aur Google par bhejne ke bajaye
+        internal private survey questions open karta hai taaki customer complaint
+        business ke paas private rahe aur public rating drop na ho!
+
+3) Super Admin Branch Summary Slider:
+   - `/api/branches/summary` endpoint create kiya gaya jo real-time har branch ki
+     average rating, total review count aur active staff calculate karke bhejta hai.
+
+4) Auto-Seeding on Startup:
+   - Jaise hi server first time start hota hai, MongoDB me test Super Admin accounts
+     automatically ban jaate hain:
+     * Email / Username: nktech@gmail.com (uname: nktech)
+     * Password: 123456
+     * Role: SUPER_ADMIN
+   - Saath hi default plans, pricing packages aur 8 default survey questions bhi
+     auto-insert ho jaate hain.
+
+5) Cross-Branch Security Isolation:
+   - Branch Admins aur Staff users sirf apni assigned branch ka data dekh aur 
+     edit kar sakte hain. Cross-branch access backend level par 403 Forbidden deta hai.
+
+
+5. HOW TO RUN BACKEND:
+--------------------------------------------------------------------------------
+1. Directory me jayein:
+   cd c:\Users\kashi\OneDrive\Desktop\PROJECTS\review\backend
+
+2. Start development server:
+   npm run dev
+
+3. Health check:
+   http://localhost:5000/api/health
+================================================================================
