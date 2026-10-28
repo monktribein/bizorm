@@ -1,20 +1,19 @@
 # Dependencies
 node_modules/
-*/node_modules/
-*/*/node_modules/
+**/node_modules/
 
 # Production builds
 dist/
-*/dist/
+**/dist/
 build/
-*/build/
+**/build/
 
-# Environment files (Keep passwords & API keys private)
+# Environment files & Secrets (never push sensitive keys or passwords)
 .env
-*/.env
-*/*/.env
-.env.local
-.env.*.local
+**/.env
+.env.*
+!.env.example
+!**/.env.example
 
 # Logs
 *.log
@@ -27,3 +26,9 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Temporary scripts
+check_user.*
+scratch/
