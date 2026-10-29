@@ -30,7 +30,7 @@ export const ContactPage = () => {
       <LandingNavbar />
 
       <section style={{ paddingTop: "76px", paddingBottom: "32px" }}>
-        <div style={{ maxWidth: "1140px", margin: "0 auto", padding: "0 24px" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 24px" }}>
             <h1
               style={{

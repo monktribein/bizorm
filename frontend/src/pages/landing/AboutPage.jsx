@@ -46,7 +46,7 @@ export const AboutPage = () => {
 
       {/* Executive Team / Commitment to Quality */}
       <section style={{ padding: "48px 0", backgroundColor: "#f8fafc" }}>
-        <div style={{ maxWidth: "1140px", margin: "0 auto", padding: "0 24px" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 48px" }}>
             <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "32px", fontWeight: "800", color: "#0f172a", marginBottom: "12px" }}>
               Our Core Commitments

@@ -14,7 +14,7 @@ export const CtaSection = () => {
     >
       <div
         style={{
-          maxWidth: "1180px",
+          maxWidth: "1280px",
           margin: "0 auto",
           padding: "0 24px",
         }}

@@ -295,7 +295,7 @@ export const FeaturesSection = () => {
     >
       <div
         style={{
-          maxWidth: "1320px",
+          maxWidth: "1280px",
           margin: "0 auto",
           padding: "0 24px",
         }}

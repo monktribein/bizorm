@@ -16,7 +16,7 @@ export const LandingFooter = () => {
       style={{
         backgroundColor: "#f0f3ff",
         borderTop: "1px solid #dee8ff",
-        paddingTop: "72px",
+        paddingTop: "64px",
         paddingBottom: "36px",
       }}
     >
@@ -27,31 +27,26 @@ export const LandingFooter = () => {
           padding: "0 24px",
         }}
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "40px",
-            marginBottom: "56px",
-          }}
-        >
+        {/* Main 4-Column Equal Balanced Grid */}
+        <div className="landing-footer-grid">
           {/* Brand Info Column */}
-          <div style={{ gridColumn: "span 2", maxWidth: "380px" }}>
-            <BizormLogo size="md" className="mb-4" />
+          <div>
+            <BizormLogo size="md" />
             <p
               style={{
                 fontSize: "14px",
-                lineHeight: 1.6,
+                lineHeight: 1.65,
                 color: "#64748b",
-                marginTop: "14px",
+                marginTop: "16px",
                 marginBottom: "20px",
+                maxWidth: "340px",
               }}
             >
-              Helping modern businesses turn real customer feedback into their greatest growth asset through smart Google review routing and private star-shield protection.
+              Helping single businesses and franchise enterprises turn customer feedback into operational excellence through dynamic QR standees and real-time intelligence.
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "#475569" }}>
               <ShieldCheck size={16} color="#004ac6" />
-              <span>Multi-Tenant Enterprise Security & RBAC</span>
+              <span>Multi-Tenant Enterprise Security &amp; RBAC</span>
             </div>
           </div>
 
@@ -59,8 +54,8 @@ export const LandingFooter = () => {
           <div>
             <h4
               style={{
-                fontSize: "14px",
-                fontWeight: "700",
+                fontSize: "13.5px",
+                fontWeight: "800",
                 color: "#0f172a",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
@@ -72,12 +67,12 @@ export const LandingFooter = () => {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
                 <a href="/#how-it-works" className="footer-hover-link">
-                  How Smart Routing Works
+                  How BizORM Works
                 </a>
               </li>
               <li>
                 <a href="/#features" className="footer-hover-link">
-                  Features & Tools
+                  Features &amp; Standees
                 </a>
               </li>
               <li>
@@ -86,14 +81,14 @@ export const LandingFooter = () => {
                 </a>
               </li>
               <li>
-                <a href="/#pricing" className="footer-hover-link">
-                  Pricing & Plans
-                </a>
+                <Link to="/pricing" className="footer-hover-link">
+                  Pricing &amp; Plans
+                </Link>
               </li>
               <li>
-                <a href="/#about" className="footer-hover-link">
-                  About Bizorm
-                </a>
+                <Link to="/about" className="footer-hover-link">
+                  About BizORM
+                </Link>
               </li>
             </ul>
           </div>
@@ -102,8 +97,8 @@ export const LandingFooter = () => {
           <div>
             <h4
               style={{
-                fontSize: "14px",
-                fontWeight: "700",
+                fontSize: "13.5px",
+                fontWeight: "800",
                 color: "#0f172a",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
@@ -115,23 +110,33 @@ export const LandingFooter = () => {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
                 <Link to="/solutions/marketplace-sellers" className="footer-hover-link" style={{ color: "#004ac6", fontWeight: "700" }}>
-                  Marketplace &amp; E-Commerce Sellers
+                  Marketplace &amp; E-Commerce
                 </Link>
               </li>
               <li>
-                <a href="/#features" className="footer-hover-link">Dental &amp; Healthcare Clinics</a>
+                <Link to="/franchise" className="footer-hover-link">
+                  Franchise &amp; Multi-Outlet
+                </Link>
               </li>
               <li>
-                <a href="/#features" className="footer-hover-link">Restaurants & Cafes</a>
+                <a href="/#solutions" className="footer-hover-link">
+                  Dental &amp; Healthcare Clinics
+                </a>
               </li>
               <li>
-                <a href="/#features" className="footer-hover-link">Salons & Luxury Spas</a>
+                <a href="/#solutions" className="footer-hover-link">
+                  Restaurants &amp; Cafes
+                </a>
               </li>
               <li>
-                <a href="/#features" className="footer-hover-link">Automobile & Service Centers</a>
+                <a href="/#solutions" className="footer-hover-link">
+                  Salons &amp; Luxury Spas
+                </a>
               </li>
               <li>
-                <a href="/#features" className="footer-hover-link">Multi-Location Franchises</a>
+                <a href="/#solutions" className="footer-hover-link">
+                  Automobile &amp; Service Centers
+                </a>
               </li>
             </ul>
           </div>
@@ -140,8 +145,8 @@ export const LandingFooter = () => {
           <div>
             <h4
               style={{
-                fontSize: "14px",
-                fontWeight: "700",
+                fontSize: "13.5px",
+                fontWeight: "800",
                 color: "#0f172a",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
@@ -152,7 +157,7 @@ export const LandingFooter = () => {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
-                <Link to="/login" className="footer-hover-link" style={{ color: "#004ac6", fontWeight: "600" }}>
+                <Link to="/login" className="footer-hover-link" style={{ color: "#004ac6", fontWeight: "700" }}>
                   Sign In to Dashboard
                 </Link>
               </li>
@@ -167,19 +172,19 @@ export const LandingFooter = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="footer-hover-link">
-                  Enterprise Pricing
+                <Link to="/contact?type=enterprise" className="footer-hover-link">
+                  Enterprise Consultation
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar (Aligned Edge-to-Edge) */}
         <div
           style={{
             borderTop: "1px solid #dee8ff",
-            paddingTop: "28px",
+            paddingTop: "24px",
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
@@ -190,16 +195,17 @@ export const LandingFooter = () => {
           }}
         >
           <div>
-            &copy; {new Date().getFullYear()} Bizorm. All rights reserved. Reputation Management CRM.
+            &copy; {new Date().getFullYear()} BizORM™. All rights reserved. Enterprise Customer Experience Platform.
           </div>
           <div style={{ display: "flex", gap: "20px" }}>
             <a href="#privacy" className="footer-hover-link" style={{ fontSize: "13px" }}>Privacy Policy</a>
             <a href="#terms" className="footer-hover-link" style={{ fontSize: "13px" }}>Terms of Service</a>
-            <a href="#security" className="footer-hover-link" style={{ fontSize: "13px" }}>Security & GDPR</a>
+            <a href="#security" className="footer-hover-link" style={{ fontSize: "13px" }}>Security &amp; GDPR</a>
           </div>
         </div>
       </div>
     </footer>
   );
 };
+
 export default LandingFooter;

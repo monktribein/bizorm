@@ -154,7 +154,7 @@ export const SocialProof = () => {
       >
         <div
           style={{
-            maxWidth: "1320px",
+            maxWidth: "1280px",
             margin: "0 auto",
             display: "flex",
             flexDirection: "column",
@@ -235,7 +235,7 @@ export const SocialProof = () => {
           borderBottom: "1px solid #e2e8f0",
         }}
       >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
           <div
             style={{
               display: "flex",
