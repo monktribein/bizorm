@@ -191,10 +191,7 @@ export const PricingSection = ({ hideHeader = false }) => {
         {/* Section Header */}
         {!hideHeader && (
           <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "#004ac6", fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
-              <Sparkles size={15} />
-              <span>TRANSPARENT SCAN-BASED PRICING</span>
-            </div>
+            
             <h2
               className="font-outfit"
               style={{
@@ -307,7 +304,7 @@ export const PricingSection = ({ hideHeader = false }) => {
         </div>
 
         {/* 4 Cards Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px", alignItems: "stretch" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "24px", alignItems: "stretch" }}>
           {currentPlans.map((plan) => {
             const isNumeric = typeof plan.monthlyPrice === "number";
             const price = isNumeric

@@ -12,7 +12,7 @@ export const PricingPublicPage = () => {
       <LandingNavbar />
 
       {/* Hero Header */}
-      <section style={{ paddingTop: "76px", paddingBottom: "16px", backgroundColor: "#f0f3ff", textAlign: "center" }}>
+      <section style={{ paddingTop: "clamp(110px, 9vw, 124px)", paddingBottom: "20px", backgroundColor: "#f0f3ff", textAlign: "center" }}>
         <div style={{ maxWidth: "860px", margin: "0 auto", padding: "0 24px" }}>
           <motion.div
             initial={{ opacity: 0, y: 15 }}

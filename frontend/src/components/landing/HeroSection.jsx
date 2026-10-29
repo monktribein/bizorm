@@ -82,6 +82,7 @@ export const HeroSection = () => {
           position: "relative",
           zIndex: 1,
         }}
+        className="landing-container"
       >
         <div
           style={{
@@ -99,20 +100,22 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            style={{ maxWidth: "600px" }}
+            style={{ width: "100%", maxWidth: "600px", minWidth: 0 }}
+            className="hero-left-col"
           >
 
             {/* Main Headline */}
             <h1
               style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(34px, 4.4vw, 52px)",
+                fontSize: "clamp(28px, 5.5vw, 52px)",
                 fontWeight: "900",
                 lineHeight: 1.15,
                 letterSpacing: "-0.03em",
                 color: "#0f172a",
                 marginBottom: "20px",
               }}
+              className="hero-main-title"
             >
               Every Customer <br />
               Experience Matters. <br />
@@ -148,7 +151,11 @@ export const HeroSection = () => {
                 gap: "14px",
                 alignItems: "center",
                 marginBottom: "26px",
+                width: "100%",
+                maxWidth: "100%",
+                boxSizing: "border-box",
               }}
+              className="hero-cta-group"
             >
               <Link
                 to="/register"
@@ -166,6 +173,8 @@ export const HeroSection = () => {
                   textDecoration: "none",
                   boxShadow: "0 8px 24px rgba(0, 82, 204, 0.32)",
                   transition: "all 0.2s ease",
+                  boxSizing: "border-box",
+                  maxWidth: "100%",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = "#1d4ed8";
@@ -199,6 +208,8 @@ export const HeroSection = () => {
                   textDecoration: "none",
                   boxShadow: "0 2px 6px rgba(0, 0, 0, 0.04)",
                   transition: "all 0.2s ease",
+                  boxSizing: "border-box",
+                  maxWidth: "100%",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = "#f8fafc";
@@ -229,6 +240,7 @@ export const HeroSection = () => {
                 fontSize: "13.5px",
                 fontWeight: "600",
               }}
+              className="hero-trust-badges"
             >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <CheckCircle2 size={16} color="#0052cc" />
@@ -258,6 +270,7 @@ export const HeroSection = () => {
               maxWidth: "740px",
               margin: "0 auto",
             }}
+            className="hero-dashboard-wrapper"
           >
             {/* FLOATING PILL TOP-LEFT: Send WhatsApp Invites */}
             <motion.div
@@ -277,6 +290,7 @@ export const HeroSection = () => {
                 gap: "10px",
                 zIndex: 20,
               }}
+              className="hero-floating-pill"
             >
               <div
                 style={{
@@ -316,6 +330,7 @@ export const HeroSection = () => {
               }}
               viewBox="0 0 60 35"
               fill="none"
+              className="hero-floating-pill"
             >
               <path
                 d="M10 2 Q 40 10 50 30"
@@ -343,6 +358,7 @@ export const HeroSection = () => {
                 gap: "10px",
                 zIndex: 20,
               }}
+              className="hero-floating-pill"
             >
               <div
                 style={{
@@ -384,6 +400,7 @@ export const HeroSection = () => {
                 overflow: "hidden",
                 marginRight: "45px", // space for phone overlap
               }}
+              className="hero-dashboard-frame"
             >
               {/* Window Header Bar */}
               <div
@@ -395,6 +412,7 @@ export const HeroSection = () => {
                   borderBottom: "1px solid #f1f5f9",
                   marginBottom: "16px",
                 }}
+                className="hero-dash-header"
               >
                 {/* Window Dots & Mini Brand */}
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -441,6 +459,7 @@ export const HeroSection = () => {
                   gap: "10px",
                   marginBottom: "16px",
                 }}
+                className="hero-kpi-grid"
               >
                 {/* Metric 1: Total Reviews */}
                 <div
@@ -536,6 +555,7 @@ export const HeroSection = () => {
                   gap: "12px",
                   marginBottom: "16px",
                 }}
+                className="hero-charts-grid"
               >
                 {/* Rating Distribution Card */}
                 <div
@@ -649,6 +669,7 @@ export const HeroSection = () => {
                   alignItems: "center",
                   gap: "10px",
                 }}
+                className="hero-feedback-snippet"
               >
                 <div
                   style={{
@@ -855,6 +876,7 @@ export const HeroSection = () => {
                 overflow: "hidden",
                 padding: "16px 14px 18px",
               }}
+              className="hero-phone-mockup"
             >
               {/* Phone Speaker Notch */}
               <div

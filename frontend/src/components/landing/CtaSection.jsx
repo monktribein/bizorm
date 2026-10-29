@@ -116,6 +116,7 @@ export const CtaSection = () => {
                 justifyContent: "center",
                 marginBottom: "28px",
               }}
+              className="landing-cta-btn-group"
             >
               <Link
                 to="/register"

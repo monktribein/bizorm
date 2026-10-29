@@ -353,30 +353,33 @@ export const SharePage = () => {
             background: "#ffffff",
             border: "1px solid #e2e8f0",
             borderRadius: "14px",
-            padding: "12px 18px",
+            padding: "8px 14px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "12px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.03)",
+            flexWrap: "nowrap",
+            gap: "10px",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+            minWidth: 0,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0, flex: 1, overflow: "hidden" }}>
             <span
               style={{
-                fontSize: "13px",
+                fontSize: "12.5px",
                 fontWeight: "700",
                 color: "#334155",
-                display: "flex",
+                display: "inline-flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "5px",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
             >
-              <Layers size={16} color="var(--primary)" />
+              <Layers size={15} color="var(--primary)" style={{ flexShrink: 0 }} />
               <span>Standee Scanner Routes To:</span>
             </span>
-            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "6px", alignItems: "center", minWidth: 0, overflow: "hidden" }}>
               {platforms
                 .filter((p) => p.active === 1)
                 .map((p) => {
@@ -388,16 +391,18 @@ export const SharePage = () => {
                       style={{
                         display: "inline-flex",
                         alignItems: "center",
-                        gap: "5px",
-                        padding: "4px 10px",
+                        gap: "4px",
+                        padding: "3px 9px",
                         borderRadius: "9999px",
                         background: isGoogle ? "#eff6ff" : isGlassdoor ? "#f0fdf4" : "#f8fafc",
                         border: `1px solid ${
                           isGoogle ? "#bfdbfe" : isGlassdoor ? "#bbf7d0" : "#e2e8f0"
                         }`,
                         color: isGoogle ? "#1d4ed8" : isGlassdoor ? "#15803d" : "#475569",
-                        fontSize: "12px",
+                        fontSize: "11.5px",
                         fontWeight: "700",
+                        whiteSpace: "nowrap",
+                        flexShrink: 0,
                       }}
                     >
                       <span>{isGoogle ? "★ Google" : isGlassdoor ? "★ Glassdoor" : `★ ${p.webName}`}</span>
@@ -405,27 +410,30 @@ export const SharePage = () => {
                   );
                 })}
               {platforms.length === 0 && (
-                <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                <span style={{ fontSize: "11.5px", color: "var(--text-muted)", whiteSpace: "nowrap" }}>
                   No platforms connected yet.
                 </span>
               )}
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center", flexShrink: 0 }}>
             <Link
               to="/platform"
               className="btn btn-primary btn-sm"
               style={{
-                padding: "6px 12px",
-                fontSize: "12px",
-                display: "flex",
+                padding: "6px 11px",
+                fontSize: "11.5px",
+                display: "inline-flex",
                 alignItems: "center",
                 gap: "5px",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+                borderRadius: "8px",
               }}
             >
               <span>Manage Platforms</span>
-              <ArrowRight size={13} />
+              <ArrowRight size={12} />
             </Link>
           </div>
         </div>
@@ -438,19 +446,19 @@ export const SharePage = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "10px 16px",
+          padding: "8px 14px",
           background: "#ffffff",
           border: "1px solid #e2e8f0",
           borderRadius: "14px",
           boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
           position: "relative",
-          gap: "12px",
-          flexWrap: "wrap",
+          gap: "10px",
+          flexWrap: "nowrap",
         }}
       >
         {/* Left: Active Tool Indicator / Quick Switcher */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0, flexWrap: "wrap" }}>
-          <span style={{ fontSize: "12px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0, flex: 1 }}>
+          <span style={{ fontSize: "11px", fontWeight: "700", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap", flexShrink: 0 }}>
             Active Tool:
           </span>
           <button
@@ -459,20 +467,22 @@ export const SharePage = () => {
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "8px",
-              padding: "7px 14px",
+              gap: "7px",
+              padding: "6px 12px",
               background: "#f8fafc",
               border: "1.5px solid #cbd5e1",
               borderRadius: "10px",
               cursor: "pointer",
               transition: "all 0.15s ease",
+              minWidth: 0,
+              maxWidth: "100%",
             }}
             title="Click or use the 3-dots button to switch tools"
           >
-            <span style={{ color: "var(--primary)", display: "flex", alignItems: "center" }}>
+            <span style={{ color: "var(--primary)", display: "flex", alignItems: "center", flexShrink: 0 }}>
               {currentTool.icon}
             </span>
-            <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>
+            <span style={{ fontSize: "12.5px", fontWeight: "700", color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {currentTool.label}
             </span>
             <span
@@ -483,23 +493,25 @@ export const SharePage = () => {
                 borderRadius: "9999px",
                 background: "var(--primary-light)",
                 color: "var(--primary)",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
             >
               {currentTool.badge}
             </span>
-            <ChevronDown size={14} color="#64748b" />
+            <ChevronDown size={14} color="#64748b" style={{ flexShrink: 0 }} />
           </button>
         </div>
 
         {/* Right: 3-Dots Action Button & Dropdown Menu */}
-        <div style={{ position: "relative" }} ref={toolMenuRef}>
+        <div style={{ position: "relative", flexShrink: 0 }} ref={toolMenuRef}>
           <button
             type="button"
             onClick={() => setToolMenuOpen(!toolMenuOpen)}
             className="btn btn-outline"
             style={{
-              width: "38px",
-              height: "38px",
+              width: "36px",
+              height: "36px",
               padding: 0,
               borderRadius: "10px",
               display: "flex",
@@ -509,11 +521,12 @@ export const SharePage = () => {
               background: toolMenuOpen ? "var(--primary-light)" : "#ffffff",
               color: toolMenuOpen ? "var(--primary)" : "#334155",
               cursor: "pointer",
+              flexShrink: 0,
             }}
             title="More Options / Switch Tool (3 Dots)"
             aria-label="More Options / Switch Tool"
           >
-            <MoreVertical size={20} />
+            <MoreVertical size={18} />
           </button>
 
           {/* 3-Dots Floating Dropdown Menu */}
@@ -1075,44 +1088,43 @@ export const SharePage = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {/* Color Palette Selector */}
             <div>
-              <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#374151", marginBottom: "8px" }}>
-                QR Code Theme Color
-              </label>
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                {colorPresets.map((c) => {
-                  const isSelected = qrColor === c.hex;
-                  return (
-                    <button
-                      key={c.hex}
-                      type="button"
-                      onClick={() => setQrColor(c.hex)}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "6px",
-                        padding: "6px 12px",
-                        borderRadius: "8px",
-                        border: isSelected ? `2px solid ${c.hex}` : "1.5px solid #e2e8f0",
-                        background: isSelected ? "#f8fafc" : "#ffffff",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                        fontSize: "12px",
-                      }}
-                    >
-                      <span
-                        style={{
-                          width: "14px",
-                          height: "14px",
-                          borderRadius: "50%",
-                          background: c.hex,
-                          display: "inline-block",
-                        }}
-                      />
-                      <span>{c.name}</span>
-                    </button>
-                  );
-                })}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#374151", margin: 0 }}>
+                  QR Code Theme Color
+                </label>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span
+                    style={{
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "50%",
+                      background: qrColor,
+                      display: "inline-block",
+                      border: "1px solid rgba(0,0,0,0.1)",
+                    }}
+                  />
+                  <span style={{ fontSize: "12px", fontWeight: "700", color: qrColor }}>
+                    {colorPresets.find((c) => c.hex === qrColor)?.name || "Custom"}
+                  </span>
+                </div>
               </div>
+
+              <select
+                className="form-select"
+                value={qrColor}
+                onChange={(e) => setQrColor(e.target.value)}
+                style={{
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
+              >
+                {colorPresets.map((c) => (
+                  <option key={c.hex} value={c.hex}>
+                    ● {c.name} ({c.hex})
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Staff Attribution for Individual QR Badges */}

@@ -278,36 +278,16 @@ export const MarketplaceSellersPage = () => {
       <section
         style={{
           position: "relative",
-          paddingTop: "120px",
+          paddingTop: "180px",
           paddingBottom: "80px",
           overflow: "hidden",
           background: "radial-gradient(circle at 50% 10%, rgba(0, 74, 198, 0.22) 0%, rgba(15, 23, 42, 0.98) 65%)",
         }}
       >
-        <div style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
           <div style={{ textAlign: "center", maxWidth: "860px", margin: "0 auto" }}>
             {/* Top Pill */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "6px 14px",
-                borderRadius: "999px",
-                background: "rgba(0, 74, 198, 0.18)",
-                border: "1px solid rgba(0, 115, 255, 0.35)",
-                color: "#60a5fa",
-                fontSize: "12px",
-                fontWeight: "700",
-                letterSpacing: "0.5px",
-                marginBottom: "20px",
-              }}
-            >
-              <Sparkles size={14} color="#60a5fa" />
-              <span>ENGINE 6 · FTC &amp; MARKETPLACE COMPLIANT SELLER INTELLIGENCE™</span>
-            </motion.div>
+           
 
             {/* Headline */}
             <motion.h1
@@ -434,7 +414,7 @@ export const MarketplaceSellersPage = () => {
               boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
             }}
           >
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "32px", alignItems: "center" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "32px", alignItems: "center" }}>
               {/* Left: The Packaging Insert Card */}
               <div
                 style={{
@@ -527,7 +507,7 @@ export const MarketplaceSellersPage = () => {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: "24px" }}>
             {[
               {
                 step: "01",
@@ -600,7 +580,7 @@ export const MarketplaceSellersPage = () => {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "20px" }}>
             {qrTypes.map((q) => {
               const isSelected = activeQrType === q.id;
               return (
@@ -708,7 +688,7 @@ export const MarketplaceSellersPage = () => {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "16px", marginBottom: "24px" }}>
               {currentChannel.features.map((f, idx) => (
                 <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px", background: "rgba(15, 23, 42, 0.4)", padding: "12px 14px", borderRadius: "10px" }}>
                   <Check size={16} color="#10b981" style={{ flexShrink: 0, marginTop: "2px" }} />
@@ -782,7 +762,7 @@ export const MarketplaceSellersPage = () => {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "24px" }}>
             {pricingPlans.map((plan) => {
               const priceDisplay =
                 typeof plan.monthly === "number"

@@ -104,7 +104,7 @@ export const FranchiseIntelligenceSection = () => {
         </div>
 
         {/* 4 Pillar Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "20px" }}>
           {pillars.map((p, idx) => {
             const Icon = p.icon;
             return (

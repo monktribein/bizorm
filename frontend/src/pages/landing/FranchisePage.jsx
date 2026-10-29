@@ -70,8 +70,8 @@ export const FranchisePage = () => {
       {/* Hero Section */}
       <section
         style={{
-          paddingTop: "76px",
-          paddingBottom: "52px",
+          paddingTop: "clamp(120px, 10vw, 140px)",
+          paddingBottom: "56px",
           background: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
           color: "#ffffff",
           position: "relative",
@@ -93,26 +93,21 @@ export const FranchisePage = () => {
           }}
         />
 
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             style={{ textAlign: "center", maxWidth: "860px", margin: "0 auto" }}
           >
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "5px 14px", borderRadius: "9999px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", marginBottom: "20px" }}>
-              <Layers size={14} color="#60a5fa" />
-              <span style={{ fontSize: "12.5px", fontWeight: "700", color: "#93c5fd" }}>
-                BizORM Enterprise™ — Franchise Solutions
-              </span>
-            </div>
+            
 
             <h1
               style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
                 fontSize: "clamp(32px, 4.5vw, 52px)",
                 fontWeight: "800",
-                lineHeight: 1.15,
+                lineHeight: 1.2,
                 letterSpacing: "-0.03em",
                 marginBottom: "20px",
                 color: "#ffffff",
@@ -181,7 +176,7 @@ export const FranchisePage = () => {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "24px" }}>
             {pillars.map((p, idx) => {
               const Icon = p.icon;
               return (

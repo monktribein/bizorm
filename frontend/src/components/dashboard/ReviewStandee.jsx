@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import QRCode from "qrcode";
-import { Download, Printer, RefreshCw, QrCode, ExternalLink, Check, Copy, Sparkles, Building2, Heart, Image as ImageIcon } from "lucide-react";
+import { Download, Printer, RefreshCw, QrCode, ExternalLink, Check, Copy, Sparkles, Building2, Heart, Image as ImageIcon, ChevronDown } from "lucide-react";
 import { getCleanBrandName } from "../../utils/brand";
 import { EditBusinessModal } from "../common/EditBusinessModal";
 import nkTechLogo from "../../assets/nktech-logo.jpg";
@@ -217,6 +217,18 @@ export const ReviewStandee = ({ user, companyDetails }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [embedLogoInQR, setEmbedLogoInQR] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
+  const themeDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (themeDropdownRef.current && !themeDropdownRef.current.contains(e.target)) {
+        setThemeDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const companyLogo = companyDetails?.cmpyLogo || "";
 
@@ -1015,65 +1027,147 @@ export const ReviewStandee = ({ user, companyDetails }) => {
               Choose a design theme matching your interior ambiance and personalize the wording:
             </p>
 
-            {/* Standee Theme Selector */}
-            <div style={{ marginBottom: "20px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+            {/* Standee Theme Selector (Custom locked dropdown bounded to card) */}
+            <div style={{ marginBottom: "18px", position: "relative" }} ref={themeDropdownRef}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                 <label style={{ fontSize: "12px", fontWeight: "800", color: "#1e293b", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   🎨 Select Standee Theme:
                 </label>
-                <span style={{ fontSize: "12px", fontWeight: "700", color: "var(--primary)" }}>
-                  {STANDEE_THEMES.find((t) => t.id === selectedTheme)?.name}
+                <span style={{ fontSize: "11px", fontWeight: "700", color: "#64748b" }}>
+                  {STANDEE_THEMES.find((t) => t.id === selectedTheme)?.tag}
                 </span>
               </div>
 
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                gap: "8px",
-              }}>
-                {STANDEE_THEMES.map((th) => {
-                  const isSelected = selectedTheme === th.id;
-                  return (
-                    <button
-                      key={th.id}
-                      type="button"
-                      onClick={() => setSelectedTheme(th.id)}
-                      style={{
-                        padding: "10px 10px",
-                        borderRadius: "12px",
-                        border: isSelected ? "2.5px solid var(--primary)" : "1.5px solid #e2e8f0",
-                        background: isSelected ? "#eff6ff" : "#ffffff",
-                        textAlign: "left",
-                        cursor: "pointer",
-                        transition: "all 0.2s ease",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "4px",
-                        position: "relative",
-                        boxShadow: isSelected ? "0 4px 12px rgba(37, 99, 235, 0.12)" : "none",
-                      }}
-                    >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ fontSize: "18px" }}>{th.icon}</span>
-                        <div style={{
-                          width: "14px",
-                          height: "14px",
-                          borderRadius: "50%",
-                          background: th.swatchBg,
-                          border: `2px solid ${th.swatchBorder}`,
-                          boxShadow: "0 1px 3px rgba(0,0,0,0.15)"
-                        }} />
-                      </div>
-                      <div style={{ fontSize: "12px", fontWeight: "800", color: "#1e293b", lineHeight: 1.2 }}>
-                        {th.name}
-                      </div>
-                      <div style={{ fontSize: "10px", color: "#64748b", lineHeight: 1.2 }}>
-                        {th.subtitle}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+              {/* Trigger Button */}
+              <button
+                type="button"
+                onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
+                style={{
+                  width: "100%",
+                  padding: "9px 12px",
+                  borderRadius: "10px",
+                  border: themeDropdownOpen ? "1.5px solid var(--primary)" : "1.5px solid var(--border)",
+                  backgroundColor: "#ffffff",
+                  color: "#0f172a",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "10px",
+                  boxShadow: themeDropdownOpen ? "0 0 0 3px rgba(37, 99, 235, 0.12)" : "0 1px 2px rgba(0,0,0,0.03)",
+                  transition: "all 0.15s ease",
+                  boxSizing: "border-box",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
+                  <span style={{ fontSize: "16px", flexShrink: 0 }}>
+                    {STANDEE_THEMES.find((t) => t.id === selectedTheme)?.icon}
+                  </span>
+                  <div style={{
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    background: STANDEE_THEMES.find((t) => t.id === selectedTheme)?.swatchBg,
+                    border: `2px solid ${STANDEE_THEMES.find((t) => t.id === selectedTheme)?.swatchBorder}`,
+                    flexShrink: 0,
+                  }} />
+                  <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {STANDEE_THEMES.find((t) => t.id === selectedTheme)?.name}
+                  </span>
+                </div>
+                <ChevronDown
+                  size={16}
+                  color="#64748b"
+                  style={{
+                    transform: themeDropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                    flexShrink: 0,
+                  }}
+                />
+              </button>
+
+              {/* Dropdown Menu (Bounded 100% inside card width) */}
+              {themeDropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 4px)",
+                    left: 0,
+                    right: 0,
+                    width: "100%",
+                    maxWidth: "100%",
+                    backgroundColor: "#ffffff",
+                    borderRadius: "12px",
+                    border: "1px solid #e2e8f0",
+                    boxShadow: "0 10px 25px -4px rgba(15, 23, 42, 0.14)",
+                    padding: "6px",
+                    zIndex: 200,
+                    boxSizing: "border-box",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                  }}
+                >
+                  {STANDEE_THEMES.map((th) => {
+                    const isSelected = selectedTheme === th.id;
+                    return (
+                      <button
+                        key={th.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedTheme(th.id);
+                          setThemeDropdownOpen(false);
+                        }}
+                        style={{
+                          width: "100%",
+                          padding: "8px 10px",
+                          borderRadius: "8px",
+                          border: isSelected ? "1px solid #bfdbfe" : "1px solid transparent",
+                          backgroundColor: isSelected ? "#eff6ff" : "transparent",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          textAlign: "left",
+                          gap: "8px",
+                          transition: "background-color 0.15s ease",
+                          boxSizing: "border-box",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) e.currentTarget.style.backgroundColor = "#f8fafc";
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) e.currentTarget.style.backgroundColor = "transparent";
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0, flex: 1 }}>
+                          <span style={{ fontSize: "16px", flexShrink: 0 }}>{th.icon}</span>
+                          <div style={{
+                            width: "10px",
+                            height: "10px",
+                            borderRadius: "50%",
+                            background: th.swatchBg,
+                            border: `1.5px solid ${th.swatchBorder}`,
+                            flexShrink: 0,
+                          }} />
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontSize: "12.5px", fontWeight: "700", color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {th.name}
+                            </div>
+                            <div style={{ fontSize: "10.5px", color: "#64748b", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {th.subtitle}
+                            </div>
+                          </div>
+                        </div>
+
+                        {isSelected && (
+                          <Check size={16} color="var(--primary)" style={{ flexShrink: 0 }} />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Industry Tagline Preset Selector */}

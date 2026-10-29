@@ -29,7 +29,7 @@ export const ContactPage = () => {
     <div style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>
       <LandingNavbar />
 
-      <section style={{ paddingTop: "76px", paddingBottom: "32px" }}>
+      <section style={{ paddingTop: "clamp(110px, 9vw, 124px)", paddingBottom: "32px" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
           <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 24px" }}>
             <h1
@@ -54,7 +54,7 @@ export const ContactPage = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
               gap: "40px",
               alignItems: "start",
             }}

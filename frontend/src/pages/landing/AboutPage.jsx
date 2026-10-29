@@ -12,7 +12,7 @@ export const AboutPage = () => {
       <LandingNavbar />
       
       {/* Hero Header */}
-      <section style={{ paddingTop: "76px", paddingBottom: "24px", backgroundColor: "#f0f3ff", textAlign: "center" }}>
+      <section style={{ paddingTop: "clamp(110px, 9vw, 124px)", paddingBottom: "28px", backgroundColor: "#f0f3ff", textAlign: "center" }}>
         <div style={{ maxWidth: "860px", margin: "0 auto", padding: "0 24px" }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -56,7 +56,7 @@ export const AboutPage = () => {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "24px" }}>
             <div style={{ backgroundColor: "#ffffff", padding: "30px", borderRadius: "18px", border: "1px solid #e2e8f0" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", backgroundColor: "#eff6ff", color: "#004ac6", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "18px" }}>
                 <Award size={24} />

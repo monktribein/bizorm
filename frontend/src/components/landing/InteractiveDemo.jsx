@@ -49,7 +49,7 @@ export const InteractiveDemo = () => {
         </div>
 
         {/* Main Grid: Inputs vs Output Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "32px", alignItems: "stretch" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "32px", alignItems: "stretch" }}>
           {/* Left: Transparent Inputs */}
           <div className="card" style={{ padding: "28px", background: "#ffffff", borderRadius: "20px" }}>
             <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f172a", marginBottom: "20px" }}>

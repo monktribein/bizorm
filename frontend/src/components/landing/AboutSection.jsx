@@ -95,6 +95,7 @@ export const AboutSection = () => {
                 border: "1px solid #e2e8f0",
                 marginBottom: "18px",
               }}
+              className="about-stats-bar"
             >
               <div>
                 <div style={{ fontSize: "26px", fontWeight: "800", color: "#004ac6", fontFamily: "'Plus Jakarta Sans'" }}>

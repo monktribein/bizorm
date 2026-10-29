@@ -384,6 +384,10 @@ export const AuthPage = ({ defaultTab }) => {
         alignItems: "flex-start",
         justifyContent: "center",
         position: "relative",
+        overflowX: "hidden",
+        width: "100%",
+        maxWidth: "100vw",
+        boxSizing: "border-box",
       }}
     >
       {/* Background Soft Glow */}
@@ -393,7 +397,7 @@ export const AuthPage = ({ defaultTab }) => {
           top: "12%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "700px",
+          width: "min(700px, 90vw)",
           height: "400px",
           background:
             "radial-gradient(circle, rgba(0, 74, 198, 0.08) 0%, rgba(248, 250, 252, 0) 70%)",
@@ -410,6 +414,7 @@ export const AuthPage = ({ defaultTab }) => {
           width: "100%",
           position: "relative",
           zIndex: 1,
+          boxSizing: "border-box",
         }}
       >
         {/* Brand Logo & Back to Home */}

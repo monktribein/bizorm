@@ -47,11 +47,15 @@ export const LoginPage = () => {
       style={{
         minHeight: "100vh",
         backgroundColor: "#f8fafc",
-        padding: "40px 16px 60px",
+        padding: "clamp(24px, 4vw, 40px) 16px clamp(32px, 6vw, 60px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        maxWidth: "100vw",
+        boxSizing: "border-box",
       }}
     >
       {/* Background Soft Glow */}
@@ -61,7 +65,7 @@ export const LoginPage = () => {
           top: "10%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "600px",
+          width: "min(600px, 90vw)",
           height: "380px",
           background: "radial-gradient(circle, rgba(0, 82, 204, 0.08) 0%, rgba(248, 250, 252, 0) 70%)",
           filter: "blur(50px)",
@@ -78,6 +82,7 @@ export const LoginPage = () => {
           width: "100%",
           position: "relative",
           zIndex: 1,
+          boxSizing: "border-box",
         }}
       >
         {/* Brand Logo & Back to Home */}
@@ -94,7 +99,9 @@ export const LoginPage = () => {
             borderRadius: "20px",
             border: "1px solid #e2e8f0",
             boxShadow: "0 15px 40px -10px rgba(0, 82, 204, 0.1), 0 4px 12px rgba(15, 23, 42, 0.04)",
-            padding: "34px 30px",
+            padding: "clamp(26px, 6vw, 36px) clamp(18px, 5vw, 30px)",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           {/* Header */}
