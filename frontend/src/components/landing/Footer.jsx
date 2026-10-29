@@ -114,7 +114,12 @@ export const LandingFooter = () => {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
-                <a href="/#features" className="footer-hover-link">Dental & Healthcare Clinics</a>
+                <Link to="/solutions/marketplace-sellers" className="footer-hover-link" style={{ color: "#004ac6", fontWeight: "700" }}>
+                  Marketplace &amp; E-Commerce Sellers
+                </Link>
+              </li>
+              <li>
+                <a href="/#features" className="footer-hover-link">Dental &amp; Healthcare Clinics</a>
               </li>
               <li>
                 <a href="/#features" className="footer-hover-link">Restaurants & Cafes</a>

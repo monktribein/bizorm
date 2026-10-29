@@ -19,6 +19,7 @@ import activityRoutes from "./routes/activityRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import inviteRoutes from "./routes/inviteRoutes.js";
+import sellerRoutes from "./routes/sellerRoutes.js";
 
 dotenv.config();
 
@@ -68,6 +69,7 @@ app.use("/api/activity", activityRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/invites", inviteRoutes);
+app.use("/api/seller", sellerRoutes);
 
 // 404 & Error Handling
 app.use(notFound);

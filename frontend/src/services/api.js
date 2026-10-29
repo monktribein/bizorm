@@ -149,4 +149,20 @@ export const api = {
   },
   getSettings: () => request("/settings"),
   updateSettings: (data) => request("/settings", { method: "PUT", body: JSON.stringify(data) }),
+
+  // Marketplace Seller Intelligence
+  getSellerProducts: () => request("/seller/products"),
+  createSellerProduct: (data) => request("/seller/products", { method: "POST", body: JSON.stringify(data) }),
+  updateSellerProduct: (id, data) => request(`/seller/products/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  archiveSellerProduct: (id) => request(`/seller/products/${id}`, { method: "DELETE" }),
+  getSellerAnalytics: () => request("/seller/analytics"),
+  getSellerComplaints: (params = {}) => {
+    const q = new URLSearchParams(params).toString();
+    return request(`/seller/complaints${q ? `?${q}` : ""}`);
+  },
+  updateComplaintStatus: (id, data) =>
+    request(`/seller/complaints/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  getPublicProductByCode: (code) => request(`/seller/public/product/${code}`),
+  submitProductFeedback: (code, data) =>
+    request(`/seller/public/feedback/${code}`, { method: "POST", body: JSON.stringify(data) }),
 };

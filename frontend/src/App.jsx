@@ -25,6 +25,7 @@ import { AboutPage } from "./pages/landing/AboutPage";
 import { ContactPage } from "./pages/landing/ContactPage";
 import { PricingPublicPage } from "./pages/landing/PricingPublicPage";
 import { FranchisePage } from "./pages/landing/FranchisePage";
+import { MarketplaceSellersPage } from "./pages/landing/MarketplaceSellersPage";
 import { useAuth } from "./context/AuthContext";
 
 // Dedicated Auth & Verification Pages
@@ -38,6 +39,7 @@ import { PlatformsPage } from "./pages/dashboard/PlatformsPage";
 import { SharePage } from "./pages/dashboard/SharePage";
 import { ReportsPage } from "./pages/dashboard/ReportsPage";
 import { AccountPage } from "./pages/dashboard/AccountPage";
+import { SellerIntelligencePage } from "./pages/dashboard/SellerIntelligencePage";
 
 // Admin Pages
 import { BranchesPage } from "./pages/admin/BranchesPage";
@@ -48,6 +50,7 @@ import { SettingsPage } from "./pages/admin/SettingsPage";
 
 // Public Customer Facing & Embed Widgets
 import { CustomerReviewPage } from "./pages/public/CustomerReviewPage";
+import { ProductFeedbackPage } from "./pages/public/ProductFeedbackPage";
 import { ReviewWidgetPage } from "./pages/public/ReviewWidgetPage";
 import { ReviewBadgeWidgetPage } from "./pages/public/ReviewBadgeWidgetPage";
 
@@ -77,9 +80,13 @@ export default function App() {
           <Route path="/pricing" element={<SmartPricingRoute />} />
           <Route path="/franchise" element={<FranchisePage />} />
           <Route path="/solutions/franchise" element={<FranchisePage />} />
+          <Route path="/solutions/marketplace-sellers" element={<MarketplaceSellersPage />} />
+          <Route path="/solutions/sellers" element={<MarketplaceSellersPage />} />
 
-          {/* Public customer review page & embed widgets */}
+          {/* Public customer review page, product feedback & embed widgets */}
           <Route path="/wtr/:formKey" element={<CustomerReviewPage />} />
+          <Route path="/product-feedback/:code" element={<ProductFeedbackPage />} />
+          <Route path="/pfe/:code" element={<ProductFeedbackPage />} />
           <Route path="/embed/reviews/:formKey" element={<ReviewWidgetPage />} />
           <Route path="/embed/badge/:formKey" element={<ReviewBadgeWidgetPage />} />
 
@@ -93,6 +100,7 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/seller-intelligence" element={<SellerIntelligencePage />} />
               <Route path="/platform" element={<PlatformsPage />} />
               <Route path="/share" element={<SharePage />} />
               <Route path="/report" element={<ReportsPage />} />

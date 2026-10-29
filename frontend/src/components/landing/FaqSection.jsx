@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown, HelpCircle, CheckCircle2, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const FaqSection = () => {
@@ -7,28 +7,32 @@ export const FaqSection = () => {
 
   const faqs = [
     {
-      q: "How does Smart Routing work?",
-      a: "When a customer rates you 4 or 5 stars, they are automatically prompted with confetti and directed to post that review on your public platforms like Google Maps. Lower ratings (1, 2, or 3 stars) immediately trigger a private internal feedback form that alerts your management team directly, preventing public damage and letting you resolve customer complaints privately.",
+      q: "What is a 'Valid QR Scan' and how is my monthly quota tracked?",
+      a: "A valid QR scan is registered when a unique customer scans your acrylic standee QR code or opens your direct feedback link to view your feedback form. Repeated or accidental scans from the same device within a short window are deduplicated automatically so your monthly scan allowance is never consumed unfairly.",
     },
     {
-      q: "How do I invite customers to leave a review?",
-      a: "You have multiple effortless options: (1) Display your downloadable 300 DPI acrylic QR code standee on reception desks or dining tables, (2) Send single or bulk WhatsApp review links directly from your dashboard, (3) Dispatch automated SMS or Email invites via our CSV batch import tool.",
+      q: "How does BizORM remain compliant with Google and platform review policies?",
+      a: "BizORM is built in full compliance with Google, FTC, and major review platform anti-gating regulations. We never restrict, block, or gate customers from expressing their voice on public review websites. Customers are presented open choices to post on public platforms (Google, Justdial, Facebook, etc.), while simultaneously having an immediate private line to alert duty managers so service issues can be resolved in real time.",
     },
     {
-      q: "Is there a completely free trial?",
-      a: "Yes! Every newly registered account starts with an unrestricted 7-day free trial that includes 100 review invites, SMS, email, and WhatsApp credits. No credit card is required to get started.",
+      q: "What is included in the 7-day free trial?",
+      a: "Every new account receives an unrestricted 7-day free trial with 100 valid QR scans, access to the 300 DPI acrylic standee generator, and multi-platform review integrations. No credit card is required to begin.",
     },
     {
-      q: "Which public review platforms can I connect?",
-      a: "Google Reviews (Google Business Profile) is our primary direct integration. You can also connect TripAdvisor, Facebook Recommendations, Practo Healthcare, Zomato, or any custom review URL specific to your industry.",
+      q: "How does monthly and annual billing work, and when do scan quotas reset?",
+      a: "Monthly subscriptions bill every 30 days, and your scan quota resets at the start of each billing cycle. Annual plans offer 2 months free with single annual billing, while retaining monthly scan resets so your business enjoys a fresh quota every month without rollover degradation.",
     },
     {
-      q: "Can I download print-ready standees for my physical store?",
-      a: "Yes. From your 'Share & Standee' dashboard, you can preview photorealistic acrylic counter standees featuring your business name, high-resolution QR code, and uploaded logo in the center. Click 'Download High-Res Standee' to get a 300 DPI print-ready file for acrylic frames.",
+      q: "How does Enterprise pooled scan billing work for multi-outlet franchises?",
+      a: "For multi-branch franchise networks (Franchise 10, 25, 50, 100 and Corporate), your valid scan allowance is pooled across all outlets. A high-footfall flagship outlet can utilize scans dynamically from the central pool without hitting artificial single-store barriers, while Head Office monitors branch-by-branch consumption in real time.",
     },
     {
-      q: "Can I manage multiple clinic or restaurant branches?",
-      a: "Yes! Bizorm supports multi-branch role-based access control (RBAC). You can manage 2 to 50+ locations, assign branch receptionists with restricted staff permissions, and inspect branch-by-branch review velocity all in one master portal.",
+      q: "Can I download print-ready acrylic counter standees for our stores?",
+      a: "Yes. From your dashboard, you can preview photorealistic acrylic counter standees customized with your business name, high-resolution QR code, and uploaded logo in the center. Click 'Download Standee' to get a 300 DPI vector-sharp PDF/PNG ready for acrylic frame production.",
+    },
+    {
+      q: "Which public review platforms can be connected?",
+      a: "You can configure up to 20 review destinations, including Google Business Profile, Justdial, Facebook Recommendations, TripAdvisor, Trustpilot, Practo Healthcare, Zomato, Amazon, Flipkart, or custom web links tailored to your specific industry.",
     },
   ];
 
@@ -36,38 +40,57 @@ export const FaqSection = () => {
     <section
       id="faq"
       style={{
-        padding: "40px 0 48px",
+        padding: "54px 0 60px",
         backgroundColor: "#ffffff",
       }}
     >
       <div
         style={{
-          maxWidth: "860px",
+          maxWidth: "880px",
           margin: "0 auto",
           padding: "0 24px",
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "18px" }}>
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "4px 12px",
+              borderRadius: "9999px",
+              backgroundColor: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              color: "#0052cc",
+              fontSize: "12px",
+              fontWeight: "700",
+              marginBottom: "10px",
+            }}
+          >
+            <HelpCircle size={14} color="#0052cc" />
+            <span>Got Questions? We Have Answers</span>
+          </div>
+
           <h2
             style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "clamp(22px, 3.2vw, 30px)",
+              fontSize: "clamp(24px, 3.2vw, 34px)",
               fontWeight: "800",
               color: "#0f172a",
               lineHeight: 1.2,
-              marginBottom: "6px",
+              marginBottom: "8px",
             }}
           >
             Frequently Asked Questions
           </h2>
-          <p style={{ fontSize: "15px", color: "#64748b" }}>
-            Everything you need to know about Bizorm's review management platform and smart routing technology.
+          <p style={{ fontSize: "15px", color: "#64748b", margin: 0 }}>
+            Everything you need to know about valid QR scans, billing resets, platform compliance, and multi-outlet franchise intelligence.
           </p>
         </div>
 
         {/* Accordion List */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
@@ -76,7 +99,7 @@ export const FaqSection = () => {
                 style={{
                   borderRadius: "14px",
                   border: "1px solid",
-                  borderColor: isOpen ? "#004ac6" : "#e2e8f0",
+                  borderColor: isOpen ? "#0052cc" : "#e2e8f0",
                   backgroundColor: isOpen ? "#f8fafc" : "#ffffff",
                   transition: "border-color 0.2s ease, background-color 0.2s ease",
                   overflow: "hidden",
@@ -90,7 +113,7 @@ export const FaqSection = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: "20px 24px",
+                    padding: "18px 22px",
                     background: "none",
                     border: "none",
                     cursor: "pointer",
@@ -101,10 +124,11 @@ export const FaqSection = () => {
                   <span
                     style={{
                       fontFamily: "'Plus Jakarta Sans', sans-serif",
-                      fontSize: "16px",
+                      fontSize: "15.5px",
                       fontWeight: "700",
                       paddingRight: "16px",
-                      color: isOpen ? "#004ac6" : "#0f172a",
+                      color: isOpen ? "#0052cc" : "#0f172a",
+                      lineHeight: 1.35,
                     }}
                   >
                     {faq.q}
@@ -112,9 +136,9 @@ export const FaqSection = () => {
                   <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
-                    style={{ flexShrink: 0, color: isOpen ? "#004ac6" : "#64748b" }}
+                    style={{ flexShrink: 0, color: isOpen ? "#0052cc" : "#64748b" }}
                   >
-                    <ChevronDown size={20} />
+                    <ChevronDown size={19} />
                   </motion.div>
                 </button>
 
@@ -128,12 +152,12 @@ export const FaqSection = () => {
                     >
                       <div
                         style={{
-                          padding: "0 24px 22px",
+                          padding: "0 22px 20px",
                           fontSize: "14.5px",
-                          lineHeight: 1.65,
+                          lineHeight: 1.6,
                           color: "#475569",
                           borderTop: "1px solid #f1f5f9",
-                          paddingTop: "14px",
+                          paddingTop: "12px",
                         }}
                       >
                         {faq.a}
@@ -149,4 +173,5 @@ export const FaqSection = () => {
     </section>
   );
 };
+
 export default FaqSection;

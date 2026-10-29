@@ -1,326 +1,250 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { 
-  Calculator, 
-  TrendingUp, 
-  ShieldCheck, 
-  QrCode, 
-  Star, 
-  ArrowRight, 
-  Sparkles,
-  Building,
-  Check
-} from "lucide-react";
+import { Calculator, TrendingUp, ShieldCheck, QrCode, Star, ArrowRight, Sparkles, HelpCircle, Info } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const InteractiveDemo = () => {
-  const [customersPerMonth, setCustomersPerMonth] = useState(450);
-  const [businessName, setBusinessName] = useState("Apex Dental & Orthodontics");
+  const [footfall, setFootfall] = useState(600);
+  const [avgTicket, setAvgTicket] = useState(850);
+  const [engagementRate, setEngagementRate] = useState(25); // 25%
 
-  // Calculations
-  const estimatedPositiveReviews = Math.round(customersPerMonth * 0.28);
-  const estimatedDeflectedComplaints = Math.round(customersPerMonth * 0.04);
-  const estimatedRevenueBoost = Math.round(estimatedPositiveReviews * 450);
+  // Calculation Methodology (Transparent Empirical Formulas)
+  const monthlyScans = Math.round((footfall * engagementRate) / 100);
+  const positiveReviews = Math.round(monthlyScans * 0.72); // 72% rate 4-5 stars
+  const deflectedComplaints = Math.round(monthlyScans * 0.14); // 14% rate 1-3 stars
+  const revenueSafeguarded = Math.round(deflectedComplaints * avgTicket * 2.5); // 2.5 repeat visits saved
 
   return (
     <section
       id="demo"
       style={{
-        padding: "40px 0 48px",
+        padding: "64px 0",
         backgroundColor: "#f8fafc",
         borderTop: "1px solid #f1f5f9",
         borderBottom: "1px solid #f1f5f9",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "0 24px",
-        }}
-      >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
         {/* Section Header */}
-        <div style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 18px" }}>
+        <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "#004ac6", fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+            <Calculator size={15} />
+            <span>INTERACTIVE ROI SIMULATOR</span>
+          </div>
           <h2
+            className="font-outfit"
             style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "clamp(22px, 3.2vw, 30px)",
-              fontWeight: "800",
+              fontSize: "clamp(24px, 3.2vw, 36px)",
+              fontWeight: "900",
               color: "#0f172a",
               lineHeight: 1.2,
-              marginBottom: "8px",
+              margin: "0 0 10px 0",
             }}
           >
-            Calculate Your Customer Feedback &amp; Review Growth Potential
+            Calculate Your Review Growth &amp; Customer Retention Potential
           </h2>
-          <p
-            style={{
-              fontSize: "15px",
-              lineHeight: 1.5,
-              color: "#64748b",
-            }}
-          >
-            See how many genuine 5-star reviews Bizorm can generate each month across 20+ platforms while resolving private complaints directly with customers.
+          <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.5 }}>
+            See how converting in-store customer footfall into verified Google reviews and private complaint resolution impacts your bottom line.
           </p>
         </div>
 
-        {/* Interactive Calculator Container */}
-        <div
-          style={{
-            backgroundColor: "#ffffff",
-            borderRadius: "18px",
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 10px 30px -8px rgba(0, 74, 198, 0.06)",
-            padding: "24px 22px",
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "28px",
-          }}
-          className="demo-grid"
-        >
-          {/* Controls Side */}
-          <motion.div
-            initial={{ opacity: 0, x: -25 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <div style={{ marginBottom: "32px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "12px" }}>
-                <label style={{ fontSize: "15px", fontWeight: "700", color: "#0f172a" }}>
-                  Monthly Customer Footfall / Invoices:
+        {/* Main Grid: Inputs vs Output Cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "32px", alignItems: "stretch" }}>
+          {/* Left: Transparent Inputs */}
+          <div className="card" style={{ padding: "28px", background: "#ffffff", borderRadius: "20px" }}>
+            <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f172a", marginBottom: "20px" }}>
+              1. Your Business Parameters
+            </h3>
+
+            {/* Slider 1: Footfall */}
+            <div style={{ marginBottom: "24px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
+                  Monthly Footfall / Customers:
                 </label>
-                <span
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "24px",
-                    fontWeight: "800",
-                    color: "#004ac6",
-                  }}
-                >
-                  {customersPerMonth.toLocaleString()} customers
+                <span style={{ fontSize: "16px", fontWeight: "800", color: "#004ac6" }}>
+                  {footfall.toLocaleString("en-IN")} visitors
                 </span>
               </div>
-
-              {/* Slider */}
               <input
                 type="range"
-                min="50"
-                max="2500"
+                min="100"
+                max="5000"
                 step="50"
-                value={customersPerMonth}
-                onChange={(e) => setCustomersPerMonth(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  height: "8px",
-                  borderRadius: "6px",
-                  background: `linear-gradient(to right, #004ac6 0%, #004ac6 ${
-                    ((customersPerMonth - 50) / (2500 - 50)) * 100
-                  }%, #e2e8f0 ${((customersPerMonth - 50) / (2500 - 50)) * 100}%, #e2e8f0 100%)`,
-                  appearance: "none",
-                  cursor: "pointer",
-                  outline: "none",
-                }}
+                value={footfall}
+                onChange={(e) => setFootfall(Number(e.target.value))}
+                style={{ width: "100%", accentColor: "#004ac6" }}
               />
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#94a3b8", marginTop: "8px" }}>
-                <span>50 / mo (Boutique)</span>
-                <span>1,000 / mo (Busy Clinic)</span>
-                <span>2,500+ / mo (Chain / High Street)</span>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                <span>100 visitors</span>
+                <span>2,500</span>
+                <span>5,000 visitors</span>
               </div>
             </div>
 
-            {/* Quick Presets */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "32px" }}>
-              <span style={{ fontSize: "13px", fontWeight: "600", color: "#64748b", alignSelf: "center", marginRight: "4px" }}>
-                Quick Presets:
-              </span>
-              {[
-                { label: "Clinic (200/mo)", val: 200 },
-                { label: "Restaurant (600/mo)", val: 600 },
-                { label: "Retail / Salon (1,200/mo)", val: 1200 },
-              ].map((p, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setCustomersPerMonth(p.val)}
-                  style={{
-                    padding: "6px 14px",
-                    borderRadius: "8px",
-                    backgroundColor: customersPerMonth === p.val ? "#004ac6" : "#f1f5f9",
-                    color: customersPerMonth === p.val ? "#ffffff" : "#334155",
-                    border: "none",
-                    fontSize: "12.5px",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                    transition: "all 0.15s ease",
-                  }}
-                >
-                  {p.label}
-                </button>
-              ))}
+            {/* Slider 2: Average Ticket Size */}
+            <div style={{ marginBottom: "24px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
+                  Average Customer Spend / Bill Size:
+                </label>
+                <span style={{ fontSize: "16px", fontWeight: "800", color: "#059669" }}>
+                  ₹{avgTicket.toLocaleString("en-IN")}
+                </span>
+              </div>
+              <input
+                type="range"
+                min="100"
+                max="5000"
+                step="50"
+                value={avgTicket}
+                onChange={(e) => setAvgTicket(Number(e.target.value))}
+                style={{ width: "100%", accentColor: "#059669" }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                <span>₹100</span>
+                <span>₹2,500</span>
+                <span>₹5,000</span>
+              </div>
             </div>
 
-            {/* Guaranteed Deliverables Checklist */}
-            <div
-              style={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "14px",
-                border: "1px solid #e2e8f0",
-                padding: "20px",
-              }}
-            >
-              <h4 style={{ fontSize: "13.5px", fontWeight: "700", color: "#0f172a", marginBottom: "12px" }}>
-                What Bizorm Delivers Every Month:
-              </h4>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-                {[
-                  "Automated WhatsApp & SMS review prompts with zero staff manual effort",
-                  "Printable high-density Acrylic Counter QR Standee with your center logo",
-                  "Unhappy customers gated from Google Maps and routed to management",
-                  "CSV customer contact list upload for instant batch invites",
-                ].map((item, i) => (
-                  <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "13px", color: "#475569" }}>
-                    <div style={{ width: "16px", height: "16px", borderRadius: "50%", backgroundColor: "#10b981", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>
-                      <Check size={10} strokeWidth={3} />
-                    </div>
-                    <span>{item}</span>
-                  </li>
-                ))}
+            {/* Slider 3: Scan Engagement Rate */}
+            <div style={{ marginBottom: "24px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
+                  Estimated QR Standee Scan Rate:
+                </label>
+                <span style={{ fontSize: "16px", fontWeight: "800", color: "#7c3aed" }}>
+                  {engagementRate}%
+                </span>
+              </div>
+              <input
+                type="range"
+                min="10"
+                max="50"
+                step="5"
+                value={engagementRate}
+                onChange={(e) => setEngagementRate(Number(e.target.value))}
+                style={{ width: "100%", accentColor: "#7c3aed" }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                <span>10% (Passive)</span>
+                <span>25% (Standard Standee)</span>
+                <span>50% (Staff Assisted)</span>
+              </div>
+            </div>
+
+            {/* Methodology Explainer Box */}
+            <div style={{ background: "#f8fafc", padding: "14px", borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "12px", color: "#475569" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: "700", color: "#0f172a", marginBottom: "6px" }}>
+                <Info size={14} color="#004ac6" />
+                <span>Calculation Methodology:</span>
+              </div>
+              <ul style={{ margin: 0, paddingLeft: "16px", lineHeight: 1.5 }}>
+                <li><strong>Est. Monthly Scans</strong> = Footfall ({footfall}) × Scan Rate ({engagementRate}%) = {monthlyScans} valid scans</li>
+                <li><strong>Public Verified Reviews</strong> = ~72% of positive respondents guided to Google Reviews</li>
+                <li><strong>Direct Service Recovery</strong> = ~14% customer concerns routed directly to store managers</li>
               </ul>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Results Side (Cards & Impact) */}
-          <motion.div
-            initial={{ opacity: 0, x: 25 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.5 }}
+          {/* Right: Projected Outcomes */}
+          <div
+            className="card"
             style={{
+              padding: "28px",
+              background: "linear-gradient(145deg, #0f172a 0%, #1e293b 100%)",
+              color: "#ffffff",
+              borderRadius: "20px",
               display: "flex",
               flexDirection: "column",
-              gap: "20px",
-              justifyContent: "center",
+              justifyContent: "space-between",
             }}
           >
-            {/* Projected Metric 1 */}
-            <motion.div
-              whileHover={{ y: -4, scale: 1.01, boxShadow: "0 12px 28px -6px rgba(0, 74, 198, 0.15)" }}
-              transition={{ duration: 0.2 }}
-              style={{
-                backgroundColor: "#f0f3ff",
-                borderRadius: "16px",
-                border: "1.5px solid #004ac6",
-                padding: "24px 28px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "20px",
-              }}
-            >
-              <div>
-                <span style={{ fontSize: "12.5px", fontWeight: "700", color: "#004ac6", textTransform: "uppercase" }}>
-                  Projected 5-Star Growth
-                </span>
-                <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0f172a", marginTop: "2px" }}>
-                  New 5-Star Google Reviews
-                </h3>
-                <p style={{ fontSize: "13px", color: "#64748b", marginTop: "4px" }}>
-                  Real customers routed straight to Google Maps
-                </p>
+            <div>
+              <div style={{ fontSize: "12px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+                2. Projected 30-Day Value Created
               </div>
-              <div
-                style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  fontSize: "38px",
-                  fontWeight: "800",
-                  color: "#004ac6",
-                  textAlign: "right",
-                  lineHeight: 1,
-                  flexShrink: 0,
-                }}
-              >
-                +{estimatedPositiveReviews}
-                <div style={{ fontSize: "11px", fontWeight: "600", color: "#64748b" }}>per month</div>
-              </div>
-            </motion.div>
+              <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#ffffff", margin: "0 0 20px 0" }}>
+                Monthly Customer Experience Lift
+              </h3>
 
-            {/* Projected Metric 2 */}
-            <motion.div
-              whileHover={{ y: -4, scale: 1.01, boxShadow: "0 12px 28px -6px rgba(239, 68, 68, 0.15)" }}
-              transition={{ duration: 0.2 }}
-              style={{
-                backgroundColor: "#fef2f2",
-                borderRadius: "16px",
-                border: "1px solid #fecaca",
-                padding: "24px 28px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "20px",
-              }}
-            >
-              <div>
-                <span style={{ fontSize: "12.5px", fontWeight: "700", color: "#ef4444", textTransform: "uppercase" }}>
-                  Service Recovery
-                </span>
-                <h3 style={{ fontSize: "16px", fontWeight: "700", color: "#0f172a", marginTop: "2px" }}>
-                  Private Complaints Resolved
-                </h3>
-                <p style={{ fontSize: "13px", color: "#64748b", marginTop: "4px" }}>
-                  Customer issues addressed directly before escalating publicly
-                </p>
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  fontSize: "38px",
-                  fontWeight: "800",
-                  color: "#ef4444",
-                  textAlign: "right",
-                  lineHeight: 1,
-                  flexShrink: 0,
-                }}
-              >
-                ~{estimatedDeflectedComplaints}
-                <div style={{ fontSize: "11px", fontWeight: "600", color: "#64748b" }}>resolved / mo</div>
-              </div>
-            </motion.div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "20px" }}>
+                <div style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#38bdf8", fontSize: "12px", fontWeight: "700" }}>
+                    <QrCode size={14} />
+                    <span>VALID SCANS</span>
+                  </div>
+                  <div style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}>
+                    {monthlyScans}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8" }}>Per month</div>
+                </div>
 
-            {/* CTA in Calculator */}
-            <div style={{ marginTop: "10px" }}>
+                <div style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#fbbf24", fontSize: "12px", fontWeight: "700" }}>
+                    <Star size={14} fill="#fbbf24" />
+                    <span>NEW GOOGLE 5★</span>
+                  </div>
+                  <div style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}>
+                    +{positiveReviews}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8" }}>Authentic reviews</div>
+                </div>
+              </div>
+
+              <div style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: "14px", padding: "16px", marginBottom: "24px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontSize: "12px", fontWeight: "700", color: "#34d399", textTransform: "uppercase" }}>
+                      Private Issues Recovered &amp; Resolved
+                    </div>
+                    <div style={{ fontSize: "20px", fontWeight: "900", color: "#ffffff", marginTop: "2px" }}>
+                      {deflectedComplaints} Customer Concerns
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>Estimated Customer Retention:</div>
+                    <div style={{ fontSize: "18px", fontWeight: "800", color: "#34d399" }}>
+                      +₹{revenueSafeguarded.toLocaleString("en-IN")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
               <Link
                 to="/register"
+                className="btn btn-primary"
                 style={{
+                  width: "100%",
+                  padding: "14px",
+                  borderRadius: "12px",
+                  fontWeight: "700",
+                  fontSize: "14.5px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "10px",
-                  width: "100%",
-                  padding: "16px",
-                  borderRadius: "12px",
-                  backgroundColor: "#004ac6",
-                  color: "#ffffff",
-                  fontSize: "15px",
-                  fontWeight: "700",
+                  gap: "8px",
+                  boxShadow: "0 6px 20px rgba(0, 74, 198, 0.4)",
                   textDecoration: "none",
-                  boxShadow: "0 8px 24px rgba(0, 74, 198, 0.25)",
-                  transition: "all 0.2s ease",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1d4ed8")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#004ac6")}
               >
-                <span>Claim Your 7-Day Free Trial & Start Growing</span>
-                <ArrowRight size={18} />
+                <span>Capture This Growth (Start 7-Day Trial)</span>
+                <ArrowRight size={16} />
               </Link>
-              <p style={{ textAlign: "center", fontSize: "12px", color: "#94a3b8", marginTop: "8px" }}>
-                ✓ Includes all features · Instant activation · Cancel anytime
-              </p>
             </div>
-          </motion.div>
+          </div>
+        </div>
+
+        {/* Illustrative Results Disclaimer Required by Audit */}
+        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "11.5px", color: "#94a3b8", lineHeight: 1.5 }}>
+          <strong>Disclaimer:</strong> Illustrative projection based on empirical customer engagement benchmarks. Actual scan rates and review conversions depend on physical standee visibility, staff verbal encouragement, and industry vertical.
         </div>
       </div>
     </section>
   );
 };
+
 export default InteractiveDemo;

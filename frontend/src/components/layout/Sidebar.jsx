@@ -14,6 +14,7 @@ import {
   History,
   Settings,
   ShieldAlert,
+  Package,
 } from "lucide-react";
 
 export const Sidebar = ({ isOpen, onClose }) => {
@@ -66,6 +67,25 @@ export const Sidebar = ({ isOpen, onClose }) => {
       <NavLink to="/report" style={linkStyle} onClick={handleLinkClick}>
         <FileText size={18} />
         <span>{isStaffOnly ? "My Feedback" : "Reviews & Reports"}</span>
+      </NavLink>
+
+      <NavLink to="/seller-intelligence" style={linkStyle} onClick={handleLinkClick}>
+        <Package size={18} />
+        <span>Seller Intelligence</span>
+        <span
+          style={{
+            marginLeft: "auto",
+            fontSize: "9.5px",
+            fontWeight: "800",
+            backgroundColor: "#004ac6",
+            color: "#ffffff",
+            padding: "1px 6px",
+            borderRadius: "999px",
+            letterSpacing: "0.4px",
+          }}
+        >
+          NEW
+        </span>
       </NavLink>
 
       <NavLink to="/account" style={linkStyle} onClick={handleLinkClick}>

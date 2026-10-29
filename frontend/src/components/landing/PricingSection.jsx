@@ -1,771 +1,430 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Star, Zap, Building2, Layers, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { Check, Star, Building2, Store, Sparkles, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { api } from "../../services/api";
 
 export const PricingSection = ({ hideHeader = false }) => {
-  const [activeTab, setActiveTab] = useState("single"); // "single" | "multiple" | "annual"
-  const [livePackages, setLivePackages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("business"); // "business" | "enterprise"
+  const [annualBilling, setAnnualBilling] = useState(true);
 
-  // Fetch live packages from backend if available
-  useEffect(() => {
-    const fetchLive = async () => {
-      try {
-        setLoading(true);
-        const res = await api.getActivePricing();
-        if (res.success && Array.isArray(res.packages) && res.packages.length > 0) {
-          setLivePackages(res.packages);
-        }
-      } catch (err) {
-        // Fallback gracefully to default static list
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLive();
-  }, []);
-
-  // Default Single Business Packages (BizORM Business™ Blueprint)
-  const defaultSinglePlans = [
+  // Business Plans (Single Location) - Exact Approved Spec
+  const businessPlans = [
     {
-      _id: "trial-single",
-      packageName: "Free Trial (7 Days)",
-      category: "Trial",
-      price: 0,
-      billingType: "7 Days",
-      businessType: "single",
-      reviewLimit: 100,
-      maxBusinesses: 1,
-      popularBadge: false,
-      featuresList: [
-        "7 Days Full Access Free Trial",
-        "100 Valid QR Scans Included",
-        "1 Business Location / Branch",
-        "Up to 5 Review Platform Destinations",
-        "Dynamic Branded QR Standee (300 DPI)",
-        "AI Feedback Writing Assistant",
-        "Private Complaint Management",
+      id: "starter",
+      name: "Starter",
+      tagline: "For small single-counter shops & local practices",
+      monthlyPrice: 299,
+      annualPrice: 2990,
+      scans: "100 valid scans/month",
+      locations: "1 business location",
+      platforms: "5 review platforms",
+      features: [
+        "100 valid scans/month",
+        "1 business location",
+        "5 review platforms",
+        "Branded QR feedback standee (300 DPI)",
+        "Basic analytics & feedback logs",
+        "Email notifications for negative ratings",
       ],
-      ctaText: "Start 7-Day Free Trial",
+      popular: false,
+      cta: "Choose Plan",
     },
     {
-      _id: "starter-single",
-      packageName: "Starter Plan",
-      category: "Standard",
-      price: 499,
-      billingType: "Monthly",
-      businessType: "single",
-      reviewLimit: 500,
-      maxBusinesses: 1,
-      popularBadge: false,
-      featuresList: [
-        "500 Valid QR Scans / Month",
-        "1 Business Location / Branch",
-        "5 Review Platform Destinations",
-        "Dynamic Branded QR Standee (300 DPI)",
-        "Basic AI Feedback Assistant",
-        "Real-Time Feedback Dashboard",
-        "WhatsApp Campaign Add-on Available",
+      id: "growth",
+      name: "Growth",
+      tagline: "For active clinics, cafes & busy retail counters",
+      monthlyPrice: 999,
+      annualPrice: 9990,
+      scans: "1,000 valid scans/month",
+      locations: "1 business location",
+      platforms: "10 review platforms",
+      features: [
+        "1,000 valid scans/month",
+        "1 business location",
+        "10 review platforms",
+        "Feedback and complaint tracking",
+        "Expanded analytics & rating velocity",
+        "Private complaint resolution workflow",
+        "Priority email & WhatsApp support",
       ],
-      ctaText: "Start 7-Day Free Trial",
+      popular: true,
+      cta: "Choose Plan",
     },
     {
-      _id: "growth-single",
-      packageName: "Growth Professional",
-      category: "Popular",
-      price: 999,
-      billingType: "Monthly",
-      businessType: "single",
-      reviewLimit: 1000,
-      maxBusinesses: 1,
-      popularBadge: true,
-      featuresList: [
-        "1,000 Valid QR Scans / Month",
-        "1 Business Location + Staff Logins",
-        "10 Review Platform Destinations",
-        "Standard AI Sentiment & Review Assistant",
-        "Custom Feedback Survey Builder",
-        "Staff Performance Attribution",
-        "Complaint Escalation & Resolution",
-        "Priority WhatsApp & Phone Support",
+      id: "professional",
+      name: "Professional",
+      tagline: "For established practices, salons & high-footfall venues",
+      monthlyPrice: 1499,
+      annualPrice: 14990,
+      scans: "3,000 valid scans/month",
+      locations: "1 business location",
+      platforms: "15 review platforms",
+      features: [
+        "3,000 valid scans/month",
+        "1 business location",
+        "15 review platforms",
+        "Staff attribution & performance scoring",
+        "Advanced reporting & CSV data exports",
+        "Custom feedback question builder",
+        "Automated customer recovery links",
       ],
-      ctaText: "Start 7-Day Free Trial",
+      popular: false,
+      cta: "Choose Plan",
     },
     {
-      _id: "pro-single",
-      packageName: "Business Pro",
-      category: "High Volume",
-      price: 2499,
-      billingType: "Monthly",
-      businessType: "single",
-      reviewLimit: 10000,
-      maxBusinesses: 1,
-      popularBadge: false,
-      featuresList: [
-        "10,000 Valid QR Scans / Month",
-        "1 Flagship Business Location",
-        "Up to 20 Review Platform Destinations",
-        "Advanced AI Review & Complaint Intelligence",
-        "Full Custom Survey Builder & Staff Scoring",
-        "Automated Review Follow-ups & Campaigns",
-        "Complete Audit Logs & CSV Data Export",
-        "24/7 Dedicated Account Support",
+      id: "business-pro",
+      name: "Business Pro",
+      tagline: "For high-volume flagship outlets & demanding brands",
+      monthlyPrice: 2499,
+      annualPrice: 24990,
+      scans: "10,000 valid scans/month",
+      locations: "1 business location",
+      platforms: "20 review platforms",
+      features: [
+        "10,000 valid scans/month",
+        "1 business location",
+        "20 review platforms",
+        "Automation features & webhook alerts",
+        "Advanced insights & sentiment clustering",
+        "Multi-staff accounts & custom QR tags",
+        "Dedicated account onboarding",
       ],
-      ctaText: "Start 7-Day Free Trial",
+      popular: false,
+      cta: "Choose Plan",
     },
   ];
 
-  // Default Franchise & Multi-Outlet Packages (BizORM Enterprise™ Blueprint)
-  const defaultMultiPlans = [
+  // Enterprise Plans (Multi-Outlet Franchise & Corporate) - Complete Transparent Pricing
+  const enterprisePlans = [
     {
-      _id: "franchise-10",
-      packageName: "Franchise 10",
-      category: "Standard",
-      price: 24999,
-      billingType: "Yearly",
-      periodLabel: "/year",
-      businessType: "multiple",
-      reviewLimit: 10000,
-      maxBusinesses: 10,
-      popularBadge: false,
-      featuresList: [
-        "Up to 10 Outlets / Franchise Locations",
-        "10,000 Pooled Valid Scans / Month",
-        "Head Office Centralized Command Center",
-        "Individual Branded QR for Each Outlet",
-        "Up to 20 Review Platform Destinations",
-        "Outlet Scorecard & Performance Ranking",
-        "Basic Complaint Assignment & Tracking",
-        "Bulk QR Code Generation",
+      id: "franchise-10",
+      name: "Franchise 10",
+      tagline: "For regional chains with up to 10 outlets",
+      monthlyPrice: 7999,
+      annualPrice: 79990,
+      scans: "25,000 Pooled Valid Scans / Month",
+      locations: "Up to 10 Locations Included",
+      features: [
+        "Complete subscription for 10 branches",
+        "25,000 pooled valid scans/month across all outlets",
+        "Central Head-Office Command Center",
+        "Individual Store Manager access & logins",
+        "Regional SLA escalation engine",
+        "Branch-by-branch comparative analytics",
+        "Bulk printable acrylic standee kit",
       ],
-      ctaText: "Choose Franchise 10",
+      popular: false,
+      cta: "Select Franchise 10",
     },
     {
-      _id: "franchise-25",
-      packageName: "Franchise 25",
-      category: "Recommended",
-      price: 49999,
-      billingType: "Yearly",
-      periodLabel: "/year",
-      businessType: "multiple",
-      reviewLimit: 25000,
-      maxBusinesses: 25,
-      popularBadge: true,
-      featuresList: [
-        "Up to 25 Outlets / Franchise Locations",
-        "25,000 Pooled Valid Scans / Month",
-        "Head Office Command Center + Scorecards",
-        "Regional Manager Access & Territory RBAC",
-        "Complaint Escalation & Resolution SLAs",
-        "AI Sentiment & Outlier Detection",
-        "Monthly Franchise Health Score™",
-        "Priority Onboarding & Dedicated Support",
+      id: "franchise-25",
+      name: "Franchise 25",
+      tagline: "For growing retail & hospitality franchise networks",
+      monthlyPrice: 16999,
+      annualPrice: 169990,
+      scans: "75,000 Pooled Valid Scans / Month",
+      locations: "Up to 25 Locations Included",
+      features: [
+        "Complete subscription for 25 branches",
+        "75,000 pooled valid scans/month across network",
+        "Franchise Health Score™ & outlet rankings",
+        "Multi-tier territory roles (Regional Directors & Branch Staff)",
+        "Audit logs & centralized survey compliance",
+        "Automated daily/weekly executive email digests",
+        "Priority corporate phone & WhatsApp support",
       ],
-      ctaText: "Choose Franchise 25",
+      popular: true,
+      cta: "Select Franchise 25",
     },
     {
-      _id: "franchise-50",
-      packageName: "Franchise 50",
-      category: "Enterprise",
-      price: 89999,
-      billingType: "Yearly",
-      periodLabel: "/year",
-      businessType: "multiple",
-      reviewLimit: 50000,
-      maxBusinesses: 50,
-      popularBadge: false,
-      featuresList: [
-        "Up to 50 Outlets / Franchise Locations",
-        "50,000 Pooled Valid Scans / Month",
-        "Full Enterprise HQ Multi-Territory Command",
-        "Multi-Tier RBAC (HQ, Regional, Store)",
-        "Advanced SLA Escalation Engine",
-        "AI Executive Summary for Leadership",
-        "Custom Survey Templates by Branch",
-        "API Integration & Webhook Support",
+      id: "franchise-50",
+      name: "Franchise 50",
+      tagline: "For national franchise brands with up to 50 outlets",
+      monthlyPrice: 29999,
+      annualPrice: 299990,
+      scans: "175,000 Pooled Valid Scans / Month",
+      locations: "Up to 50 Locations Included",
+      features: [
+        "Complete subscription for 50 branches",
+        "175,000 pooled valid scans/month across network",
+        "Multi-brand governance & sub-franchise hierarchies",
+        "Automated bulk QR dispatch & acrylic standee production",
+        "Advanced complaint root-cause AI clustering",
+        "Quarterly business review with reputation strategists",
+        "Dedicated Customer Success Manager",
       ],
-      ctaText: "Choose Franchise 50",
+      popular: false,
+      cta: "Select Franchise 50",
     },
     {
-      _id: "franchise-100",
-      packageName: "Franchise 100",
-      category: "Enterprise Plus",
-      price: 149999,
-      billingType: "Yearly",
-      periodLabel: "/year",
-      businessType: "multiple",
-      reviewLimit: 100000,
-      maxBusinesses: 100,
-      popularBadge: false,
-      featuresList: [
-        "Up to 100 Outlets / Large Chain",
-        "1,00,000 Pooled Valid Scans / Month",
-        "Complete Franchise Intelligence Platform",
-        "Franchise Health Score™ Calibrated Index",
-        "Custom Integrations (POS, Billing, CRM)",
-        "Dedicated Enterprise Account Director",
-        "Usage-Based High-Volume WhatsApp Messaging",
-        "Custom SLA & 99.9% Uptime Guarantee",
+      id: "franchise-corporate",
+      name: "Franchise 100 / Corporate",
+      tagline: "For large enterprise chains & multi-brand conglomerates",
+      monthlyPrice: "Custom",
+      annualPrice: "Custom",
+      scans: "500,000+ Pooled Valid Scans / Month",
+      locations: "100+ Locations & Custom Scale",
+      features: [
+        "Unlimited branches & custom location tiers",
+        "Tailored high-volume pooled scan quotas",
+        "Custom ERP, POS, and CRM API integrations",
+        "Custom enterprise SLAs & contractual data governance",
+        "On-premise or dedicated private cloud deployment options",
+        "Dedicated Account Director & executive training",
       ],
-      ctaText: "Choose Franchise 100",
+      popular: false,
+      cta: "Contact Enterprise Sales",
     },
   ];
 
-  // Annual GST Plans (from bizorm.com)
-  const annualGstPlans = [
-    {
-      _id: "gst-essential",
-      packageName: "Essential",
-      category: "Standard",
-      price: 955,
-      billingType: "Yearly",
-      periodLabel: "/+ GST Per Year",
-      businessType: "annual",
-      reviewLimit: 100,
-      maxBusinesses: 1,
-      popularBadge: false,
-      featuresList: [
-        "5 Email Review Invites",
-        "40 SMS Review Invites",
-        "5 WhatsApp Review Invites",
-        "5 Review Platforms (Google, etc.)",
-        "Smart Routing (1-3★ Gated, 4-5★ Public)",
-        "Real-time Analytics Dashboard",
-        "Standard Email Support",
-      ],
-      ctaText: "Start 7-Day Free Trial",
-    },
-    {
-      _id: "gst-premium",
-      packageName: "Premium Plan",
-      category: "Popular",
-      price: 5550,
-      billingType: "Yearly",
-      periodLabel: "/+ GST Per Year",
-      businessType: "annual",
-      reviewLimit: 500,
-      maxBusinesses: 1,
-      popularBadge: true,
-      featuresList: [
-        "10 Email Review Invites",
-        "100 SMS Review Invites",
-        "10 WhatsApp Review Invites",
-        "10 Review Platforms",
-        "Smart Routing & Private Star Shield",
-        "Printable 300 DPI Counter Standee",
-        "Bulk CSV Customer Import",
-        "Priority Support via Phone & WhatsApp",
-      ],
-      ctaText: "Start 7-Day Free Trial",
-    },
-    {
-      _id: "gst-premium-plus",
-      packageName: "Premium Plus",
-      category: "Enterprise",
-      price: 9550,
-      billingType: "Yearly",
-      periodLabel: "/+ GST Per Year",
-      businessType: "annual",
-      reviewLimit: 1000,
-      maxBusinesses: 1,
-      popularBadge: false,
-      featuresList: [
-        "20 Email Review Invites",
-        "200 SMS Review Invites",
-        "20 WhatsApp Review Invites",
-        "20 Review Platforms",
-        "Smart Routing & Private Complaint Inbox",
-        "Dynamic Multi-QR Standee Generator",
-        "Competitor Review Benchmarking",
-        "Dedicated Account Growth Manager",
-      ],
-      ctaText: "Start 7-Day Free Trial",
-    },
-  ];
-
-  // Determine which list to render
-  let displayPlans = [];
-  if (activeTab === "single") {
-    const liveSingle = livePackages.filter((p) => p.businessType === "single");
-    displayPlans = liveSingle.length > 0 ? liveSingle : defaultSinglePlans;
-  } else if (activeTab === "multiple") {
-    const liveMulti = livePackages.filter((p) => p.businessType === "multiple");
-    displayPlans = liveMulti.length > 0 ? liveMulti : defaultMultiPlans;
-  } else {
-    displayPlans = annualGstPlans;
-  }
+  const currentPlans = activeTab === "business" ? businessPlans : enterprisePlans;
 
   return (
     <section
       id="pricing"
       style={{
-        padding: hideHeader ? "10px 0 32px" : "28px 0 36px",
-        backgroundColor: "#f0f3ff",
+        padding: hideHeader ? "20px 0 64px" : "64px 0 72px",
+        backgroundColor: "#ffffff",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1320px",
-          margin: "0 auto",
-          padding: "0 20px",
-        }}
-      >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
         {/* Section Header */}
         {!hideHeader && (
-          <div style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 16px" }}>
+          <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "#004ac6", fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+              <Sparkles size={15} />
+              <span>TRANSPARENT SCAN-BASED PRICING</span>
+            </div>
             <h2
+              className="font-outfit"
               style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(22px, 3vw, 30px)",
-                fontWeight: "800",
+                fontSize: "clamp(26px, 3.5vw, 38px)",
+                fontWeight: "900",
                 color: "#0f172a",
                 lineHeight: 1.2,
-                marginBottom: "6px",
+                margin: "0 0 10px 0",
               }}
             >
-              Transparent Plans for Every Business Stage
+              Plans for Every Business Stage
             </h2>
-            <p
-              style={{
-                fontSize: "14.5px",
-                lineHeight: 1.5,
-                color: "#64748b",
-                margin: "0 auto",
-              }}
-            >
-              Choose the best plan for your business. All packages include our <strong>7-Day Free Trial</strong> with instant access.
+            <p style={{ fontSize: "15.5px", color: "#64748b", margin: 0, lineHeight: 1.5 }}>
+              Approved commercial direction built on <strong>valid QR scans</strong> and transparent quotas. No hidden per-review fees.
             </p>
           </div>
         )}
 
-        {/* 3 Categories Navigation Tabs - Single Clean Row */}
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              backgroundColor: "#ffffff",
-              borderRadius: "12px",
-              padding: "4px",
-              border: "1px solid #dee8ff",
-              boxShadow: "0 2px 8px rgba(0, 74, 198, 0.05)",
-              gap: "4px",
-              maxWidth: "100%",
-              overflowX: "auto",
-            }}
-          >
-            {/* Single Business Tab */}
+        {/* Category & Billing Toggles */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
+          {/* Business vs Enterprise Segment Toggle */}
+          <div style={{ display: "inline-flex", background: "#f1f5f9", padding: "4px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
             <button
               type="button"
-              onClick={() => setActiveTab("single")}
+              onClick={() => setActiveTab("business")}
               style={{
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                padding: "7px 14px",
+                gap: "8px",
+                padding: "10px 22px",
                 borderRadius: "8px",
                 border: "none",
-                fontSize: "13px",
+                background: activeTab === "business" ? "#ffffff" : "transparent",
+                color: activeTab === "business" ? "#004ac6" : "#64748b",
                 fontWeight: "700",
+                fontSize: "13.5px",
                 cursor: "pointer",
-                whiteSpace: "nowrap",
-                backgroundColor: activeTab === "single" ? "#004ac6" : "transparent",
-                color: activeTab === "single" ? "#ffffff" : "#475569",
+                boxShadow: activeTab === "business" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
                 transition: "all 0.15s ease",
               }}
             >
-              <Building2 size={15} />
-              <span>BizORM Business™</span>
-              <span
-                style={{
-                  fontSize: "10.5px",
-                  fontWeight: "800",
-                  backgroundColor: activeTab === "single" ? "rgba(255,255,255,0.25)" : "#f1f5f9",
-                  color: activeTab === "single" ? "#ffffff" : "#64748b",
-                  padding: "1px 5px",
-                  borderRadius: "5px",
-                }}
-              >
-                Single Store
-              </span>
+              <Store size={16} />
+              <span>Single Business Locations</span>
             </button>
-
-            {/* Franchise & Multi-Outlet Tab */}
             <button
               type="button"
-              onClick={() => setActiveTab("multiple")}
+              onClick={() => setActiveTab("enterprise")}
               style={{
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                padding: "7px 14px",
+                gap: "8px",
+                padding: "10px 22px",
                 borderRadius: "8px",
                 border: "none",
-                fontSize: "13px",
+                background: activeTab === "enterprise" ? "#ffffff" : "transparent",
+                color: activeTab === "enterprise" ? "#004ac6" : "#64748b",
                 fontWeight: "700",
+                fontSize: "13.5px",
                 cursor: "pointer",
-                whiteSpace: "nowrap",
-                backgroundColor: activeTab === "multiple" ? "#004ac6" : "transparent",
-                color: activeTab === "multiple" ? "#ffffff" : "#475569",
+                boxShadow: activeTab === "enterprise" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
                 transition: "all 0.15s ease",
               }}
             >
-              <Layers size={15} />
-              <span>BizORM Enterprise™</span>
-              <span
-                style={{
-                  fontSize: "10.5px",
-                  fontWeight: "800",
-                  backgroundColor: activeTab === "multiple" ? "rgba(255,255,255,0.25)" : "#eff6ff",
-                  color: activeTab === "multiple" ? "#ffffff" : "#004ac6",
-                  padding: "1px 6px",
-                  borderRadius: "5px",
-                }}
-              >
-                Franchise Networks
-              </span>
+              <Building2 size={16} />
+              <span>Multi-Outlet Franchises &amp; Corporate</span>
             </button>
+          </div>
 
-            {/* Annual GST Tab */}
+          {/* Monthly / Annual Billing Toggle */}
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", background: "#f8fafc", padding: "4px 8px", borderRadius: "999px", border: "1px solid #e2e8f0" }}>
             <button
               type="button"
-              onClick={() => setActiveTab("annual")}
+              onClick={() => setAnnualBilling(false)}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "7px 14px",
-                borderRadius: "8px",
+                padding: "6px 16px",
+                borderRadius: "999px",
                 border: "none",
+                background: !annualBilling ? "#004ac6" : "transparent",
+                color: !annualBilling ? "#ffffff" : "#475569",
                 fontSize: "13px",
                 fontWeight: "700",
                 cursor: "pointer",
-                whiteSpace: "nowrap",
-                backgroundColor: activeTab === "annual" ? "#004ac6" : "transparent",
-                color: activeTab === "annual" ? "#ffffff" : "#475569",
-                transition: "all 0.15s ease",
               }}
             >
-              <Zap size={14} />
-              <span>Annual GST</span>
-              <span
-                style={{
-                  fontSize: "10px",
-                  fontWeight: "800",
-                  backgroundColor: activeTab === "annual" ? "#ffffff" : "#dbeafe",
-                  color: "#004ac6",
-                  padding: "1px 6px",
-                  borderRadius: "4px",
-                }}
-              >
-                Save 20%
+              Monthly Billing
+            </button>
+            <button
+              type="button"
+              onClick={() => setAnnualBilling(true)}
+              style={{
+                padding: "6px 16px",
+                borderRadius: "999px",
+                border: "none",
+                background: annualBilling ? "#004ac6" : "transparent",
+                color: annualBilling ? "#ffffff" : "#475569",
+                fontSize: "13px",
+                fontWeight: "700",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span>Annual Billing (2 Months Free)</span>
+              <span style={{ fontSize: "10.5px", background: "#10b981", color: "#fff", padding: "1px 6px", borderRadius: "999px", fontWeight: "800" }}>
+                SAVE 17%
               </span>
             </button>
           </div>
         </div>
 
-        {/* Pricing Cards Grid */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "18px",
-            alignItems: "stretch",
-          }}
-        >
-          {displayPlans.map((pkg, idx) => {
-            const isPopular = pkg.popularBadge || pkg.category === "Popular";
-            const priceLabel = pkg.price === 0 ? "₹0" : `₹${Number(pkg.price).toLocaleString()}`;
-            const periodLabel = pkg.periodLabel || (pkg.billingType === "7 Days" ? "/7 Days" : "/Monthly");
+        {/* 4 Cards Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px", alignItems: "stretch" }}>
+          {currentPlans.map((plan) => {
+            const isNumeric = typeof plan.monthlyPrice === "number";
+            const price = isNumeric
+              ? annualBilling
+                ? `₹${plan.annualPrice.toLocaleString("en-IN")}`
+                : `₹${plan.monthlyPrice.toLocaleString("en-IN")}`
+              : "Custom";
+
+            const cycle = isNumeric ? (annualBilling ? "/year" : "/mo") : "";
 
             return (
               <motion.div
-                key={pkg._id}
-                initial={{ opacity: 0, y: 30, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.4, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{
-                  y: -8,
-                  boxShadow: isPopular
-                    ? "0 20px 48px -8px rgba(0, 74, 198, 0.24)"
-                    : "0 16px 36px -6px rgba(0, 74, 198, 0.12)",
-                  borderColor: isPopular ? "#004ac6" : "#93c5fd",
-                  transition: { duration: 0.2 }
-                }}
+                key={plan.id}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.15 }}
                 style={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "16px",
-                  border: isPopular ? "2px solid #004ac6" : "1px solid #dee8ff",
-                  boxShadow: isPopular
-                    ? "0 12px 30px -8px rgba(0, 74, 198, 0.14)"
-                    : "0 4px 16px -2px rgba(0, 74, 198, 0.04)",
-                  padding: "20px 18px",
+                  background: "#ffffff",
+                  borderRadius: "20px",
+                  padding: "32px 24px",
+                  border: plan.popular ? "2px solid #004ac6" : "1px solid #e2e8f0",
+                  boxShadow: plan.popular
+                    ? "0 12px 30px rgba(0, 74, 198, 0.12)"
+                    : "0 4px 14px rgba(0, 0, 0, 0.04)",
+                  position: "relative",
                   display: "flex",
                   flexDirection: "column",
-                  position: "relative",
-                  cursor: "default",
-                  transition: "border-color 0.2s, box-shadow 0.2s",
                 }}
               >
-                {/* Popular Ribbon */}
-                {isPopular && (
+                {plan.popular && (
                   <div
                     style={{
                       position: "absolute",
-                      top: "-11px",
+                      top: "-12px",
                       left: "50%",
                       transform: "translateX(-50%)",
-                      backgroundColor: "#004ac6",
+                      background: "#004ac6",
                       color: "#ffffff",
-                      fontSize: "10px",
+                      fontSize: "11px",
                       fontWeight: "800",
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      padding: "2px 10px",
-                      borderRadius: "6px",
-                      boxShadow: "0 2px 8px rgba(0, 74, 198, 0.25)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      whiteSpace: "nowrap",
+                      padding: "3px 14px",
+                      borderRadius: "999px",
+                      letterSpacing: "0.5px",
                     }}
                   >
-                    <Sparkles size={11} />
-                    <span>MOST POPULAR</span>
+                    MOST POPULAR
                   </div>
                 )}
 
-                {/* Top Category & Branch Badge */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-                  <span
-                    style={{
-                      fontSize: "10.5px",
-                      fontWeight: "800",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                      color: isPopular ? "#004ac6" : "#64748b",
-                      backgroundColor: isPopular ? "#eff6ff" : "#f1f5f9",
-                      padding: "2px 7px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    {pkg.category || "STANDARD"}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "10.5px",
-                      fontWeight: "700",
-                      color: "#64748b",
-                      backgroundColor: "#f8fafc",
-                      padding: "2px 7px",
-                      borderRadius: "5px",
-                      border: "1px solid #e2e8f0",
-                    }}
-                  >
-                    {pkg.maxBusinesses ? `${pkg.maxBusinesses} ${pkg.maxBusinesses > 1 ? "Branches" : "Branch"}` : "1 Branch"}
-                  </span>
+                <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a", marginBottom: "4px" }}>
+                  {plan.name}
+                </div>
+                <div style={{ fontSize: "12px", color: "#64748b", minHeight: "32px", marginBottom: "16px", lineHeight: 1.4 }}>
+                  {plan.tagline}
                 </div>
 
-                {/* Package Name */}
-                <h3
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "17px",
-                    fontWeight: "800",
-                    color: "#0f172a",
-                    marginBottom: "8px",
-                    lineHeight: 1.25,
-                  }}
-                >
-                  {pkg.packageName}
-                </h3>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "16px" }}>
+                  <span style={{ fontSize: "36px", fontWeight: "900", color: "#0f172a", letterSpacing: "-0.5px" }}>
+                    {price}
+                  </span>
+                  <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "600" }}>{cycle}</span>
+                </div>
 
-                {/* Price */}
-                <div style={{ marginBottom: "10px" }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-                    <span
-                      style={{
-                        fontFamily: "'Plus Jakarta Sans', sans-serif",
-                        fontSize: "28px",
-                        fontWeight: "800",
-                        color: isPopular ? "#004ac6" : "#0f172a",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {priceLabel}
-                    </span>
-                    <span style={{ fontSize: "12.5px", fontWeight: "600", color: "#64748b" }}>
-                      {periodLabel}
-                    </span>
+                {/* Quota Highlights Box */}
+                <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "20px", border: "1px solid #f1f5f9" }}>
+                  <div style={{ fontSize: "13px", fontWeight: "800", color: "#004ac6" }}>
+                    🔍 {plan.scans}
                   </div>
-                  {pkg.extraBizPrice > 0 && (
-                    <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
-                      +₹{pkg.extraBizPrice}/mo for extra branches
-                    </div>
-                  )}
+                  <div style={{ fontSize: "12px", color: "#475569", marginTop: "2px", fontWeight: "600" }}>
+                    📍 {plan.locations}
+                  </div>
                 </div>
 
-                {/* Review Limit Highlight Box */}
-                <div
-                  style={{
-                    backgroundColor: "#f0f3ff",
-                    border: "1px solid #dee8ff",
-                    borderRadius: "8px",
-                    padding: "7px 10px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    marginBottom: "12px",
-                  }}
-                >
-                  <Zap size={14} color="#004ac6" />
-                  <span style={{ fontSize: "12px", fontWeight: "700", color: "#004ac6" }}>
-                    {pkg.billingType === "7 Days" || pkg.category === "Trial"
-                      ? `${pkg.reviewLimit || 100} Reviews Included`
-                      : `${pkg.reviewLimit || 500} Monthly Reviews Included`}
-                  </span>
-                </div>
+                {/* Features List */}
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", flex: 1, display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {plan.features.map((f, i) => (
+                    <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12.5px", color: "#334155", lineHeight: 1.4 }}>
+                      <Check size={15} color="#059669" style={{ flexShrink: 0, marginTop: "2px" }} />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
 
-                {/* Features Checklist */}
-                <div style={{ flex: 1, marginBottom: "16px" }}>
-                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "7px" }}>
-                    {(pkg.featuresList || []).map((feat, i) => (
-                      <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "7px", fontSize: "12px", color: "#334155", lineHeight: 1.4 }}>
-                        <div
-                          style={{
-                            width: "15px",
-                            height: "15px",
-                            borderRadius: "50%",
-                            backgroundColor: "#ecfdf5",
-                            color: "#10b981",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                            marginTop: "2px",
-                          }}
-                        >
-                          <Check size={10} strokeWidth={3} />
-                        </div>
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Action CTA Button */}
                 <Link
-                  to={`/register?plan=${pkg._id}&businessType=${pkg.businessType || "single"}`}
+                  to="/register"
+                  className={plan.popular ? "btn btn-primary" : "btn btn-outline"}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "6px",
-                    padding: "9px 12px",
+                    width: "100%",
+                    padding: "12px",
                     borderRadius: "10px",
-                    fontSize: "13px",
                     fontWeight: "700",
+                    fontSize: "13.5px",
+                    textAlign: "center",
                     textDecoration: "none",
-                    transition: "all 0.15s ease",
-                    backgroundColor: isPopular ? "#004ac6" : "#ffffff",
-                    color: isPopular ? "#ffffff" : "#004ac6",
-                    border: isPopular ? "none" : "1.5px solid #004ac6",
                   }}
                 >
-                  <span>{pkg.price === 0 ? "Start Free 7-Day Trial" : (pkg.ctaText || "Get Started")}</span>
-                  <ArrowRight size={14} />
+                  {plan.cta}
                 </Link>
               </motion.div>
             );
           })}
-        </motion.div>
-
-        {/* Transparent Blueprint Disclosures */}
-        <div
-          style={{
-            marginTop: "24px",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "14px",
-            backgroundColor: "#f8fafc",
-            border: "1px solid #e2e8f0",
-            borderRadius: "14px",
-            padding: "18px 20px",
-          }}
-        >
-          <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-            <div style={{ width: "24px", height: "24px", borderRadius: "6px", backgroundColor: "#eff6ff", color: "#004ac6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>
-              <Check size={14} strokeWidth={2.5} />
-            </div>
-            <div>
-              <p style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a", margin: "0 0 2px" }}>Fair-Use Valid Scans</p>
-              <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.4 }}>
-                Counted as 1 unique human visitor per QR code within 24 hours (with bot filtering and deduplication).
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-            <div style={{ width: "24px", height: "24px", borderRadius: "6px", backgroundColor: "#ecfdf5", color: "#10b981", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>
-              <Check size={14} strokeWidth={2.5} />
-            </div>
-            <div>
-              <p style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a", margin: "0 0 2px" }}>Pooled Franchise Allowance</p>
-              <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.4 }}>
-                Enterprise scans pool across your network so high-traffic outlets never hit artificial limits.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
-            <div style={{ width: "24px", height: "24px", borderRadius: "6px", backgroundColor: "#fffbeb", color: "#d97706", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "2px" }}>
-              <Check size={14} strokeWidth={2.5} />
-            </div>
-            <div>
-              <p style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a", margin: "0 0 2px" }}>WhatsApp Usage Rates</p>
-              <p style={{ fontSize: "12px", color: "#64748b", margin: 0, lineHeight: 1.4 }}>
-                Transparent ₹0.75–₹1.00/message for customer feedback invitations and opted-in service recovery.
-              </p>
-            </div>
-          </div>
         </div>
 
-        {/* Footnote */}
-        <div
-          style={{
-            marginTop: "16px",
-            textAlign: "center",
-            padding: "12px 18px",
-            borderRadius: "10px",
-            backgroundColor: "#ffffff",
-            border: "1px solid #dee8ff",
-            maxWidth: "720px",
-            margin: "16px auto 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-            flexWrap: "wrap",
-          }}
-        >
-          <div style={{ width: "22px", height: "22px", borderRadius: "50%", backgroundColor: "#e7eeff", color: "#004ac6", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Sparkles size={13} />
+        {/* Mandatory Commercial Disclaimers from Audit Spec */}
+        <div style={{ marginTop: "32px", padding: "16px 20px", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0", textAlign: "center", fontSize: "12.5px", color: "#64748b", lineHeight: 1.5 }}>
+          <div style={{ fontWeight: "700", color: "#334155", marginBottom: "4px" }}>
+            Commercial Terms &amp; Quota Policy:
           </div>
-          <span style={{ fontSize: "13px", fontWeight: "600", color: "#334155" }}>
-            Need a custom enterprise setup for 100+ franchise locations?
-          </span>
-          <Link to="/contact?type=enterprise" style={{ fontSize: "13px", fontWeight: "700", color: "#004ac6", textDecoration: "none" }}>
-            Contact Enterprise Sales →
-          </Link>
+          <div>
+            Interactive proposed pricing design. Prices are pending commercial sign-off; exclude GST and third-party messaging carrier charges. Annual subscriptions retain monthly scan resets.
+          </div>
+          <div style={{ marginTop: "4px" }}>
+            Need custom volume beyond Franchise 50? <Link to="/contact" style={{ color: "#004ac6", fontWeight: "700", textDecoration: "none" }}>Contact our Enterprise Sales team →</Link>
+          </div>
         </div>
       </div>
     </section>
   );
 };
+
 export default PricingSection;

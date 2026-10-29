@@ -137,7 +137,7 @@ export const HeroSection = () => {
                 fontWeight: "500",
               }}
             >
-              Collect genuine customer feedback, manage reviews across <strong>20+ platforms</strong>, use branded QR codes, automate WhatsApp campaigns, and get AI insights to improve service quality and grow your business.
+              Collect authentic customer feedback, boost verified reviews across <strong>20+ platforms</strong>, and protect brand reputation with intelligent QR standees and real-time franchise analytics.
             </p>
 
             {/* CTA Buttons */}
@@ -236,7 +236,7 @@ export const HeroSection = () => {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <CheckCircle2 size={16} color="#0052cc" />
-                <span>100 QR Scans Included</span>
+                <span>100 Valid Scans / Month</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <CheckCircle2 size={16} color="#0052cc" />
@@ -255,7 +255,7 @@ export const HeroSection = () => {
             style={{
               position: "relative",
               width: "100%",
-              maxWidth: "680px",
+              maxWidth: "740px",
               margin: "0 auto",
             }}
           >
@@ -375,14 +375,14 @@ export const HeroSection = () => {
             <div
               style={{
                 backgroundColor: "#ffffff",
-                borderRadius: "20px",
+                borderRadius: "22px",
                 border: "1px solid #cbd5e1",
-                boxShadow: "0 25px 60px -15px rgba(0, 82, 204, 0.16), 0 10px 30px -8px rgba(15, 23, 42, 0.08)",
-                padding: "20px",
+                boxShadow: "0 25px 60px -15px rgba(0, 82, 204, 0.18), 0 10px 30px -8px rgba(15, 23, 42, 0.08)",
+                padding: "22px 24px",
                 position: "relative",
                 zIndex: 2,
                 overflow: "hidden",
-                marginRight: "60px", // space for phone overlap
+                marginRight: "45px", // space for phone overlap
               }}
             >
               {/* Window Header Bar */}

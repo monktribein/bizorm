@@ -16,7 +16,8 @@ import {
   Sparkles,
   ChevronRight,
   Dumbbell,
-  Gem
+  Gem,
+  Package,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -125,17 +126,17 @@ export const SocialProof = () => {
 
   // Industry Solution Cards from Image 2 + High-Value Verticals
   const industries = [
-    { title: "Restaurants & Cafes", icon: <Utensils size={18} color="#e11d48" />, bg: "#fff1f2", border: "#fecdd3" },
-    { title: "Hotels & Hospitality", icon: <Hotel size={18} color="#0284c7" />, bg: "#f0f9ff", border: "#bae6fd" },
-    { title: "Healthcare & Clinics", icon: <Stethoscope size={18} color="#059669" />, bg: "#ecfdf5", border: "#a7f3d0" },
-    { title: "Education & Schools", icon: <GraduationCap size={18} color="#7c3aed" />, bg: "#f5f3ff", border: "#ddd6fe" },
-    { title: "Retail & Showrooms", icon: <ShoppingBag size={18} color="#d97706" />, bg: "#fffbeb", border: "#fde68a" },
-    { title: "Automotive & Dealerships", icon: <Car size={18} color="#dc2626" />, bg: "#fef2f2", border: "#fecaca" },
-    { title: "Real Estate & Builders", icon: <Building2 size={18} color="#2563eb" />, bg: "#eff6ff", border: "#bfdbfe" },
-    { title: "Salons & Spas", icon: <Sparkles size={18} color="#db2777" />, bg: "#fdf2f8", border: "#fbcfe8" },
-    { title: "Gyms & Fitness", icon: <Dumbbell size={18} color="#059669" />, bg: "#ecfdf5", border: "#a7f3d0" },
-    { title: "Jewelry & Luxury", icon: <Gem size={18} color="#7c3aed" />, bg: "#f5f3ff", border: "#ddd6fe" },
-    { title: "... and more", icon: <span style={{ fontSize: "18px" }}>⚡</span>, bg: "#f1f5f9", border: "#cbd5e1", isSpecial: true },
+    { title: "Marketplace Sellers", path: "/solutions/marketplace-sellers", icon: <Package size={18} color="#0052cc" />, bg: "#eff6ff", border: "#bfdbfe" },
+    { title: "Restaurants & Cafes", path: "/#solutions", icon: <Utensils size={18} color="#e11d48" />, bg: "#fff1f2", border: "#fecdd3" },
+    { title: "Hotels & Hospitality", path: "/#solutions", icon: <Hotel size={18} color="#0284c7" />, bg: "#f0f9ff", border: "#bae6fd" },
+    { title: "Healthcare & Clinics", path: "/#solutions", icon: <Stethoscope size={18} color="#059669" />, bg: "#ecfdf5", border: "#a7f3d0" },
+    { title: "Franchise & Multi-Outlet", path: "/franchise", icon: <Building2 size={18} color="#2563eb" />, bg: "#eff6ff", border: "#bfdbfe" },
+    { title: "Retail & Showrooms", path: "/#solutions", icon: <ShoppingBag size={18} color="#d97706" />, bg: "#fffbeb", border: "#fde68a" },
+    { title: "Automotive & Dealerships", path: "/#solutions", icon: <Car size={18} color="#dc2626" />, bg: "#fef2f2", border: "#fecaca" },
+    { title: "Salons & Spas", path: "/#solutions", icon: <Sparkles size={18} color="#db2777" />, bg: "#fdf2f8", border: "#fbcfe8" },
+    { title: "Education & Schools", path: "/#solutions", icon: <GraduationCap size={18} color="#7c3aed" />, bg: "#f5f3ff", border: "#ddd6fe" },
+    { title: "Gyms & Fitness", path: "/#solutions", icon: <Dumbbell size={18} color="#059669" />, bg: "#ecfdf5", border: "#a7f3d0" },
+    { title: "Jewelry & Luxury", path: "/#solutions", icon: <Gem size={18} color="#7c3aed" />, bg: "#f5f3ff", border: "#ddd6fe" },
   ];
 
   return (
@@ -283,13 +284,13 @@ export const SocialProof = () => {
           <div className="industry-marquee-container" style={{ cursor: "pointer" }}>
             <div className="industry-marquee-track">
               {[...industries, ...industries].map((ind, idx) => (
-                <div
+                <Link
                   key={idx}
+                  to={ind.path || "/#solutions"}
                   style={{
-                    backgroundColor: ind.isSpecial ? "#f8fafc" : "#ffffff",
+                    backgroundColor: "#ffffff",
                     borderRadius: "14px",
                     border: `1px solid ${ind.border}`,
-                    borderStyle: ind.isSpecial ? "dashed" : "solid",
                     padding: "16px 18px",
                     display: "flex",
                     flexDirection: "column",
@@ -301,6 +302,7 @@ export const SocialProof = () => {
                     minWidth: "165px",
                     flexShrink: 0,
                     boxShadow: "0 2px 6px rgba(0, 0, 0, 0.03)",
+                    textDecoration: "none",
                     transition: "all 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
@@ -332,245 +334,16 @@ export const SocialProof = () => {
                     style={{
                       fontSize: "12.5px",
                       fontWeight: "700",
-                      color: ind.isSpecial ? "#64748b" : "#0f172a",
+                      color: "#0f172a",
                       lineHeight: 1.25,
                       whiteSpace: "nowrap",
                     }}
                   >
                     {ind.title}
                   </span>
-                </div>
+                </Link>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* =========================================================================
-          STRIP 3: DEEP NAVY BLUE ENTERPRISE STATS BANNER
-         ========================================================================= */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #07152b 0%, #0a1e3f 50%, #0d2855 100%)",
-          color: "#ffffff",
-          padding: "38px 24px",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Subtle decorative glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-80px",
-            right: "10%",
-            width: "350px",
-            height: "200px",
-            background: "radial-gradient(circle, rgba(0, 82, 204, 0.4) 0%, rgba(7, 21, 43, 0) 70%)",
-            filter: "blur(40px)",
-            pointerEvents: "none",
-          }}
-        />
-
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "28px",
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
-          {/* 4 Large Metrics */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "24px 36px",
-              flex: 1,
-            }}
-          >
-            {/* Stat 1: 10,000+ Happy Businesses */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "10px",
-                  backgroundColor: "rgba(0, 82, 204, 0.3)",
-                  border: "1px solid rgba(0, 82, 204, 0.5)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#60a5fa",
-                  flexShrink: 0,
-                }}
-              >
-                <Users size={20} />
-              </div>
-              <div>
-                <div
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "26px",
-                    fontWeight: "900",
-                    color: "#ffffff",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  10,000+
-                </div>
-                <div style={{ fontSize: "12px", color: "#93c5fd", fontWeight: "600", marginTop: "2px" }}>
-                  Happy Businesses
-                </div>
-              </div>
-            </div>
-
-            {/* Stat 2: 5 Million+ Feedbacks */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "10px",
-                  backgroundColor: "rgba(245, 158, 11, 0.2)",
-                  border: "1px solid rgba(245, 158, 11, 0.4)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fbbf24",
-                  flexShrink: 0,
-                }}
-              >
-                <Star size={20} fill="#fbbf24" />
-              </div>
-              <div>
-                <div
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "26px",
-                    fontWeight: "900",
-                    color: "#ffffff",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  5 Million+
-                </div>
-                <div style={{ fontSize: "12px", color: "#93c5fd", fontWeight: "600", marginTop: "2px" }}>
-                  Customer Feedbacks Collected
-                </div>
-              </div>
-            </div>
-
-            {/* Stat 3: 40% Increase */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "10px",
-                  backgroundColor: "rgba(16, 185, 129, 0.2)",
-                  border: "1px solid rgba(16, 185, 129, 0.4)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#34d399",
-                  flexShrink: 0,
-                }}
-              >
-                <TrendingUp size={20} />
-              </div>
-              <div>
-                <div
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "26px",
-                    fontWeight: "900",
-                    color: "#ffffff",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  40%
-                </div>
-                <div style={{ fontSize: "12px", color: "#93c5fd", fontWeight: "600", marginTop: "2px" }}>
-                  Average Increase in 5-Star Reviews
-                </div>
-              </div>
-            </div>
-
-            {/* Stat 4: 80% Issues Resolved Privately */}
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "10px",
-                  backgroundColor: "rgba(168, 85, 247, 0.2)",
-                  border: "1px solid rgba(168, 85, 247, 0.4)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#c084fc",
-                  flexShrink: 0,
-                }}
-              >
-                <ShieldCheck size={20} />
-              </div>
-              <div>
-                <div
-                  style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "26px",
-                    fontWeight: "900",
-                    color: "#ffffff",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  80%
-                </div>
-                <div style={{ fontSize: "12px", color: "#93c5fd", fontWeight: "600", marginTop: "2px" }}>
-                  Issues Resolved Privately
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Action: White Pill CTA */}
-          <div style={{ flexShrink: 0 }}>
-            <Link
-              to="/#how-it-works"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "12px 24px",
-                borderRadius: "9999px",
-                backgroundColor: "#ffffff",
-                color: "#0052cc",
-                fontSize: "14px",
-                fontWeight: "800",
-                textDecoration: "none",
-                boxShadow: "0 6px 20px rgba(0, 0, 0, 0.25)",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#eff6ff";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 10px 24px rgba(0, 0, 0, 0.32)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#ffffff";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 6px 20px rgba(0, 0, 0, 0.25)";
-              }}
-            >
-              <span>See How It Works</span>
-              <ArrowRight size={15} />
-            </Link>
           </div>
         </div>
       </div>

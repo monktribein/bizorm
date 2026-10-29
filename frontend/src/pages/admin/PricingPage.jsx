@@ -134,26 +134,26 @@ export const PricingPage = () => {
     setPackageName("");
     setBusinessType(activeTab);
     setCategory("Standard");
-    setPrice(activeTab === "multiple" ? 2999 : activeTab === "marketplace" ? 2999 : 599);
+    setPrice(activeTab === "multiple" ? 7999 : activeTab === "marketplace" ? 2499 : 299);
     setBillingType("Monthly");
-    setReviewLimit(500);
+    setReviewLimit(activeTab === "multiple" ? 25000 : 100);
     setProductsLimit(activeTab === "marketplace" ? 5 : 0);
-    setMaxBusinesses(activeTab === "multiple" ? 1 : 1);
-    setExtraBizPrice(activeTab === "multiple" ? 599 : 0);
+    setMaxBusinesses(activeTab === "multiple" ? 10 : 1);
+    setExtraBizPrice(0);
     setPopularBadge(false);
     setIsCustomQuote(false);
     setFeaturesList(
       activeTab === "marketplace"
         ? [
             "5 Products / SKUs Included",
-            "500 Product Reviews / Monthly Quota",
-            "Product-Specific Review Landing Pages",
+            "1,000 Valid Scans / Monthly Quota",
+            "Product-Specific QR Landing Pages",
             "Direct Redirect to Google & Marketplace Reviews",
           ]
         : [
-            "WhatsApp, SMS & Dynamic QR Invites",
-            "Google Reviews Direct Integration",
-            "Private Star-Gating (1-3 stars filter)",
+            "Branded QR Feedback Standee (300 DPI)",
+            "Multi-Platform Review Integrations (20+)",
+            "Real-Time Manager Complaint Desk & Alerts",
           ]
     );
     setStatus("active");

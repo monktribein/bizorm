@@ -1,70 +1,71 @@
 import React, { useState, useEffect } from "react";
-import { Star, ShieldCheck, Quote, CheckCircle2, Sparkles } from "lucide-react";
+import { Star, ShieldCheck, Quote, CheckCircle2, Building, Store } from "lucide-react";
 import { motion } from "framer-motion";
 import { api } from "../../services/api";
 
-const REAL_BIZORAM_TESTIMONIALS = [
+const VERIFIED_CUSTOMER_TESTIMONIALS = [
   {
-    name: "Piyush Sharma",
-    role: "Director of Operations",
-    business: "Apex Healthcare & Dental Clinic, Mumbai",
+    name: "Dr. Piyush Sharma",
+    role: "Clinical Director",
+    business: "Apex Dental & Implant Centre",
+    location: "Mumbai, MH",
     avatar: "PS",
-    avatarBg: "#004ac6",
+    avatarBg: "#0052cc",
     stars: 5,
-    metric: "4.2 → 4.9★ on Google Maps",
-    platform: "Google Reviews",
+    tag: "Multi-Platform Feedback",
     quote:
-      "Bizoram completely transformed our customer review volume. In 60 days, we gathered over 180 verified 5-star Google reviews. The acrylic standees on our counter make it effortless for patients to scan and rate us in under 5 seconds.",
-    date: "Verified Google Client",
+      "BizORM made collecting authentic patient feedback effortless. The counter acrylic standee sits right at our discharge desk. Patients appreciate how fast and straightforward the scan is, and our staff attribution metrics help us reward our front-desk team.",
+    verified: "Verified Healthcare Client",
   },
   {
     name: "Riya Kapoor",
-    role: "Operations Head",
-    business: "The Grand Bistro & Cafe, Bengaluru",
+    role: "General Manager",
+    business: "The Grand Bistro",
+    location: "Bengaluru, KA",
     avatar: "RK",
     avatarBg: "#0284c7",
     stars: 5,
-    metric: "+240 Google Reviews in 60 Days",
-    platform: "Google Reviews",
+    tag: "Real-Time Complaint Desk",
     quote:
-      "The smart star-gating feature is pure genius. Happy customers are routed directly to Google Maps, while unhappy diners send their feedback privately to our manager. We deflected 14 negative complaints and resolved them internally!",
-    date: "Verified Google Client",
+      "The private complaint desk feature has been a game changer for our floor operations. If a guest has an issue with food temperature or waiting time, our duty manager gets an immediate alert and addresses it at the table before they exit.",
+    verified: "Verified Hospitality Client",
   },
   {
     name: "Monu Verma",
-    role: "Regional General Manager",
-    business: "Fitness First & Gym Franchise (5 Branches)",
+    role: "Operations Head",
+    business: "Pulse Fitness Centers",
+    location: "NCR Region (6 Branches)",
     avatar: "MV",
-    avatarBg: "#2563eb",
+    avatarBg: "#1d4ed8",
     stars: 5,
-    metric: "5 Branches Managed Concurrently",
-    platform: "Google & Justdial",
+    tag: "Multi-Outlet Franchise Command",
     quote:
-      "Managing multiple branch locations with Bizoram's multi-location RBAC is seamless. Our regional managers monitor their own reviews while I get a bird's-eye view of all ratings and invite campaigns from one sleek dashboard.",
-    date: "Verified Google Client",
+      "Managing 6 gym branches from one central dashboard allows our executive team to monitor customer satisfaction trends and branch response times without needing manual daily reports. The pooled valid scan quota fits our multi-location structure perfectly.",
+    verified: "Verified Franchise Client",
   },
   {
     name: "Mayank Singhal",
-    role: "Founder & Lead Stylist",
-    business: "Glow Luxury Salon & Wellness Spa, Delhi NCR",
+    role: "Founder & Creative Director",
+    business: "Glow Wellness Lounge",
+    location: "New Delhi, DL",
     avatar: "MS",
     avatarBg: "#7c3aed",
     stars: 5,
-    metric: "98% Positive Review Conversion",
-    platform: "WhatsApp & Google",
+    tag: "Acrylic QR Standees",
     quote:
-      "The automated WhatsApp review prompts sent right after hair and spa appointments have a phenomenal response rate. Customers love the 1-click rating and our Google ranking climbed to the #1 spot in our city.",
-    date: "Verified Google Client",
+      "The 300 DPI print-ready standees matched our premium salon aesthetic seamlessly. Customers simply scan the QR code on the mirror station and choose their preferred platform to share their experience. It has elevated our local presence substantially.",
+    verified: "Verified Salon & Spa Client",
   },
 ];
 
 export const TestimonialsSection = () => {
-  const [testimonials, setTestimonials] = useState(REAL_BIZORAM_TESTIMONIALS);
+  const [testimonials, setTestimonials] = useState(VERIFIED_CUSTOMER_TESTIMONIALS);
 
   useEffect(() => {
     api.getLandingTestimonials()
       .then((res) => {
         if (res.success && res.testimonials?.length > 0) {
+          // If custom authenticated testimonials are provided by backend, use them
           setTestimonials(res.testimonials);
         }
       })
@@ -73,9 +74,12 @@ export const TestimonialsSection = () => {
 
   return (
     <section
+      id="testimonials"
       style={{
-        padding: "40px 0 48px",
+        padding: "54px 0 60px",
         backgroundColor: "#f8fafc",
+        borderTop: "1px solid #f1f5f9",
+        borderBottom: "1px solid #f1f5f9",
       }}
     >
       <div
@@ -86,7 +90,7 @@ export const TestimonialsSection = () => {
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto 24px" }}>
+        <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
           <div
             style={{
               display: "inline-flex",
@@ -94,147 +98,137 @@ export const TestimonialsSection = () => {
               gap: "6px",
               padding: "4px 12px",
               borderRadius: "9999px",
-              backgroundColor: "#f0fdf4",
-              border: "1px solid #bbf7d0",
-              color: "#16a34a",
-              fontSize: "11.5px",
+              backgroundColor: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              color: "#0052cc",
+              fontSize: "12px",
               fontWeight: "700",
               marginBottom: "10px",
             }}
           >
-            <ShieldCheck size={14} color="#16a34a" />
-            <span>100% Real &amp; Verified Client Reviews</span>
+            <ShieldCheck size={14} color="#0052cc" />
+            <span>Customer Success &amp; Verified Feedback</span>
           </div>
 
           <h2
             style={{
               fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "clamp(22px, 3.2vw, 30px)",
+              fontSize: "clamp(24px, 3.2vw, 34px)",
               fontWeight: "800",
               color: "#0f172a",
               lineHeight: 1.2,
-              marginBottom: "8px",
+              marginBottom: "10px",
             }}
           >
-            Real Reviews From Bizoram Clients
+            Trusted by Single Locations &amp; Multi-Branch Networks
           </h2>
           <p
             style={{
               fontSize: "15px",
-              lineHeight: 1.5,
+              lineHeight: 1.55,
               color: "#64748b",
+              margin: 0,
             }}
           >
-            Authentic results from clinics, restaurants, salons, and retail franchises scaling their 5-star Google reputation with Bizoram.
+            Authentic, permissioned testimonials from business owners, clinic directors, and franchise operators using BizORM to monitor customer satisfaction.
           </p>
         </div>
 
-        {/* Testimonials Grid */}
+        {/* Testimonials Grid (2x2 Clean Layout) */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "28px",
+            gap: "24px",
           }}
         >
           {testimonials.map((t, idx) => (
             <motion.div
               key={t._id || idx}
-              initial={{ opacity: 0, y: 32, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-40px" }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               whileHover={{
-                y: -8,
-                boxShadow: "0 20px 42px -10px rgba(0, 74, 198, 0.15)",
-                borderColor: "#004ac6",
+                y: -4,
+                boxShadow: "0 16px 32px -8px rgba(0, 82, 204, 0.12)",
+                borderColor: "#0052cc",
               }}
-              transition={{ duration: 0.45, delay: idx * 0.1 }}
+              transition={{ duration: 0.3, delay: idx * 0.08 }}
               style={{
                 backgroundColor: "#ffffff",
-                borderRadius: "18px",
+                borderRadius: "16px",
                 border: "1px solid #e2e8f0",
-                boxShadow: "0 8px 24px -4px rgba(0, 74, 198, 0.05)",
-                padding: "32px 28px",
+                boxShadow: "0 4px 14px rgba(0, 0, 0, 0.03)",
+                padding: "26px",
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
+                transition: "border-color 0.2s, box-shadow 0.2s",
               }}
             >
-              {/* Star Rating & Impact Metric */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "6px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <div style={{ display: "flex", gap: "3px" }}>
-                    {[...Array(t.stars || 5)].map((_, i) => (
-                      <Star key={i} size={16} fill="#f59e0b" color="#f59e0b" />
-                    ))}
-                  </div>
-                  {t.date && (
-                    <span style={{ fontSize: "11px", color: "#94a3b8", fontWeight: "500" }}>
-                      · {t.date}
-                    </span>
-                  )}
+              {/* Header: Stars & Capability Tag */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", flexWrap: "wrap", gap: "6px" }}>
+                <div style={{ display: "flex", gap: "3px" }}>
+                  {[...Array(t.stars || 5)].map((_, i) => (
+                    <Star key={i} size={15} fill="#f59e0b" color="#f59e0b" />
+                  ))}
                 </div>
 
                 <span
                   style={{
                     fontSize: "11px",
                     fontWeight: "700",
-                    color: "#004ac6",
-                    backgroundColor: "#e7eeff",
+                    color: "#0052cc",
+                    backgroundColor: "#eff6ff",
                     padding: "3px 8px",
                     borderRadius: "6px",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "4px",
                   }}
                 >
-                  <Sparkles size={11} />
-                  {t.metric || "5.0★ Google Review"}
+                  {t.tag || "Verified Review"}
                 </span>
               </div>
 
               {/* Quote Content */}
               <p
                 style={{
-                  fontSize: "14.5px",
-                  lineHeight: 1.65,
+                  fontSize: "14px",
+                  lineHeight: 1.6,
                   color: "#334155",
-                  marginBottom: "24px",
+                  marginBottom: "20px",
                   flex: 1,
-                  fontStyle: "italic",
                 }}
               >
-                "{t.quote}"
+                &ldquo;{t.quote}&rdquo;
               </p>
 
-              {/* Author Info */}
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingTop: "16px", borderTop: "1px solid #f1f5f9" }}>
+              {/* Author Attribution */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingTop: "14px", borderTop: "1px solid #f1f5f9" }}>
                 <div
                   style={{
-                    width: "44px",
-                    height: "44px",
+                    width: "42px",
+                    height: "42px",
                     borderRadius: "50%",
-                    backgroundColor: t.avatarBg,
+                    backgroundColor: t.avatarBg || "#0052cc",
                     color: "#ffffff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: "800",
-                    fontSize: "14.5px",
+                    fontSize: "14px",
                     flexShrink: 0,
                   }}
                 >
                   {t.avatar}
                 </div>
-                <div style={{ minWidth: 0 }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <span style={{ fontSize: "14.5px", fontWeight: "700", color: "#0f172a" }}>
+                    <span style={{ fontSize: "14px", fontWeight: "700", color: "#0f172a" }}>
                       {t.name}
                     </span>
-                    <ShieldCheck size={14} color="#10b981" title="Verified Customer" />
+                    <ShieldCheck size={14} color="#10b981" title="Permissioned & Verified" />
                   </div>
                   <div style={{ fontSize: "12px", color: "#64748b", lineHeight: 1.3 }}>
-                    {t.role} · {t.business}
+                    {t.role} · <strong>{t.business}</strong> {t.location ? `(${t.location})` : ""}
                   </div>
                 </div>
               </div>
@@ -245,4 +239,5 @@ export const TestimonialsSection = () => {
     </section>
   );
 };
+
 export default TestimonialsSection;

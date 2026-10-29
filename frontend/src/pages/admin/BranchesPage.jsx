@@ -483,10 +483,10 @@ export const BranchesPage = () => {
                   <Building2 size={28} />
                 </div>
                 <h3 style={{ fontSize: "20px", fontWeight: "900", color: "#0f172a", margin: "0 0 6px" }}>
-                  Upgrade to Multiple Business Plan
+                  Upgrade to Franchise Multi-Outlet Plan
                 </h3>
                 <p style={{ fontSize: "13.5px", color: "#64748b", margin: 0, lineHeight: "1.5" }}>
-                  Your account is currently on a <strong>Single Business</strong> plan. To add branches and unlock multi-location reviews, you must first upgrade to our Multiple Business architecture.
+                  Your account is currently on a <strong>Single Business</strong> plan. To add branches and unlock multi-location reviews, choose a transparent Franchise tier with pooled valid scan allowances.
                 </p>
               </div>
 
@@ -507,15 +507,15 @@ export const BranchesPage = () => {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <Sparkles size={16} color="#2563eb" />
-                  <span><strong>Base Multi-Business Plan:</strong> ₹2,999/mo (unlocks multi-branch portal)</span>
+                  <span><strong>Franchise 10:</strong> ₹7,999/mo (up to 10 branches · 25,000 pooled scans)</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <Zap size={16} color="#d97706" />
-                  <span><strong>Add-on Branches:</strong> Only ₹599/mo per branch (+500 reviews each)</span>
+                  <span><strong>Franchise 25:</strong> ₹16,999/mo (up to 25 branches · 75,000 pooled scans)</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <CheckCircle size={16} color="#16a34a" />
-                  <span>Independent Google Review links &amp; staff isolation per branch</span>
+                  <span>Transparent total subscription price with central Head-Office command center</span>
                 </div>
               </div>
 
@@ -533,7 +533,7 @@ export const BranchesPage = () => {
                   type="button"
                   onClick={() => {
                     setShowUpgradeModal(false);
-                    navigate("/pricing?tab=multiple");
+                    navigate("/pricing");
                   }}
                   className="btn btn-primary"
                   style={{
@@ -545,8 +545,8 @@ export const BranchesPage = () => {
                     gap: "6px",
                   }}
                 >
-                  <span>Upgrade Plan</span>
-                  <ArrowRight size={15} />
+                  <span>View Franchise Plans</span>
+                  <ArrowRight size={16} />
                 </button>
               </div>
             </div>
