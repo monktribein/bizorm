@@ -14,8 +14,8 @@ export const LandingFooter = () => {
   return (
     <footer
       style={{
-        backgroundColor: "#f0f3ff",
-        borderTop: "1px solid #dee8ff",
+        backgroundColor: "#ffffff",
+        borderTop: "1px solid #e2e8f0",
         paddingTop: "64px",
         paddingBottom: "36px",
       }}
@@ -109,7 +109,7 @@ export const LandingFooter = () => {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
-                <Link to="/solutions/marketplace-sellers" className="footer-hover-link" style={{ color: "#004ac6", fontWeight: "700" }}>
+                <Link to="/solutions/marketplace-sellers" className="footer-hover-link">
                   Marketplace &amp; E-Commerce
                 </Link>
               </li>
@@ -133,11 +133,6 @@ export const LandingFooter = () => {
                   Salons &amp; Luxury Spas
                 </a>
               </li>
-              <li>
-                <a href="/#solutions" className="footer-hover-link">
-                  Automobile &amp; Service Centers
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -157,7 +152,7 @@ export const LandingFooter = () => {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               <li>
-                <Link to="/login" className="footer-hover-link" style={{ color: "#004ac6", fontWeight: "700" }}>
+                <Link to="/login" className="footer-hover-link">
                   Sign In to Dashboard
                 </Link>
               </li>
@@ -183,7 +178,7 @@ export const LandingFooter = () => {
         {/* Bottom Bar (Aligned Edge-to-Edge) */}
         <div
           style={{
-            borderTop: "1px solid #dee8ff",
+            borderTop: "1px solid #e2e8f0",
             paddingTop: "24px",
             display: "flex",
             flexWrap: "wrap",
