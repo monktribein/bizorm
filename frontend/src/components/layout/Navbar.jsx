@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
-import { LogOut, User as UserIcon, Building2, ExternalLink, Menu, X, Globe } from "lucide-react";
+import { LogOut, User as UserIcon, Building2, ExternalLink, Menu, X, Globe, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getCleanBrandName } from "../../utils/brand";
 
@@ -87,17 +87,15 @@ export const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
         </Link>
 
         {user?.formKey && (
-          <a
-            href={`/wtr/${user.formKey}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={`/wtr/${user.formKey}`}
             className="btn btn-outline btn-sm"
-            style={{ display: "flex", alignItems: "center", gap: "5px", padding: "5px 10px" }}
+            style={{ display: "flex", alignItems: "center", gap: "5px", padding: "5px 10px", textDecoration: "none" }}
             title="View Live Review Portal"
           >
-            <ExternalLink size={13} />
+            <Star size={13} color="#f59e0b" fill="#f59e0b" />
             <span className="hide-on-mobile">Live Review</span>
-          </a>
+          </Link>
         )}
 
         <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "3px 6px", borderRadius: "var(--radius-md)", background: "#f8fafc" }}>

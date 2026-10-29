@@ -21,6 +21,7 @@ import {
   Award,
 } from "lucide-react";
 import { getCleanBrandName } from "../../utils/brand";
+import { Link } from "react-router-dom";
 
 export const StaffDashboard = ({ user, companyDetails, stats, recentReviews = [], loading, onRefresh }) => {
   const [copiedLink, setCopiedLink] = useState(false);
@@ -178,11 +179,9 @@ export const StaffDashboard = ({ user, companyDetails, stats, recentReviews = []
             <span>{copiedLink ? "Link Copied!" : "Copy Review Link"}</span>
           </button>
 
-          {staffReviewUrl && (
-            <a
-              href={staffReviewUrl}
-              target="_blank"
-              rel="noreferrer"
+          {user?.formKey && (
+            <Link
+              to={`/wtr/${user.formKey}?staff=${encodeURIComponent(staffTag)}`}
               className="btn btn-primary"
               style={{
                 display: "inline-flex",
@@ -196,7 +195,7 @@ export const StaffDashboard = ({ user, companyDetails, stats, recentReviews = []
             >
               <ExternalLink size={15} />
               <span>Test Form</span>
-            </a>
+            </Link>
           )}
         </div>
       </div>

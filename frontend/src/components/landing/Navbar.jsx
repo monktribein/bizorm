@@ -189,7 +189,26 @@ export const LandingNavbar = () => {
               );
             }
 
-            return (
+            const isInternalRoute = link.href.startsWith("/") && !link.href.includes("#");
+
+            return isInternalRoute ? (
+              <Link
+                key={link.name}
+                to={link.href}
+                style={{
+                  fontSize: "14.5px",
+                  fontWeight: "600",
+                  color: "#475569",
+                  textDecoration: "none",
+                  transition: "color 0.2s ease",
+                  padding: "8px 0",
+                }}
+                onMouseEnter={(e) => (e.target.style.color = "#004ac6")}
+                onMouseLeave={(e) => (e.target.style.color = "#475569")}
+              >
+                {link.name}
+              </Link>
+            ) : (
               <a
                 key={link.name}
                 href={link.href}
@@ -392,23 +411,37 @@ export const LandingNavbar = () => {
               gap: "16px",
             }}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  color: "#1e293b",
-                  textDecoration: "none",
-                  padding: "8px 0",
-                  borderBottom: "1px solid #f1f5f9",
-                }}
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isInternal = link.href.startsWith("/") && !link.href.includes("#");
+              const style = {
+                fontSize: "16px",
+                fontWeight: "600",
+                color: "#1e293b",
+                textDecoration: "none",
+                padding: "8px 0",
+                borderBottom: "1px solid #f1f5f9",
+              };
+
+              return isInternal ? (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={style}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={style}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
 
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "8px" }}>
               {user ? (

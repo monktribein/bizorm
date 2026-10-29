@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard,
@@ -133,10 +133,9 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
       {/* Quick link to main website */}
       <div style={{ marginTop: "auto", paddingTop: "20px" }}>
-        <a
-          href="/"
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          to="/"
+          onClick={handleLinkClick}
           style={{
             display: "flex",
             alignItems: "center",
@@ -152,8 +151,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
           }}
         >
           <span>Bizorm Website</span>
-          <span style={{ fontSize: "11px", opacity: 0.7 }}>↗</span>
-        </a>
+          <span style={{ fontSize: "11px", opacity: 0.7 }}>→</span>
+        </Link>
       </div>
     </aside>
   );

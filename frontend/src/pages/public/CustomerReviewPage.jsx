@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../../services/api";
 import { BUSINESS_CATEGORIES } from "../../constants/categories";
 import { getCleanBrandName } from "../../utils/brand";
@@ -15,12 +15,14 @@ import {
   RefreshCw,
   Check,
   ArrowRight,
+  ArrowLeft,
   Copy,
   Sparkles,
   ShieldCheck,
 } from "lucide-react";
 
 export const CustomerReviewPage = () => {
+  const navigate = useNavigate();
   const { formKey } = useParams();
   const [searchParams] = useSearchParams();
 
@@ -486,6 +488,14 @@ export const CustomerReviewPage = () => {
           <p style={{ fontSize: "14px", color: "var(--text-muted)", marginTop: "8px" }}>
             The review destination you accessed is expired or does not exist.
           </p>
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            className="btn btn-primary btn-sm"
+            style={{ marginTop: "16px" }}
+          >
+            Go to Dashboard
+          </button>
         </div>
       </div>
     );
@@ -499,7 +509,48 @@ export const CustomerReviewPage = () => {
       background: "#f8fafc",
       display: "flex",
       flexDirection: "column",
+      position: "relative",
     }}>
+      {/* Quick Back Navigation */}
+      <div style={{ position: "absolute", top: 16, left: 16, zIndex: 10 }}>
+        <button
+          type="button"
+          onClick={() => {
+            if (window.history.length > 1) {
+              navigate(-1);
+            } else {
+              navigate("/dashboard");
+            }
+          }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "7px 12px",
+            borderRadius: "8px",
+            border: "1px solid #e2e8f0",
+            background: "#ffffff",
+            color: "#475569",
+            fontSize: "12.5px",
+            fontWeight: "600",
+            cursor: "pointer",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+            transition: "all 0.15s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#f1f5f9";
+            e.currentTarget.style.color = "#0f172a";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "#ffffff";
+            e.currentTarget.style.color = "#475569";
+          }}
+          title="Back to previous page"
+        >
+          <ArrowLeft size={14} />
+          <span>Back</span>
+        </button>
+      </div>
       {/* Main Review Form Area */}
       <main style={{
         flex: 1,
