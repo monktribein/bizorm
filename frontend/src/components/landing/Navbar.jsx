@@ -47,10 +47,6 @@ export const LandingNavbar = () => {
       items: [
         { label: "Marketplace Sellers (NEW)", path: "/solutions/marketplace-sellers", desc: "QR-in-the-box, SKU analytics & Amazon/Flipkart compliance" },
         { label: "Franchise & Multi-Outlet", path: "/franchise", desc: "Centralized control for 5 to 50+ branches" },
-        { label: "Restaurants & Cafes", path: "/#solutions", desc: "Dining feedback, Zomato & Google ratings" },
-        { label: "Healthcare & Clinics", path: "/#solutions", desc: "Private patient feedback & doctor reputation" },
-        { label: "Hotels & Hospitality", path: "/#solutions", desc: "TripAdvisor rankings & guest experience" },
-        { label: "Retail & Showrooms", path: "/#solutions", desc: "On-spot counter QR code review collection" },
       ]
     },
     { name: "Pricing", href: "/pricing" },

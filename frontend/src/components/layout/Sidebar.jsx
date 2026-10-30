@@ -144,7 +144,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
             <span>Staff & Team</span>
           </NavLink>
 
-          <NavLink to="/pricing" style={linkStyle} onClick={handleLinkClick}>
+          <NavLink to="/subscription" style={linkStyle} onClick={handleLinkClick}>
             <CreditCard size={18} />
             <span>Subscription & Upgrade</span>
           </NavLink>

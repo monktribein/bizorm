@@ -43,7 +43,13 @@ export const InteractiveDemo = () => {
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
         {/* Section Header: Approved Title per Spec Section 10 */}
-        <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 36px" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 36px" }}
+        >
           <div
             style={{
               display: "inline-flex",
@@ -75,7 +81,7 @@ export const InteractiveDemo = () => {
           <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.55 }}>
             Simulate how converting in-store customer footfall into valid QR scans and feedback submissions drives real-time issue recovery and neutral public review engagement.
           </p>
-        </div>
+        </motion.div>
 
         {/* Main Grid: Inputs vs Output Cards */}
         <div
@@ -87,7 +93,11 @@ export const InteractiveDemo = () => {
           }}
         >
           {/* Left: Input Parameters & Methodology */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-30px" }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
             style={{
               padding: "28px",
               background: "#ffffff",
@@ -187,10 +197,14 @@ export const InteractiveDemo = () => {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right: Projected Operational Outcomes */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-30px" }}
+            transition={{ duration: 0.55, delay: 0.1, ease: "easeOut" }}
             style={{
               padding: "28px",
               background: "linear-gradient(145deg, #0f172a 0%, #1e293b 100%)",
@@ -212,37 +226,57 @@ export const InteractiveDemo = () => {
 
               {/* 2 Top Metric Cards */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
-                <div style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", transition: "all 0.2s ease" }}
+                >
                   <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#38bdf8", fontSize: "11.5px", fontWeight: "700" }}>
                     <QrCode size={14} />
                     <span>VALID SCANS</span>
                   </div>
-                  <div style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}>
+                  <motion.div
+                    key={projectedScans}
+                    initial={{ scale: 0.9, opacity: 0.7 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}
+                  >
                     {projectedScans}
-                  </div>
+                  </motion.div>
                   <div style={{ fontSize: "11px", color: "#94a3b8" }}>Scans / month</div>
-                </div>
+                </motion.div>
 
-                <div style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", transition: "all 0.2s ease" }}
+                >
                   <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#fbbf24", fontSize: "11.5px", fontWeight: "700" }}>
                     <Star size={14} fill="#fbbf24" />
                     <span>PUBLIC REVIEWS</span>
                   </div>
-                  <div style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}>
+                  <motion.div
+                    key={publicReviewChoices}
+                    initial={{ scale: 0.9, opacity: 0.7 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}
+                  >
                     ~{publicReviewChoices}
-                  </div>
+                  </motion.div>
                   <div style={{ fontSize: "11px", color: "#94a3b8" }}>Public review choices</div>
-                </div>
+                </motion.div>
               </div>
 
               {/* Middle Metric Card: Service Recovery Tickets */}
-              <div
+              <motion.div
+                whileHover={{ scale: 1.02, y: -2 }}
                 style={{
                   background: "rgba(16, 185, 129, 0.12)",
                   border: "1px solid rgba(16, 185, 129, 0.3)",
                   borderRadius: "14px",
                   padding: "16px",
                   marginBottom: "20px",
+                  transition: "all 0.2s ease",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -250,18 +284,30 @@ export const InteractiveDemo = () => {
                     <div style={{ fontSize: "11.5px", fontWeight: "700", color: "#34d399", textTransform: "uppercase" }}>
                       Private Issues Recovered &amp; Resolved
                     </div>
-                    <div style={{ fontSize: "20px", fontWeight: "900", color: "#ffffff", marginTop: "2px" }}>
+                    <motion.div
+                      key={serviceRecoveryInquiries}
+                      initial={{ scale: 0.9, opacity: 0.7 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ fontSize: "20px", fontWeight: "900", color: "#ffffff", marginTop: "2px" }}
+                    >
                       ~{serviceRecoveryInquiries} Customer Inquiries
-                    </div>
+                    </motion.div>
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontSize: "11px", color: "#94a3b8" }}>Feedback Completed:</div>
-                    <div style={{ fontSize: "18px", fontWeight: "800", color: "#34d399" }}>
+                    <motion.div
+                      key={feedbackSubmissions}
+                      initial={{ scale: 0.9, opacity: 0.7 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ fontSize: "18px", fontWeight: "800", color: "#34d399" }}
+                    >
                       {feedbackSubmissions}
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Distinction reminder */}
               <div style={{ fontSize: "11.5px", color: "#94a3b8", lineHeight: 1.45, marginBottom: "20px" }}>
@@ -291,7 +337,7 @@ export const InteractiveDemo = () => {
                 <ArrowRight size={16} />
               </Link>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Visible Disclaimer Required by Audit */}

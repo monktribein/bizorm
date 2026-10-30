@@ -90,7 +90,13 @@ export const TestimonialsSection = () => {
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}
+        >
           <div
             style={{
               display: "inline-flex",
@@ -132,7 +138,7 @@ export const TestimonialsSection = () => {
           >
             Authentic, permissioned testimonials from business owners, clinic directors, and franchise operators using BizORM to monitor customer satisfaction.
           </p>
-        </div>
+        </motion.div>
 
         {/* Testimonials Grid (2x2 Clean Layout) */}
         <div

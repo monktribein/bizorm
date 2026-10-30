@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Store, Building2, ShieldAlert, Info, HelpCircle } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BUSINESS_PLANS, FRANCHISE_PLANS, PRICING_DISCLAIMERS } from "../../constants/plans";
 
 export const PricingSection = ({ hideHeader = false }) => {
@@ -21,7 +21,13 @@ export const PricingSection = ({ hideHeader = false }) => {
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
         {/* Section Header */}
         {!hideHeader && (
-          <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}
+          >
             <div
               style={{
                 display: "inline-flex",
@@ -54,7 +60,7 @@ export const PricingSection = ({ hideHeader = false }) => {
             <p style={{ fontSize: "15.5px", color: "#64748b", margin: 0, lineHeight: 1.5 }}>
               Transparent pricing based on <strong>valid QR scans</strong> and clear location allowances. No hidden per-review fees.
             </p>
-          </div>
+          </motion.div>
         )}
 
         {/* Category & Billing Toggles */}
@@ -72,8 +78,9 @@ export const PricingSection = ({ hideHeader = false }) => {
               justifyContent: "center",
             }}
           >
-            <button
+            <motion.button
               type="button"
+              whileTap={{ scale: 0.96 }}
               onClick={() => setActiveTab("business")}
               style={{
                 display: "flex",
@@ -93,9 +100,10 @@ export const PricingSection = ({ hideHeader = false }) => {
             >
               <Store size={16} />
               <span>Single Business Locations</span>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               type="button"
+              whileTap={{ scale: 0.96 }}
               onClick={() => setActiveTab("enterprise")}
               style={{
                 display: "flex",
@@ -115,7 +123,7 @@ export const PricingSection = ({ hideHeader = false }) => {
             >
               <Building2 size={16} />
               <span>Multi-Outlet Franchises &amp; Corporate</span>
-            </button>
+            </motion.button>
           </div>
 
           {/* Monthly / Annual Billing Toggle */}
@@ -130,8 +138,9 @@ export const PricingSection = ({ hideHeader = false }) => {
               border: "1px solid #e2e8f0",
             }}
           >
-            <button
+            <motion.button
               type="button"
+              whileTap={{ scale: 0.96 }}
               onClick={() => setAnnualBilling(false)}
               style={{
                 padding: "6px 16px",
@@ -146,9 +155,10 @@ export const PricingSection = ({ hideHeader = false }) => {
               }}
             >
               Monthly Billing
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               type="button"
+              whileTap={{ scale: 0.96 }}
               onClick={() => setAnnualBilling(true)}
               style={{
                 padding: "6px 16px",
@@ -178,164 +188,181 @@ export const PricingSection = ({ hideHeader = false }) => {
               >
                 SAVE 17% (2 Mo. Free)
               </span>
-            </button>
+            </motion.button>
           </div>
         </div>
 
-        {/* 4 Cards Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
-            gap: "24px",
-            alignItems: "stretch",
-          }}
-        >
-          {currentPlans.map((plan) => {
-            const isNumeric = typeof plan.monthlyPrice === "number";
-            const effectiveMonthly = isNumeric
-              ? annualBilling
-                ? Math.round(plan.annualPrice / 12)
-                : plan.monthlyPrice
-              : "Custom";
+        {/* 4 Cards Grid with AnimatePresence */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${activeTab}-${annualBilling ? "annual" : "monthly"}`}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+              gap: "24px",
+              alignItems: "stretch",
+            }}
+          >
+            {currentPlans.map((plan, idx) => {
+              const isNumeric = typeof plan.monthlyPrice === "number";
+              const effectiveMonthly = isNumeric
+                ? annualBilling
+                  ? Math.round(plan.annualPrice / 12)
+                  : plan.monthlyPrice
+                : "Custom";
 
-            const price = isNumeric
-              ? `₹${effectiveMonthly.toLocaleString("en-IN")}`
-              : "Custom";
+              const price = isNumeric
+                ? `₹${effectiveMonthly.toLocaleString("en-IN")}`
+                : "Custom";
 
-            const cycle = isNumeric ? " / month" : "";
+              const cycle = isNumeric ? " / month" : "";
 
-            const targetLink = plan.isCustomQuote
-              ? "/contact?type=enterprise"
-              : `/register?plan=${plan.id}&billing=${annualBilling ? "annual" : "monthly"}`;
+              const targetLink = plan.isCustomQuote
+                ? "/contact?type=enterprise"
+                : `/register?plan=${plan.id}&billing=${annualBilling ? "annual" : "monthly"}`;
 
-            return (
-              <motion.div
-                key={plan.id}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.15 }}
-                style={{
-                  background: "#ffffff",
-                  borderRadius: "20px",
-                  padding: "30px 22px",
-                  border: plan.popular ? "2px solid #0052cc" : "1px solid #e2e8f0",
-                  boxShadow: plan.popular
-                    ? "0 12px 30px rgba(0, 82, 204, 0.14)"
-                    : "0 4px 14px rgba(0, 0, 0, 0.04)",
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {plan.popular && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "-12px",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      background: "#0052cc",
-                      color: "#ffffff",
-                      fontSize: "11px",
-                      fontWeight: "800",
-                      padding: "3px 14px",
-                      borderRadius: "999px",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    MOST POPULAR
-                  </div>
-                )}
-
-                <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a", marginBottom: "4px" }}>
-                  {plan.packageName}
-                </div>
-                <div style={{ fontSize: "12px", color: "#64748b", minHeight: "34px", marginBottom: "16px", lineHeight: 1.4 }}>
-                  {plan.tagline}
-                </div>
-
-                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: isNumeric ? "4px" : "16px" }}>
-                  <span style={{ fontSize: "34px", fontWeight: "900", color: "#0f172a", letterSpacing: "-0.5px" }}>
-                    {price}
-                  </span>
-                  <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "600" }}>{cycle}</span>
-                </div>
-
-                {annualBilling && isNumeric && (
-                  <div style={{ fontSize: "11.5px", color: "#0052cc", fontWeight: "700", marginBottom: "14px" }}>
-                    Billed annually at ₹{plan.annualPrice.toLocaleString("en-IN")}/yr (Save ~17%)
-                  </div>
-                )}
-                {!annualBilling && isNumeric && (
-                  <div style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "600", marginBottom: "14px" }}>
-                    Billed on monthly renewal
-                  </div>
-                )}
-
-                {/* Quota Highlights Box */}
-                <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "18px", border: "1px solid #f1f5f9" }}>
-                  <div style={{ fontSize: "13px", fontWeight: "800", color: "#0052cc" }}>
-                    🔍 {plan.scansDisplay}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#475569", marginTop: "3px", fontWeight: "600" }}>
-                    📍 {plan.locationsDisplay}
-                  </div>
-                  {annualBilling && isNumeric && (
-                    <div style={{ fontSize: "11px", color: "#059669", marginTop: "4px", fontWeight: "700" }}>
-                      ✓ Monthly scan reset included
-                    </div>
-                  )}
-                </div>
-
-                {/* Features List */}
-                <ul
+              return (
+                <motion.div
+                  key={plan.id}
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: idx * 0.07, ease: "easeOut" }}
+                  whileHover={{
+                    y: -8,
+                    scale: 1.015,
+                    boxShadow: plan.popular
+                      ? "0 24px 48px -10px rgba(0, 82, 204, 0.22)"
+                      : "0 18px 36px -8px rgba(0, 0, 0, 0.08)",
+                  }}
                   style={{
-                    listStyle: "none",
-                    padding: 0,
-                    margin: "0 0 24px 0",
-                    flex: 1,
+                    background: "#ffffff",
+                    borderRadius: "20px",
+                    padding: "30px 22px",
+                    border: plan.popular ? "2px solid #0052cc" : "1px solid #e2e8f0",
+                    boxShadow: plan.popular
+                      ? "0 12px 30px rgba(0, 82, 204, 0.14)"
+                      : "0 4px 14px rgba(0, 0, 0, 0.04)",
+                    position: "relative",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "10px",
+                    transition: "border-color 0.2s ease, box-shadow 0.2s ease",
                   }}
                 >
-                  {plan.features.map((f, i) => (
-                    <li
-                      key={i}
+                  {plan.popular && (
+                    <div
                       style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "8px",
-                        fontSize: "12.5px",
-                        color: "#334155",
-                        lineHeight: 1.45,
+                        position: "absolute",
+                        top: "-12px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        background: "#0052cc",
+                        color: "#ffffff",
+                        fontSize: "11px",
+                        fontWeight: "800",
+                        padding: "3px 14px",
+                        borderRadius: "999px",
+                        letterSpacing: "0.5px",
                       }}
                     >
-                      <Check size={15} color="#059669" style={{ flexShrink: 0, marginTop: "2px" }} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
+                      MOST POPULAR
+                    </div>
+                  )}
 
-                <Link
-                  to={targetLink}
-                  className={plan.popular ? "btn btn-primary" : "btn btn-outline"}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    borderRadius: "10px",
-                    fontWeight: "700",
-                    fontSize: "13.5px",
-                    textAlign: "center",
-                    textDecoration: "none",
-                  }}
-                >
-                  {plan.cta}
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
+                  <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a", marginBottom: "4px" }}>
+                    {plan.packageName}
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#64748b", minHeight: "34px", marginBottom: "16px", lineHeight: 1.4 }}>
+                    {plan.tagline}
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: isNumeric ? "4px" : "16px" }}>
+                    <span style={{ fontSize: "34px", fontWeight: "900", color: "#0f172a", letterSpacing: "-0.5px" }}>
+                      {price}
+                    </span>
+                    <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "600" }}>{cycle}</span>
+                  </div>
+
+                  {annualBilling && isNumeric && (
+                    <div style={{ fontSize: "11.5px", color: "#0052cc", fontWeight: "700", marginBottom: "14px" }}>
+                      Billed annually at ₹{plan.annualPrice.toLocaleString("en-IN")}/yr (Save ~17%)
+                    </div>
+                  )}
+                  {!annualBilling && isNumeric && (
+                    <div style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "600", marginBottom: "14px" }}>
+                      Billed on monthly renewal
+                    </div>
+                  )}
+
+                  {/* Quota Highlights Box */}
+                  <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "18px", border: "1px solid #f1f5f9" }}>
+                    <div style={{ fontSize: "13px", fontWeight: "800", color: "#0052cc" }}>
+                      🔍 {plan.scansDisplay}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#475569", marginTop: "3px", fontWeight: "600" }}>
+                      📍 {plan.locationsDisplay}
+                    </div>
+                    {annualBilling && isNumeric && (
+                      <div style={{ fontSize: "11px", color: "#059669", marginTop: "4px", fontWeight: "700" }}>
+                        ✓ Monthly scan reset included
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Features List */}
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: 0,
+                      margin: "0 0 24px 0",
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    {plan.features.map((f, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "8px",
+                          fontSize: "12.5px",
+                          color: "#334155",
+                          lineHeight: 1.45,
+                        }}
+                      >
+                        <Check size={15} color="#059669" style={{ flexShrink: 0, marginTop: "2px" }} />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    to={targetLink}
+                    className={plan.popular ? "btn btn-primary" : "btn btn-outline"}
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      borderRadius: "10px",
+                      fontWeight: "700",
+                      fontSize: "13.5px",
+                      textAlign: "center",
+                      textDecoration: "none",
+                      transition: "transform 0.15s ease",
+                    }}
+                  >
+                    {plan.cta}
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
 
         {/* Mandatory Commercial Disclaimers Required by Specification */}
         <div

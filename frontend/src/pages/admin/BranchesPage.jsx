@@ -160,7 +160,7 @@ export const BranchesPage = () => {
 
           {isLimitReached && (
             <Link
-              to="/pricing"
+              to="/subscription"
               className="btn btn-primary btn-sm"
               style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
@@ -327,7 +327,7 @@ export const BranchesPage = () => {
                     <span>{error}</span>
                     {error.includes("upgrade") && (
                       <Link
-                        to="/pricing"
+                        to="/subscription"
                         style={{ color: "var(--primary)", fontWeight: "800", textDecoration: "underline", fontSize: "12px" }}
                       >
                         View Pricing Plans →
@@ -533,7 +533,7 @@ export const BranchesPage = () => {
                   type="button"
                   onClick={() => {
                     setShowUpgradeModal(false);
-                    navigate("/pricing");
+                    navigate("/subscription");
                   }}
                   className="btn btn-primary"
                   style={{

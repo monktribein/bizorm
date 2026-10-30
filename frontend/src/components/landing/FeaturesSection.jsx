@@ -290,8 +290,13 @@ export const FeaturesSection = () => {
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
         {/* Header */}
-        <div style={{ textAlign: "center", maxWidth: "740px", margin: "0 auto 44px" }}>
-          
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{ textAlign: "center", maxWidth: "740px", margin: "0 auto 44px" }}
+        >
           <h2
             className="font-outfit"
             style={{
@@ -307,7 +312,7 @@ export const FeaturesSection = () => {
           <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.55 }}>
             Six core pillars connecting in-store physical touchpoints with actionable feedback, operational triage, and multi-platform review presence.
           </p>
-        </div>
+        </motion.div>
 
         {/* 6 Feature Cards Grid */}
         <div
@@ -317,14 +322,21 @@ export const FeaturesSection = () => {
             gap: "24px",
           }}
         >
-          {coreFeatures.map((f) => {
+          {coreFeatures.map((f, index) => {
             const Icon = f.icon;
             const isComingSoon = f.status === "coming_soon";
             return (
               <motion.div
                 key={f.id}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.15 }}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.45, delay: index * 0.08, ease: "easeOut" }}
+                whileHover={{
+                  y: -6,
+                  boxShadow: "0 20px 38px -10px rgba(0, 82, 204, 0.12)",
+                  borderColor: "#93c5fd",
+                }}
                 style={{
                   background: "#ffffff",
                   borderRadius: "18px",
@@ -334,6 +346,7 @@ export const FeaturesSection = () => {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
+                  transition: "border-color 0.2s ease",
                 }}
               >
                 <div>

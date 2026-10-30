@@ -64,7 +64,13 @@ export const FranchiseIntelligenceSection = () => {
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         {/* Section Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "20px", marginBottom: "36px" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "20px", marginBottom: "36px" }}
+        >
           <div style={{ maxWidth: "720px" }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "#004ac6", fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
               <Building2 size={15} />
@@ -103,10 +109,15 @@ export const FranchiseIntelligenceSection = () => {
             <span>Explore Franchise Edition</span>
             <ArrowRight size={15} />
           </Link>
-        </div>
+        </motion.div>
 
         {/* Corporate HQ Dashboard Visual (Requirement from Spec Section 4) */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 35, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          whileHover={{ boxShadow: "0 28px 60px -12px rgba(0, 82, 204, 0.18)" }}
           style={{
             backgroundColor: "#ffffff",
             borderRadius: "20px",
@@ -115,6 +126,7 @@ export const FranchiseIntelligenceSection = () => {
             padding: "24px",
             marginBottom: "36px",
             overflow: "hidden",
+            transition: "box-shadow 0.3s ease",
           }}
         >
           {/* Corporate Header Bar */}
@@ -279,7 +291,7 @@ export const FranchiseIntelligenceSection = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* 4 Pillar Cards */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "20px" }}>
@@ -288,8 +300,16 @@ export const FranchiseIntelligenceSection = () => {
             return (
               <motion.div
                 key={idx}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.15 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.45, delay: idx * 0.1, ease: "easeOut" }}
+                whileHover={{
+                  y: -6,
+                  scale: 1.015,
+                  boxShadow: "0 18px 36px -8px rgba(0, 82, 204, 0.12)",
+                  borderColor: "#93c5fd",
+                }}
                 style={{
                   background: "#ffffff",
                   borderRadius: "16px",
@@ -298,6 +318,7 @@ export const FranchiseIntelligenceSection = () => {
                   boxShadow: "0 4px 14px rgba(0, 0, 0, 0.03)",
                   display: "flex",
                   flexDirection: "column",
+                  transition: "border-color 0.2s ease",
                 }}
               >
                 <div

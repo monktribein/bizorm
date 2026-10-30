@@ -77,7 +77,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/pricing" element={<SmartPricingRoute />} />
+          <Route path="/pricing" element={<PricingPublicPage />} />
           <Route path="/franchise" element={<FranchisePage />} />
           <Route path="/solutions/franchise" element={<FranchisePage />} />
           <Route path="/solutions/marketplace-sellers" element={<MarketplaceSellersPage />} />
@@ -110,7 +110,7 @@ export default function App() {
               <Route element={<ProtectedRoute allowedRoles={["SUPER_ADMIN", "BRANCH_ADMIN"]} />}>
                 <Route path="/branches" element={<BranchesPage />} />
                 <Route path="/team" element={<UsersPage />} />
-                <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/subscription" element={<PricingPage />} />
                 <Route path="/admin/branches" element={<BranchesPage />} />
                 <Route path="/admin/users" element={<UsersPage />} />
                 <Route path="/admin/pricing" element={<PricingPage />} />
