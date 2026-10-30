@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
-import { Search, Star, Filter, ThumbsUp, AlertTriangle, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Building2, X, MessageCircle, Check, CheckCircle2, FileText, PhoneCall, Download, BarChart3, ShieldCheck, TrendingUp } from "lucide-react";
+import { Search, Star, Filter, ThumbsUp, AlertTriangle, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Building2, Users, X, MessageCircle, Check, CheckCircle2, FileText, PhoneCall, Download, BarChart3, ShieldCheck, TrendingUp } from "lucide-react";
 import { ReviewCharts } from "../../components/charts/ReviewCharts";
 import { WhatsAppReplyModal } from "../../components/reports/WhatsAppReplyModal";
 
@@ -272,7 +272,7 @@ export const ReportsPage = () => {
         const d = r.createdAt ? new Date(r.createdAt) : new Date();
         const dateStr = d.toLocaleDateString();
         const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const type = r.star >= 4 ? "Public (Redirected)" : "Gated (Private Complaint)";
+        const type = r.star >= 4 ? "Public Review" : "Customer Resolution Ticket";
         const status = r.star <= 3 ? (r.status || "NEW") : "REDIRECTED";
         const staff = r.staffMember || "Unassigned";
         const client = r.clientName || r.formKey || "Default";
@@ -312,6 +312,58 @@ export const ReportsPage = () => {
     }
   };
 
+  // Group clients by businessName for clean nested/dependent filtering
+  const businessesGrouped = useMemo(() => {
+    const map = {};
+    clientsList.forEach((c) => {
+      const biz = (c.businessName || "My Business").trim();
+      if (!map[biz]) {
+        map[biz] = [];
+      }
+      map[biz].push(c);
+    });
+    return map;
+  }, [clientsList]);
+
+  // Selected Business (derived from current clientFilter)
+  const currentBusinessName = useMemo(() => {
+    if (!clientFilter) return "";
+    const filterKeys = clientFilter.split(",").map((k) => k.trim());
+    const matched = clientsList.find((c) => filterKeys.includes(c.formKey));
+    return matched ? (matched.businessName || "My Business").trim() : "";
+  }, [clientFilter, clientsList]);
+
+  // Selected Account FormKey (empty string represents "All Accounts" of this business)
+  const currentAccountKey = useMemo(() => {
+    if (!clientFilter) return "";
+    if (clientFilter.includes(",")) return "";
+    return clientFilter;
+  }, [clientFilter]);
+
+  const handleBusinessChange = (bizName) => {
+    if (!bizName) {
+      handleClientFilterChange("");
+      return;
+    }
+    const accounts = businessesGrouped[bizName] || [];
+    if (accounts.length === 1) {
+      handleClientFilterChange(accounts[0].formKey);
+    } else {
+      const allKeys = accounts.map((a) => a.formKey).join(",");
+      handleClientFilterChange(allKeys);
+    }
+  };
+
+  const handleAccountChange = (accountKey) => {
+    if (!accountKey) {
+      const accounts = businessesGrouped[currentBusinessName] || [];
+      const allKeys = accounts.map((a) => a.formKey).join(",");
+      handleClientFilterChange(allKeys);
+    } else {
+      handleClientFilterChange(accountKey);
+    }
+  };
+
   const activeClientObj = clientsList.find((c) => c.formKey === clientFilter);
 
   return (
@@ -322,7 +374,7 @@ export const ReportsPage = () => {
             Reviews & Feedback Reports
           </h1>
           <p style={{ fontSize: "14px", color: "var(--text-muted)" }}>
-            Inspect incoming customer ratings, external redirection records, and gated private feedback
+            Inspect incoming customer ratings, public review connections, and resolution tickets
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
@@ -495,32 +547,73 @@ export const ReportsPage = () => {
             <button type="submit" className="btn btn-secondary">Search</button>
           </form>
 
-          {/* Super Admin Client Filter */}
+          {/* Super Admin Client / Business Hierarchy Filters */}
           {isSuperAdmin && (
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+              {/* Step 1: Business Selector */}
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <Building2 size={16} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
                 <select
-                  value={clientFilter}
-                  onChange={(e) => handleClientFilterChange(e.target.value)}
+                  value={currentBusinessName}
+                  onChange={(e) => handleBusinessChange(e.target.value)}
                   className="form-input"
                   style={{
                     padding: "7px 10px",
                     fontSize: "13px",
-                    fontWeight: clientFilter ? "700" : "500",
-                    borderColor: clientFilter ? "var(--primary)" : "var(--border)",
-                    background: clientFilter ? "#fdfbf7" : "#fff",
-                    minWidth: "210px",
+                    fontWeight: currentBusinessName ? "700" : "500",
+                    borderColor: currentBusinessName ? "var(--primary)" : "var(--border)",
+                    background: currentBusinessName ? "#f8fafc" : "#fff",
+                    minWidth: "190px",
                   }}
+                  title="Select Business"
                 >
-                  <option value="">🏢 All Clients (Global)</option>
-                  {clientsList.map((c) => (
-                    <option key={c.formKey} value={c.formKey}>
-                      {c.businessName} (@{c.uname})
-                    </option>
-                  ))}
+                  <option value="">🏢 All Businesses (Global)</option>
+                  {Object.keys(businessesGrouped).map((biz) => {
+                    const count = businessesGrouped[biz].length;
+                    return (
+                      <option key={biz} value={biz}>
+                        {biz} ({count} {count === 1 ? "account" : "accounts"})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
+
+              {/* Step 2: Staff / Account Selector (Shown when a business is selected and has members) */}
+              {currentBusinessName && businessesGrouped[currentBusinessName] && (
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Users size={16} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+                  <select
+                    value={currentAccountKey}
+                    onChange={(e) => handleAccountChange(e.target.value)}
+                    className="form-input"
+                    style={{
+                      padding: "7px 10px",
+                      fontSize: "13px",
+                      fontWeight: currentAccountKey ? "700" : "500",
+                      borderColor: currentAccountKey ? "var(--primary)" : "var(--border)",
+                      background: currentAccountKey ? "#eff6ff" : "#fff",
+                      minWidth: "210px",
+                    }}
+                    title="Select Staff / Account"
+                  >
+                    <option value="">
+                      👥 All Accounts ({businessesGrouped[currentBusinessName].length} members)
+                    </option>
+                    {businessesGrouped[currentBusinessName].map((c) => {
+                      const isAdmin = c.role === "BRANCH_ADMIN" || c.role === "SUPER_ADMIN";
+                      const roleTag = isAdmin ? "Admin" : "Staff";
+                      return (
+                        <option key={c.formKey} value={c.formKey}>
+                          {isAdmin ? "👑" : "👤"} @{c.uname} ({c.ownerName || roleTag})
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
+
+              {/* Clear Filter Button */}
               {clientFilter && (
                 <button
                   type="button"
@@ -633,13 +726,17 @@ export const ReportsPage = () => {
             <div>
               <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Currently filtering reviews for: </span>
               <strong style={{ fontSize: "14px", color: "var(--secondary)" }}>
-                {activeClientObj ? activeClientObj.businessName : clientFilter}
+                {currentBusinessName || (activeClientObj ? activeClientObj.businessName : clientFilter)}
               </strong>
-              {activeClientObj && (
+              {currentAccountKey && activeClientObj ? (
                 <span style={{ fontSize: "12px", color: "var(--text-muted)", marginLeft: "6px" }}>
-                  (@{activeClientObj.uname} • Form Key: <code>{clientFilter}</code>)
+                  (@{activeClientObj.uname} • Account Form Key: <code>{activeClientObj.formKey}</code>)
                 </span>
-              )}
+              ) : currentBusinessName ? (
+                <span style={{ fontSize: "12px", color: "var(--text-muted)", marginLeft: "6px" }}>
+                  (All Accounts & Staff included)
+                </span>
+              ) : null}
             </div>
           </div>
           <button
@@ -648,7 +745,7 @@ export const ReportsPage = () => {
             className="btn btn-sm btn-outline"
             style={{ fontSize: "12px" }}
           >
-            Show All Clients (Clear Filter)
+            Show All Businesses (Clear Filter)
           </button>
         </div>
       )}
@@ -1259,7 +1356,7 @@ export const ReportsPage = () => {
                       }}
                     >
                       <Star size={11} fill="#fff" />
-                      <span>{resolutionModalReview.star}.0★ Gated</span>
+                      <span>{resolutionModalReview.star}.0★ Resolution Ticket</span>
                     </div>
                   </div>
                   {resolutionModalReview.review && (

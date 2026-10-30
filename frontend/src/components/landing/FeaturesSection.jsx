@@ -5,32 +5,27 @@ import {
   QrCode, 
   BarChart3, 
   ShieldCheck, 
-  Store, 
-  CheckCircle2,
-  ArrowRight,
-  Star,
-  Smartphone,
-  Building,
+  Share2,
   Clock,
-  ThumbsUp,
-  Share2
+  ExternalLink,
+  Store,
+  Layers,
+  CheckCircle2
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const FeaturesSection = () => {
-  const [selectedReviewPlatform, setSelectedReviewPlatform] = useState("Google");
-
   const coreFeatures = [
     {
-      id: "qr-standees",
+      id: "branded-qr-feedback",
       icon: QrCode,
-      tag: "QR Standee Engine",
-      title: "Dynamic Branded QR Standees",
-      desc: "Turn on-counter transactions into verified reviews. Generate print-ready 300 DPI acrylic standees with your brand colors, custom logo, and instant-scan routing.",
+      tag: "Branded QR Feedback",
+      title: "Branded QR Feedback",
+      desc: "Collect customer experiences through branded, mobile-friendly QR journeys. Generate print-ready 300 DPI acrylic counter standees with your brand colors, custom logo, and dynamic scan routing.",
       highlight: "300 DPI Print-Ready Acrylic Standees",
       color: "#0052cc",
       bg: "#eff6ff",
-      // Visual Screenshot Mockup
+      status: "deployed",
       preview: (
         <div style={{
           background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
@@ -42,7 +37,6 @@ export const FeaturesSection = () => {
           gap: "14px",
           marginTop: "16px",
         }}>
-          {/* Acrylic Standee Mini Mockup */}
           <div style={{
             width: "72px",
             height: "90px",
@@ -81,22 +75,22 @@ export const FeaturesSection = () => {
               <span style={{ fontSize: "9px", background: "#dbeafe", color: "#0052cc", padding: "1px 5px", borderRadius: "4px", fontWeight: "700" }}>300 DPI</span>
             </div>
             <p style={{ fontSize: "11px", color: "#64748b", margin: 0, lineHeight: 1.4 }}>
-              Includes custom business logo, dynamic table URL &amp; counter display holder.
+              Custom logo, dynamic branch link &amp; durable counter display template.
             </p>
           </div>
         </div>
       ),
     },
     {
-      id: "multi-platform",
-      icon: Sparkles,
-      tag: "Platform Hub",
-      title: "20+ Connected Review Platforms",
-      desc: "Connect Google, Justdial, Facebook, TripAdvisor, Trustpilot, Zomato, Practo and custom URLs. Direct verified feedback to where it matters most for your industry.",
-      highlight: "Unified Google, Justdial, Zomato & 20+ Platforms",
+      id: "multi-platform-links",
+      icon: ExternalLink,
+      tag: "Public Review Destinations",
+      title: "Multi-Platform Review Links",
+      desc: "Connect customers with configured public-review destinations without sentiment-based filtering. Support Google Business, Justdial, Facebook, TripAdvisor, and industry-specific portals.",
+      highlight: "Neutral Destination Routing (No Gating)",
       color: "#7c3aed",
       bg: "#f5f3ff",
-      // Visual Screenshot Mockup
+      status: "deployed",
       preview: (
         <div style={{
           background: "#ffffff",
@@ -107,16 +101,16 @@ export const FeaturesSection = () => {
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
             <span style={{ fontSize: "11px", fontWeight: "700", color: "#64748b" }}>Active Destinations:</span>
-            <span style={{ fontSize: "11px", fontWeight: "800", color: "#7c3aed" }}>20+ Platforms</span>
+            <span style={{ fontSize: "10px", fontWeight: "800", color: "#059669", background: "#ecfdf5", padding: "1px 6px", borderRadius: "4px" }}>Neutral Access</span>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             {[
-              { name: "Google", rating: "4.9★", color: "#4285F4" },
-              { name: "Justdial", rating: "4.8★", color: "#EA4335" },
-              { name: "Facebook", rating: "4.9★", color: "#1877F2" },
-              { name: "Trustpilot", rating: "4.7★", color: "#00B67A" },
-              { name: "TripAdvisor", rating: "4.8★", color: "#34E0A1" },
-              { name: "Zomato", rating: "4.6★", color: "#E23744" },
+              { name: "Google Reviews", color: "#4285F4" },
+              { name: "Justdial", color: "#EA4335" },
+              { name: "Facebook", color: "#1877F2" },
+              { name: "Trustpilot", color: "#00B67A" },
+              { name: "TripAdvisor", color: "#34E0A1" },
+              { name: "Zomato", color: "#E23744" },
             ].map((p, i) => (
               <span key={i} style={{
                 fontSize: "10px",
@@ -128,10 +122,10 @@ export const FeaturesSection = () => {
                 borderRadius: "6px",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "4px"
+                gap: "5px"
               }}>
                 <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: p.color }} />
-                {p.name} <strong style={{ color: "#f59e0b" }}>{p.rating}</strong>
+                {p.name}
               </span>
             ))}
           </div>
@@ -139,15 +133,47 @@ export const FeaturesSection = () => {
       ),
     },
     {
-      id: "ai-intelligence",
+      id: "complaint-resolution",
+      icon: ShieldCheck,
+      tag: "Issue Management",
+      title: "Complaint Resolution",
+      desc: "Assign, track, escalate and close customer service issues in real time. Notify duty managers immediately when concerns are submitted to resolve problems before customer churn.",
+      highlight: "Private Manager Alerts & SLA Resolution",
+      color: "#dc2626",
+      bg: "#fef2f2",
+      status: "deployed",
+      preview: (
+        <div style={{
+          background: "#fef2f2",
+          borderRadius: "12px",
+          padding: "12px 14px",
+          border: "1px solid #fee2e2",
+          marginTop: "16px",
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+            <span style={{ fontSize: "11px", fontWeight: "800", color: "#991b1b" }}>Ticket #4182 · Service Alert</span>
+            <span style={{ fontSize: "9.5px", background: "#fee2e2", color: "#b91c1c", padding: "1px 6px", borderRadius: "4px", fontWeight: "700" }}>SLA: 15m remaining</span>
+          </div>
+          <p style={{ fontSize: "11px", color: "#7f1d1d", margin: "0 0 8px 0", lineHeight: 1.3 }}>
+            &ldquo;Food arrived cold at table 14. Manager alerted for on-site table check.&rdquo;
+          </p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10px" }}>
+            <span style={{ color: "#991b1b", fontWeight: "600" }}>Assigned: Store Manager</span>
+            <span style={{ background: "#10b981", color: "#ffffff", padding: "2px 8px", borderRadius: "999px", fontWeight: "700" }}>Resolve Issue</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "ai-feedback-intelligence",
       icon: BarChart3,
-      tag: "AI Intelligence",
-      title: "Aspect Sentiment & Root-Cause AI",
-      desc: "Our neural sentiment engine breaks down customer feedback by key operational drivers: service speed, staff courtesy, hygiene, and product quality in real time.",
-      highlight: "Automated Sentiment & Aspect Classification",
+      tag: "AI Feedback Intelligence",
+      title: "AI Feedback Intelligence",
+      desc: "Identify sentiment and recurring themes across customer comments. Automatically tag operational drivers like service speed, staff courtesy, hygiene, and product quality.",
+      highlight: "Sentiment Analytics · Generative AI (Coming Soon)",
       color: "#059669",
       bg: "#ecfdf5",
-      // Visual Screenshot Mockup
+      status: "coming_soon",
       preview: (
         <div style={{
           background: "#ffffff",
@@ -155,16 +181,19 @@ export const FeaturesSection = () => {
           padding: "14px",
           border: "1px solid #e2e8f0",
           marginTop: "16px",
+          position: "relative",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "11px" }}>
-            <span style={{ fontWeight: "700", color: "#0f172a" }}>Sentiment Score: 94% Positive</span>
-            <span style={{ color: "#059669", fontWeight: "800" }}>+12% this month</span>
+            <span style={{ fontWeight: "700", color: "#0f172a" }}>Sentiment Tracking</span>
+            <span style={{ background: "#fef3c7", color: "#b45309", padding: "1px 6px", borderRadius: "4px", fontSize: "9.5px", fontWeight: "800" }}>
+              Generative NLP: Coming Soon
+            </span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             {[
-              { aspect: "Staff Courtesy", score: 98, color: "#10b981" },
-              { aspect: "Cleanliness & Hygiene", score: 94, color: "#059669" },
-              { aspect: "Service Speed", score: 88, color: "#3b82f6" },
+              { aspect: "Staff Courtesy", score: 96, color: "#10b981" },
+              { aspect: "Cleanliness & Hygiene", score: 92, color: "#059669" },
+              { aspect: "Service Speed", score: 86, color: "#3b82f6" },
             ].map((a, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span style={{ fontSize: "10px", color: "#64748b", width: "95px" }}>{a.aspect}</span>
@@ -179,47 +208,47 @@ export const FeaturesSection = () => {
       ),
     },
     {
-      id: "service-recovery",
-      icon: ShieldCheck,
-      tag: "Service Recovery",
-      title: "Real-Time Complaint Escalation",
-      desc: "Receive instant notifications when a customer expresses concern. Assign tickets to branch managers, set resolution SLAs, and solve issues before public escalation.",
-      highlight: "Private Manager Alerts & SLA Tracking",
-      color: "#dc2626",
-      bg: "#fef2f2",
-      // Visual Screenshot Mockup
+      id: "whatsapp-engagement",
+      icon: MessageSquare,
+      tag: "Customer Engagement",
+      title: "WhatsApp Engagement",
+      desc: "Consent-based invitations and service follow-up. Engage customers via opted-in WhatsApp and SMS communication with transparent carrier charges (~₹1/msg) and policy constraints disclosed.",
+      highlight: "Consent-Based Outreach · Carrier Rates Apply",
+      color: "#25d366",
+      bg: "#f0fdf4",
+      status: "deployed",
       preview: (
         <div style={{
-          background: "#fef2f2",
+          background: "#f0fdf4",
           borderRadius: "12px",
           padding: "12px 14px",
-          border: "1px solid #fee2e2",
+          border: "1px solid #dcfce7",
           marginTop: "16px",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-            <span style={{ fontSize: "11px", fontWeight: "800", color: "#991b1b" }}>Incident #4182 · Escalate</span>
-            <span style={{ fontSize: "9.5px", background: "#fee2e2", color: "#b91c1c", padding: "1px 6px", borderRadius: "4px", fontWeight: "700" }}>SLA: 15m remaining</span>
+            <span style={{ fontSize: "11px", fontWeight: "800", color: "#166534" }}>Opted-In Follow-up</span>
+            <span style={{ fontSize: "9.5px", color: "#15803d", fontWeight: "700" }}>₹1 / message</span>
           </div>
-          <p style={{ fontSize: "11px", color: "#7f1d1d", margin: "0 0 8px 0", lineHeight: 1.3 }}>
-            &ldquo;Food arrived cold at table 14. Waiter apologized but issue unaddressed.&rdquo;
+          <p style={{ fontSize: "11px", color: "#14532d", margin: "0 0 6px 0", lineHeight: 1.35 }}>
+            &ldquo;Hi Rahul, thank you for dining at The Grand Bistro! Tap to rate your experience or alert management.&rdquo;
           </p>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10px" }}>
-            <span style={{ color: "#991b1b", fontWeight: "600" }}>Assigned: Manager on Duty</span>
-            <span style={{ background: "#10b981", color: "#ffffff", padding: "2px 8px", borderRadius: "999px", fontWeight: "700" }}>Resolve Now</span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10px", color: "#166534" }}>
+            <span>✓ Verified Consent</span>
+            <span>Delivered via WhatsApp API</span>
           </div>
         </div>
       ),
     },
     {
-      id: "franchise-command",
-      icon: Store,
-      tag: "Franchise Intelligence",
-      title: "Multi-Outlet Franchise Command",
-      desc: "Give corporate and regional directors complete visibility across 5 to 100+ branches. Compare outlet satisfaction ratings, track response velocities, and benchmark performance.",
-      highlight: "Head-Office Command Center & Outlets Matrix",
-      color: "#d97706",
-      bg: "#fffbeb",
-      // Visual Screenshot Mockup
+      id: "business-analytics",
+      icon: BarChart3,
+      tag: "Operational Command",
+      title: "Business Analytics",
+      desc: "Monitor feedback volume, trends, branch comparison and resolution performance. Gain real-time executive visibility across single stores or multi-outlet franchise networks.",
+      highlight: "Volume, Trends & Branch Scorecards",
+      color: "#0284c7",
+      bg: "#f0f9ff",
+      status: "deployed",
       preview: (
         <div style={{
           background: "#ffffff",
@@ -229,56 +258,23 @@ export const FeaturesSection = () => {
           marginTop: "16px",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", fontWeight: "700", color: "#64748b", borderBottom: "1px solid #f1f5f9", paddingBottom: "4px", marginBottom: "6px" }}>
-            <span>Outlet Name</span>
-            <span>Rating</span>
+            <span>Location</span>
+            <span>CSAT</span>
             <span>Valid Scans</span>
-            <span>Status</span>
+            <span>SLA Met</span>
           </div>
           {[
-            { name: "Delhi Connaught", rating: "4.9★", scans: "1,420", status: "Top 5%" },
-            { name: "Mumbai Bandra", rating: "4.8★", scans: "1,180", status: "Good" },
-            { name: "Bengaluru Indiranagar", rating: "4.9★", scans: "980", status: "Top 5%" },
+            { name: "Delhi Connaught", csat: "4.9★", scans: "1,420", sla: "99%" },
+            { name: "Mumbai Bandra", csat: "4.8★", scans: "1,180", sla: "96%" },
+            { name: "Bengaluru Indiranagar", csat: "4.9★", scans: "980", sla: "98%" },
           ].map((row, i) => (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: "10.5px", padding: "3px 0", color: "#0f172a" }}>
               <span style={{ fontWeight: "600" }}>{row.name}</span>
-              <span style={{ fontWeight: "700", color: "#f59e0b" }}>{row.rating}</span>
+              <span style={{ fontWeight: "700", color: "#f59e0b" }}>{row.csat}</span>
               <span style={{ color: "#64748b" }}>{row.scans}</span>
-              <span style={{ fontSize: "9px", background: "#ecfdf5", color: "#059669", padding: "1px 5px", borderRadius: "4px", fontWeight: "700" }}>{row.status}</span>
+              <span style={{ fontSize: "9px", background: "#ecfdf5", color: "#059669", padding: "1px 5px", borderRadius: "4px", fontWeight: "700" }}>{row.sla}</span>
             </div>
           ))}
-        </div>
-      ),
-    },
-    {
-      id: "automated-workflows",
-      icon: MessageSquare,
-      tag: "Customer Workflows",
-      title: "Automated Feedback Invitations",
-      desc: "Trigger review requests after purchase, dining, or appointments. Engage customers through seamless QR encounters or opted-in WhatsApp and SMS communication.",
-      highlight: "Real-Time Delivery & Scan Attribution",
-      color: "#25d366",
-      bg: "#f0fdf4",
-      // Visual Screenshot Mockup
-      preview: (
-        <div style={{
-          background: "#f0fdf4",
-          borderRadius: "12px",
-          padding: "12px 14px",
-          border: "1px solid #dcfce7",
-          marginTop: "16px",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
-            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#25d366" }} />
-            <span style={{ fontSize: "11px", fontWeight: "800", color: "#166534" }}>Opted-In Follow-up Trigger</span>
-            <span style={{ fontSize: "9px", color: "#15803d", marginLeft: "auto" }}>Delivered</span>
-          </div>
-          <div style={{ background: "#ffffff", padding: "8px 10px", borderRadius: "8px", border: "1px solid #bbf7d0", fontSize: "11px", color: "#1f2937" }}>
-            &ldquo;Hi Rahul, thank you for choosing us today! We'd love your 5-second rating:&rdquo;
-            <div style={{ display: "flex", gap: "6px", marginTop: "6px" }}>
-              <span style={{ background: "#0052cc", color: "#ffffff", padding: "3px 8px", borderRadius: "4px", fontSize: "9.5px", fontWeight: "700" }}>Rate on Google</span>
-              <span style={{ background: "#f1f5f9", color: "#475569", padding: "3px 8px", borderRadius: "4px", fontSize: "9.5px" }}>Direct Feedback</span>
-            </div>
-          </div>
         </div>
       ),
     },
@@ -288,95 +284,67 @@ export const FeaturesSection = () => {
     <section
       id="features"
       style={{
-        padding: "54px 0 60px",
+        padding: "100px 0",
         backgroundColor: "#ffffff",
-        borderBottom: "1px solid #f1f5f9",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "0 24px",
-        }}
-      >
-        {/* Section Header */}
-        <div style={{ textAlign: "center", maxWidth: "780px", margin: "0 auto 36px" }}>
-          <span
-            style={{
-              fontSize: "12px",
-              fontWeight: "800",
-              color: "#0052cc",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              display: "block",
-              marginBottom: "8px",
-            }}
-          >
-            Core Capabilities
-          </span>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+        {/* Header */}
+        <div style={{ textAlign: "center", maxWidth: "740px", margin: "0 auto 44px" }}>
+          
           <h2
+            className="font-outfit"
             style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
-              fontSize: "clamp(26px, 3.2vw, 36px)",
+              fontSize: "clamp(26px, 3.4vw, 36px)",
               fontWeight: "900",
               color: "#0f172a",
               lineHeight: 1.2,
-              marginBottom: "12px",
-              letterSpacing: "-0.02em",
+              margin: "0 0 10px 0",
             }}
           >
-            Six Core Product Features Built for Scalable Reputation
+            Capabilities Engineered for Real-World Customer Operations
           </h2>
-          <p
-            style={{
-              fontSize: "15.5px",
-              lineHeight: 1.55,
-              color: "#64748b",
-              margin: 0,
-            }}
-          >
-            Everything single locations and franchise enterprises need to collect genuine customer sentiment, expand review velocity, and resolve issues before they hurt brand equity.
+          <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.55 }}>
+            Six core pillars connecting in-store physical touchpoints with actionable feedback, operational triage, and multi-platform review presence.
           </p>
         </div>
 
-        {/* 6 Concise Feature Cards Grid (3x2 Desktop Layout) */}
+        {/* 6 Feature Cards Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
             gap: "24px",
           }}
         >
-          {coreFeatures.map((feat) => {
-            const Icon = feat.icon;
+          {coreFeatures.map((f) => {
+            const Icon = f.icon;
+            const isComingSoon = f.status === "coming_soon";
             return (
               <motion.div
-                key={feat.id}
-                whileHover={{ y: -4, borderColor: "#0052cc", boxShadow: "0 14px 32px -8px rgba(0, 82, 204, 0.12)" }}
-                transition={{ duration: 0.2 }}
+                key={f.id}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.15 }}
                 style={{
-                  backgroundColor: "#ffffff",
+                  background: "#ffffff",
                   borderRadius: "18px",
-                  border: "1px solid #e2e8f0",
                   padding: "24px",
+                  border: "1px solid #e2e8f0",
+                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.04)",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.03)",
-                  transition: "border-color 0.2s, box-shadow 0.2s",
                 }}
               >
                 <div>
-                  {/* Header: Icon + Tag */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                     <div
                       style={{
-                        width: "42px",
-                        height: "42px",
-                        borderRadius: "10px",
-                        backgroundColor: feat.bg,
-                        color: feat.color,
+                        width: "44px",
+                        height: "44px",
+                        borderRadius: "12px",
+                        background: f.bg,
+                        color: f.color,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -384,68 +352,51 @@ export const FeaturesSection = () => {
                     >
                       <Icon size={22} />
                     </div>
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        fontWeight: "700",
-                        color: feat.color,
-                        backgroundColor: feat.bg,
-                        padding: "4px 10px",
-                        borderRadius: "999px",
-                      }}
-                    >
-                      {feat.tag}
-                    </span>
+                    {isComingSoon ? (
+                      <span
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "800",
+                          background: "#fef3c7",
+                          color: "#b45309",
+                          padding: "3px 8px",
+                          borderRadius: "999px",
+                          border: "1px solid #fde68a",
+                        }}
+                      >
+                        COMING SOON
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "800",
+                          background: "#ecfdf5",
+                          color: "#059669",
+                          padding: "3px 8px",
+                          borderRadius: "999px",
+                          border: "1px solid #a7f3d0",
+                        }}
+                      >
+                        ACTIVE &amp; DEPLOYED
+                      </span>
+                    )}
                   </div>
 
-                  {/* Title */}
-                  <h3
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: "800",
-                      color: "#0f172a",
-                      marginBottom: "8px",
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {feat.title}
+                  <div style={{ fontSize: "11px", fontWeight: "800", color: f.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>
+                    {f.tag}
+                  </div>
+
+                  <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", marginBottom: "8px" }}>
+                    {f.title}
                   </h3>
 
-                  {/* Concise Description */}
-                  <p
-                    style={{
-                      fontSize: "13.5px",
-                      color: "#64748b",
-                      lineHeight: 1.55,
-                      margin: "0 0 12px 0",
-                    }}
-                  >
-                    {feat.desc}
+                  <p style={{ fontSize: "13px", color: "#64748b", lineHeight: 1.55, margin: 0 }}>
+                    {f.desc}
                   </p>
-
-                  {/* Strong Product Screenshot / UI Mockup */}
-                  {feat.preview}
                 </div>
 
-                {/* Footer Highlight */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    paddingTop: "14px",
-                    marginTop: "16px",
-                    borderTop: "1px solid #f1f5f9",
-                    fontSize: "12px",
-                    fontWeight: "700",
-                    color: "#0052cc",
-                  }}
-                >
-                  <CheckCircle2 size={15} color="#0052cc" />
-                  <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {feat.highlight}
-                  </span>
-                </div>
+                {f.preview}
               </motion.div>
             );
           })}

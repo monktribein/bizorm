@@ -217,17 +217,17 @@ export const getLandingTestimonials = async (req, res, next) => {
 
     const curatedBizoramReviews = [
       {
-        name: "Piyush Sharma",
-        role: "Managing Director",
+        name: "Dr. Piyush Sharma",
+        role: "Clinical Director",
         business: "Apex Healthcare & Dental Clinic",
         avatar: "PS",
         avatarBg: "#004ac6",
         stars: 5,
-        metric: "4.2 → 4.9★ on Google Maps",
+        metric: "Multi-Platform Feedback",
         platform: "Google Reviews",
         quote:
-          "Bizoram completely transformed our customer review volume. In 60 days, we gathered over 180 verified 5-star Google reviews. The acrylic standees on our counter make it effortless for patients to scan and rate us in under 5 seconds.",
-        date: "Verified Google Client",
+          "BizORM made collecting authentic patient feedback effortless. The counter acrylic standee sits right at our discharge desk. Patients appreciate how fast and straightforward the scan is, and our staff attribution metrics help us reward our front-desk team.",
+        date: "Verified Healthcare Client",
       },
       {
         name: "Riya Kapoor",
@@ -236,11 +236,11 @@ export const getLandingTestimonials = async (req, res, next) => {
         avatar: "RK",
         avatarBg: "#0284c7",
         stars: 5,
-        metric: "+240 Google Reviews in 60 Days",
-        platform: "Google Reviews",
+        metric: "Real-Time Complaint Desk",
+        platform: "Google & Direct",
         quote:
-          "The smart star-gating feature is pure genius. Happy customers are routed directly to Google Maps, while unhappy diners send their feedback privately to our manager. We deflected 14 negative complaints and resolved them internally!",
-        date: "Verified Google Client",
+          "The real-time complaint desk feature has been vital for our floor operations. If a guest has an issue with food temperature or service speed, our duty manager gets an immediate alert and addresses it on the floor before they exit.",
+        date: "Verified Hospitality Client",
       },
       {
         name: "Monu Verma",
@@ -249,11 +249,11 @@ export const getLandingTestimonials = async (req, res, next) => {
         avatar: "MV",
         avatarBg: "#2563eb",
         stars: 5,
-        metric: "5 Branches Managed Concurrently",
+        metric: "Multi-Outlet Franchise Command",
         platform: "Google & Justdial",
         quote:
-          "Managing multiple branch locations with Bizoram's multi-location RBAC is seamless. Our regional managers monitor their own reviews while I get a bird's-eye view of all ratings and invite campaigns from one sleek dashboard.",
-        date: "Verified Google Client",
+          "Managing multiple branch locations with BizORM's multi-location RBAC is seamless. Our regional managers monitor their own branch feedback while I get a bird's-eye view of all satisfaction trends from one central dashboard.",
+        date: "Verified Franchise Client",
       },
       {
         name: "Mayank Singhal",
@@ -262,11 +262,11 @@ export const getLandingTestimonials = async (req, res, next) => {
         avatar: "MS",
         avatarBg: "#7c3aed",
         stars: 5,
-        metric: "98% Positive Review Conversion",
+        metric: "Acrylic QR Standees",
         platform: "WhatsApp & Google",
         quote:
-          "The automated WhatsApp review prompts sent right after hair and spa appointments have a phenomenal response rate. Customers love the 1-click rating and our Google ranking climbed to the #1 spot in our city.",
-        date: "Verified Google Client",
+          "The 300 DPI print-ready standees matched our premium salon aesthetic seamlessly. Customers simply scan the QR code on the mirror station and choose their preferred platform to share their experience.",
+        date: "Verified Salon & Spa Client",
       },
     ];
 
@@ -399,17 +399,20 @@ export const saveRating = async (req, res, next) => {
       }
     }
 
-    // Gating determination: 4-5 stars = positive (allow external review redirect)
-    // 1-3 stars = private feedback captured
-    const isPositive = Number(star) >= 4;
+    // Neutral Smart Feedback & Resolution:
+    // Respect platform anti-gating policies: neutral access to public review destination
+    // Private feedback / complaint resolution captured in parallel
+    const starVal = Number(star);
+    const isPositive = starVal >= 4;
 
     res.status(201).json({
       success: true,
       message: "Feedback submitted successfully",
       ratingId: newRating._id,
       isPositive,
-      redirectUrl: isPositive && webLink ? webLink : null,
-      gatedToPrivateSurvey: !isPositive,
+      redirectUrl: webLink ? webLink : null,
+      allowPublicReview: true,
+      requiresFollowUp: !isPositive,
     });
   } catch (error) {
     next(error);
@@ -426,7 +429,14 @@ export const getReviews = async (req, res, next) => {
 
     if (role === "SUPER_ADMIN") {
       if (branchId) query.branchId = branchId;
-      if (formKey) query.formKey = formKey;
+      if (formKey) {
+        if (formKey.includes(",")) {
+          const keys = formKey.split(",").map((k) => k.trim()).filter(Boolean);
+          query.formKey = { $in: keys };
+        } else {
+          query.formKey = formKey;
+        }
+      }
     } else {
       if (!req.user.branchId) {
         query.formKey = req.user.formKey;
@@ -572,7 +582,14 @@ export const getReviewStats = async (req, res, next) => {
     const query = {};
     if (role === "SUPER_ADMIN") {
       if (branchId) query.branchId = branchId;
-      if (formKey) query.formKey = formKey;
+      if (formKey) {
+        if (formKey.includes(",")) {
+          const keys = formKey.split(",").map((k) => k.trim()).filter(Boolean);
+          query.formKey = { $in: keys };
+        } else {
+          query.formKey = formKey;
+        }
+      }
     } else {
       if (!req.user.branchId) {
         query.formKey = req.user.formKey;

@@ -813,7 +813,7 @@ export const HeroSection = () => {
                 </div>
               </motion.div>
 
-              {/* Badge 3: Private Feedback */}
+              {/* Badge 3: Complaint Resolution */}
               <motion.div
                 initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -822,8 +822,8 @@ export const HeroSection = () => {
                   backgroundColor: "#ffffff",
                   padding: "9px 14px",
                   borderRadius: "12px",
-                  border: "1px solid #fee2e2",
-                  boxShadow: "0 8px 20px rgba(239, 68, 68, 0.08)",
+                  border: "1px solid #e0e7ff",
+                  boxShadow: "0 8px 20px rgba(0, 82, 204, 0.08)",
                   display: "flex",
                   alignItems: "center",
                   gap: "9px",
@@ -835,11 +835,11 @@ export const HeroSection = () => {
                     width: "28px",
                     height: "28px",
                     borderRadius: "8px",
-                    backgroundColor: "#fef2f2",
+                    backgroundColor: "#eff6ff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#ef4444",
+                    color: "#0052cc",
                     flexShrink: 0,
                   }}
                 >
@@ -847,10 +847,10 @@ export const HeroSection = () => {
                 </div>
                 <div>
                   <p style={{ fontSize: "11.5px", fontWeight: "800", color: "#0f172a", margin: 0 }}>
-                    Private Feedback
+                    Complaint Resolution
                   </p>
-                  <p style={{ fontSize: "10px", color: "#64748b", margin: 0 }}>
-                    Resolve issues before public posting
+                  <p style={{ fontSize: "10px", color: "#475569", margin: 0 }}>
+                    Resolve customer concerns in real time
                   </p>
                 </div>
               </motion.div>

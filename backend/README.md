@@ -12,9 +12,9 @@ A robust, enterprise-grade REST API backend built with **Node.js**, **Express.js
    - `BRANCH_USER`: Strictly read-only access to branch metrics, reviews, and logs.
 2. **Branch Security & Data Isolation**:
    - Automated server-side tenant isolation prevents cross-branch access.
-3. **Star-Gating Feedback System**:
-   - 4–5 Star ratings: Marked as positive and redirected/prompted to external platforms (Google Reviews, Facebook, etc.).
-   - 1–3 Star ratings: Gated to a private internal survey/complaint form to resolve issues before they reach public platforms.
+3. **Smart Feedback & Resolution System**:
+   - Neutral Review Opportunities: Transparent, unhindered access to public review destinations (Google Reviews, Justdial, Facebook, etc.) in compliance with platform anti-gating policies.
+   - Real-Time Complaint Resolution: Parallel private customer service triage and issue management to address concerns immediately.
 4. **Automated Seeding on First Boot**:
    - Pre-seeds Super Admin account (`nktech@gmail.com` / `123456`).
    - Pre-seeds default pricing packages, essential subscription plans, survey questions, and system settings.

@@ -1,183 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Star, Building2, Store, Sparkles, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Check, Store, Building2, ShieldAlert, Info, HelpCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { BUSINESS_PLANS, FRANCHISE_PLANS, PRICING_DISCLAIMERS } from "../../constants/plans";
 
 export const PricingSection = ({ hideHeader = false }) => {
   const [activeTab, setActiveTab] = useState("business"); // "business" | "enterprise"
   const [annualBilling, setAnnualBilling] = useState(true);
 
-  // Business Plans (Single Location) - Exact Approved Spec
-  const businessPlans = [
-    {
-      id: "starter",
-      name: "Starter",
-      tagline: "For small single-counter shops & local practices",
-      monthlyPrice: 299,
-      annualPrice: 2990,
-      scans: "100 valid scans/month",
-      locations: "1 business location",
-      platforms: "5 review platforms",
-      features: [
-        "100 valid scans/month",
-        "1 business location",
-        "5 review platforms",
-        "Branded QR feedback standee (300 DPI)",
-        "Basic analytics & feedback logs",
-        "Email notifications for negative ratings",
-      ],
-      popular: false,
-      cta: "Choose Plan",
-    },
-    {
-      id: "growth",
-      name: "Growth",
-      tagline: "For active clinics, cafes & busy retail counters",
-      monthlyPrice: 999,
-      annualPrice: 9990,
-      scans: "1,000 valid scans/month",
-      locations: "1 business location",
-      platforms: "10 review platforms",
-      features: [
-        "1,000 valid scans/month",
-        "1 business location",
-        "10 review platforms",
-        "Feedback and complaint tracking",
-        "Expanded analytics & rating velocity",
-        "Private complaint resolution workflow",
-        "Priority email & WhatsApp support",
-      ],
-      popular: true,
-      cta: "Choose Plan",
-    },
-    {
-      id: "professional",
-      name: "Professional",
-      tagline: "For established practices, salons & high-footfall venues",
-      monthlyPrice: 1499,
-      annualPrice: 14990,
-      scans: "3,000 valid scans/month",
-      locations: "1 business location",
-      platforms: "15 review platforms",
-      features: [
-        "3,000 valid scans/month",
-        "1 business location",
-        "15 review platforms",
-        "Staff attribution & performance scoring",
-        "Advanced reporting & CSV data exports",
-        "Custom feedback question builder",
-        "Automated customer recovery links",
-      ],
-      popular: false,
-      cta: "Choose Plan",
-    },
-    {
-      id: "business-pro",
-      name: "Business Pro",
-      tagline: "For high-volume flagship outlets & demanding brands",
-      monthlyPrice: 2499,
-      annualPrice: 24990,
-      scans: "10,000 valid scans/month",
-      locations: "1 business location",
-      platforms: "20 review platforms",
-      features: [
-        "10,000 valid scans/month",
-        "1 business location",
-        "20 review platforms",
-        "Automation features & webhook alerts",
-        "Advanced insights & sentiment clustering",
-        "Multi-staff accounts & custom QR tags",
-        "Dedicated account onboarding",
-      ],
-      popular: false,
-      cta: "Choose Plan",
-    },
-  ];
-
-  // Enterprise Plans (Multi-Outlet Franchise & Corporate) - Complete Transparent Pricing
-  const enterprisePlans = [
-    {
-      id: "franchise-10",
-      name: "Franchise 10",
-      tagline: "For regional chains with up to 10 outlets",
-      monthlyPrice: 7999,
-      annualPrice: 79990,
-      scans: "25,000 Pooled Valid Scans / Month",
-      locations: "Up to 10 Locations Included",
-      features: [
-        "Complete subscription for 10 branches",
-        "25,000 pooled valid scans/month across all outlets",
-        "Central Head-Office Command Center",
-        "Individual Store Manager access & logins",
-        "Regional SLA escalation engine",
-        "Branch-by-branch comparative analytics",
-        "Bulk printable acrylic standee kit",
-      ],
-      popular: false,
-      cta: "Select Franchise 10",
-    },
-    {
-      id: "franchise-25",
-      name: "Franchise 25",
-      tagline: "For growing retail & hospitality franchise networks",
-      monthlyPrice: 16999,
-      annualPrice: 169990,
-      scans: "75,000 Pooled Valid Scans / Month",
-      locations: "Up to 25 Locations Included",
-      features: [
-        "Complete subscription for 25 branches",
-        "75,000 pooled valid scans/month across network",
-        "Franchise Health Score™ & outlet rankings",
-        "Multi-tier territory roles (Regional Directors & Branch Staff)",
-        "Audit logs & centralized survey compliance",
-        "Automated daily/weekly executive email digests",
-        "Priority corporate phone & WhatsApp support",
-      ],
-      popular: true,
-      cta: "Select Franchise 25",
-    },
-    {
-      id: "franchise-50",
-      name: "Franchise 50",
-      tagline: "For national franchise brands with up to 50 outlets",
-      monthlyPrice: 29999,
-      annualPrice: 299990,
-      scans: "175,000 Pooled Valid Scans / Month",
-      locations: "Up to 50 Locations Included",
-      features: [
-        "Complete subscription for 50 branches",
-        "175,000 pooled valid scans/month across network",
-        "Multi-brand governance & sub-franchise hierarchies",
-        "Automated bulk QR dispatch & acrylic standee production",
-        "Advanced complaint root-cause AI clustering",
-        "Quarterly business review with reputation strategists",
-        "Dedicated Customer Success Manager",
-      ],
-      popular: false,
-      cta: "Select Franchise 50",
-    },
-    {
-      id: "franchise-corporate",
-      name: "Franchise 100 / Corporate",
-      tagline: "For large enterprise chains & multi-brand conglomerates",
-      monthlyPrice: "Custom",
-      annualPrice: "Custom",
-      scans: "500,000+ Pooled Valid Scans / Month",
-      locations: "100+ Locations & Custom Scale",
-      features: [
-        "Unlimited branches & custom location tiers",
-        "Tailored high-volume pooled scan quotas",
-        "Custom ERP, POS, and CRM API integrations",
-        "Custom enterprise SLAs & contractual data governance",
-        "On-premise or dedicated private cloud deployment options",
-        "Dedicated Account Director & executive training",
-      ],
-      popular: false,
-      cta: "Contact Enterprise Sales",
-    },
-  ];
-
-  const currentPlans = activeTab === "business" ? businessPlans : enterprisePlans;
+  const currentPlans = activeTab === "business" ? BUSINESS_PLANS : FRANCHISE_PLANS;
 
   return (
     <section
@@ -191,7 +22,23 @@ export const PricingSection = ({ hideHeader = false }) => {
         {/* Section Header */}
         {!hideHeader && (
           <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
-            
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "4px 12px",
+                borderRadius: "9999px",
+                backgroundColor: "#eff6ff",
+                border: "1px solid #bfdbfe",
+                color: "#0052cc",
+                fontSize: "12px",
+                fontWeight: "700",
+                marginBottom: "12px",
+              }}
+            >
+              <span>Subscription &amp; Scan Quota Pricing</span>
+            </div>
             <h2
               className="font-outfit"
               style={{
@@ -205,7 +52,7 @@ export const PricingSection = ({ hideHeader = false }) => {
               Plans for Every Business Stage
             </h2>
             <p style={{ fontSize: "15.5px", color: "#64748b", margin: 0, lineHeight: 1.5 }}>
-              Approved commercial direction built on <strong>valid QR scans</strong> and transparent quotas. No hidden per-review fees.
+              Transparent pricing based on <strong>valid QR scans</strong> and clear location allowances. No hidden per-review fees.
             </p>
           </div>
         )}
@@ -213,7 +60,18 @@ export const PricingSection = ({ hideHeader = false }) => {
         {/* Category & Billing Toggles */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
           {/* Business vs Enterprise Segment Toggle */}
-          <div style={{ display: "inline-flex", background: "#f1f5f9", padding: "4px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              background: "#f1f5f9",
+              padding: "4px",
+              borderRadius: "12px",
+              border: "1px solid #e2e8f0",
+              maxWidth: "100%",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
             <button
               type="button"
               onClick={() => setActiveTab("business")}
@@ -225,7 +83,7 @@ export const PricingSection = ({ hideHeader = false }) => {
                 borderRadius: "8px",
                 border: "none",
                 background: activeTab === "business" ? "#ffffff" : "transparent",
-                color: activeTab === "business" ? "#004ac6" : "#64748b",
+                color: activeTab === "business" ? "#0052cc" : "#64748b",
                 fontWeight: "700",
                 fontSize: "13.5px",
                 cursor: "pointer",
@@ -247,7 +105,7 @@ export const PricingSection = ({ hideHeader = false }) => {
                 borderRadius: "8px",
                 border: "none",
                 background: activeTab === "enterprise" ? "#ffffff" : "transparent",
-                color: activeTab === "enterprise" ? "#004ac6" : "#64748b",
+                color: activeTab === "enterprise" ? "#0052cc" : "#64748b",
                 fontWeight: "700",
                 fontSize: "13.5px",
                 cursor: "pointer",
@@ -261,7 +119,17 @@ export const PricingSection = ({ hideHeader = false }) => {
           </div>
 
           {/* Monthly / Annual Billing Toggle */}
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", background: "#f8fafc", padding: "4px 8px", borderRadius: "999px", border: "1px solid #e2e8f0" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              background: "#f8fafc",
+              padding: "4px 8px",
+              borderRadius: "999px",
+              border: "1px solid #e2e8f0",
+            }}
+          >
             <button
               type="button"
               onClick={() => setAnnualBilling(false)}
@@ -269,11 +137,12 @@ export const PricingSection = ({ hideHeader = false }) => {
                 padding: "6px 16px",
                 borderRadius: "999px",
                 border: "none",
-                background: !annualBilling ? "#004ac6" : "transparent",
+                background: !annualBilling ? "#0052cc" : "transparent",
                 color: !annualBilling ? "#ffffff" : "#475569",
                 fontSize: "13px",
                 fontWeight: "700",
                 cursor: "pointer",
+                transition: "all 0.15s ease",
               }}
             >
               Monthly Billing
@@ -285,7 +154,7 @@ export const PricingSection = ({ hideHeader = false }) => {
                 padding: "6px 16px",
                 borderRadius: "999px",
                 border: "none",
-                background: annualBilling ? "#004ac6" : "transparent",
+                background: annualBilling ? "#0052cc" : "transparent",
                 color: annualBilling ? "#ffffff" : "#475569",
                 fontSize: "13px",
                 fontWeight: "700",
@@ -293,27 +162,52 @@ export const PricingSection = ({ hideHeader = false }) => {
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
+                transition: "all 0.15s ease",
               }}
             >
-              <span>Annual Billing (2 Months Free)</span>
-              <span style={{ fontSize: "10.5px", background: "#10b981", color: "#fff", padding: "1px 6px", borderRadius: "999px", fontWeight: "800" }}>
-                SAVE 17%
+              <span>Annual Billing</span>
+              <span
+                style={{
+                  fontSize: "10.5px",
+                  background: "#10b981",
+                  color: "#ffffff",
+                  padding: "1px 7px",
+                  borderRadius: "999px",
+                  fontWeight: "800",
+                }}
+              >
+                SAVE 17% (2 Mo. Free)
               </span>
             </button>
           </div>
         </div>
 
         {/* 4 Cards Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "24px", alignItems: "stretch" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+            gap: "24px",
+            alignItems: "stretch",
+          }}
+        >
           {currentPlans.map((plan) => {
             const isNumeric = typeof plan.monthlyPrice === "number";
-            const price = isNumeric
+            const effectiveMonthly = isNumeric
               ? annualBilling
-                ? `₹${plan.annualPrice.toLocaleString("en-IN")}`
-                : `₹${plan.monthlyPrice.toLocaleString("en-IN")}`
+                ? Math.round(plan.annualPrice / 12)
+                : plan.monthlyPrice
               : "Custom";
 
-            const cycle = isNumeric ? (annualBilling ? "/year" : "/mo") : "";
+            const price = isNumeric
+              ? `₹${effectiveMonthly.toLocaleString("en-IN")}`
+              : "Custom";
+
+            const cycle = isNumeric ? " / month" : "";
+
+            const targetLink = plan.isCustomQuote
+              ? "/contact?type=enterprise"
+              : `/register?plan=${plan.id}&billing=${annualBilling ? "annual" : "monthly"}`;
 
             return (
               <motion.div
@@ -323,10 +217,10 @@ export const PricingSection = ({ hideHeader = false }) => {
                 style={{
                   background: "#ffffff",
                   borderRadius: "20px",
-                  padding: "32px 24px",
-                  border: plan.popular ? "2px solid #004ac6" : "1px solid #e2e8f0",
+                  padding: "30px 22px",
+                  border: plan.popular ? "2px solid #0052cc" : "1px solid #e2e8f0",
                   boxShadow: plan.popular
-                    ? "0 12px 30px rgba(0, 74, 198, 0.12)"
+                    ? "0 12px 30px rgba(0, 82, 204, 0.14)"
                     : "0 4px 14px rgba(0, 0, 0, 0.04)",
                   position: "relative",
                   display: "flex",
@@ -340,7 +234,7 @@ export const PricingSection = ({ hideHeader = false }) => {
                       top: "-12px",
                       left: "50%",
                       transform: "translateX(-50%)",
-                      background: "#004ac6",
+                      background: "#0052cc",
                       color: "#ffffff",
                       fontSize: "11px",
                       fontWeight: "800",
@@ -354,33 +248,69 @@ export const PricingSection = ({ hideHeader = false }) => {
                 )}
 
                 <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a", marginBottom: "4px" }}>
-                  {plan.name}
+                  {plan.packageName}
                 </div>
-                <div style={{ fontSize: "12px", color: "#64748b", minHeight: "32px", marginBottom: "16px", lineHeight: 1.4 }}>
+                <div style={{ fontSize: "12px", color: "#64748b", minHeight: "34px", marginBottom: "16px", lineHeight: 1.4 }}>
                   {plan.tagline}
                 </div>
 
-                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "16px" }}>
-                  <span style={{ fontSize: "36px", fontWeight: "900", color: "#0f172a", letterSpacing: "-0.5px" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: isNumeric ? "4px" : "16px" }}>
+                  <span style={{ fontSize: "34px", fontWeight: "900", color: "#0f172a", letterSpacing: "-0.5px" }}>
                     {price}
                   </span>
                   <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "600" }}>{cycle}</span>
                 </div>
 
+                {annualBilling && isNumeric && (
+                  <div style={{ fontSize: "11.5px", color: "#0052cc", fontWeight: "700", marginBottom: "14px" }}>
+                    Billed annually at ₹{plan.annualPrice.toLocaleString("en-IN")}/yr (Save ~17%)
+                  </div>
+                )}
+                {!annualBilling && isNumeric && (
+                  <div style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "600", marginBottom: "14px" }}>
+                    Billed on monthly renewal
+                  </div>
+                )}
+
                 {/* Quota Highlights Box */}
-                <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "20px", border: "1px solid #f1f5f9" }}>
-                  <div style={{ fontSize: "13px", fontWeight: "800", color: "#004ac6" }}>
-                    🔍 {plan.scans}
+                <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "18px", border: "1px solid #f1f5f9" }}>
+                  <div style={{ fontSize: "13px", fontWeight: "800", color: "#0052cc" }}>
+                    🔍 {plan.scansDisplay}
                   </div>
-                  <div style={{ fontSize: "12px", color: "#475569", marginTop: "2px", fontWeight: "600" }}>
-                    📍 {plan.locations}
+                  <div style={{ fontSize: "12px", color: "#475569", marginTop: "3px", fontWeight: "600" }}>
+                    📍 {plan.locationsDisplay}
                   </div>
+                  {annualBilling && isNumeric && (
+                    <div style={{ fontSize: "11px", color: "#059669", marginTop: "4px", fontWeight: "700" }}>
+                      ✓ Monthly scan reset included
+                    </div>
+                  )}
                 </div>
 
                 {/* Features List */}
-                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px 0", flex: 1, display: "flex", flexDirection: "column", gap: "10px" }}>
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: "0 0 24px 0",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                  }}
+                >
                   {plan.features.map((f, i) => (
-                    <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12.5px", color: "#334155", lineHeight: 1.4 }}>
+                    <li
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "8px",
+                        fontSize: "12.5px",
+                        color: "#334155",
+                        lineHeight: 1.45,
+                      }}
+                    >
                       <Check size={15} color="#059669" style={{ flexShrink: 0, marginTop: "2px" }} />
                       <span>{f}</span>
                     </li>
@@ -388,7 +318,7 @@ export const PricingSection = ({ hideHeader = false }) => {
                 </ul>
 
                 <Link
-                  to="/register"
+                  to={targetLink}
                   className={plan.popular ? "btn btn-primary" : "btn btn-outline"}
                   style={{
                     width: "100%",
@@ -407,17 +337,40 @@ export const PricingSection = ({ hideHeader = false }) => {
           })}
         </div>
 
-        {/* Mandatory Commercial Disclaimers from Audit Spec */}
-        <div style={{ marginTop: "32px", padding: "16px 20px", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0", textAlign: "center", fontSize: "12.5px", color: "#64748b", lineHeight: 1.5 }}>
-          <div style={{ fontWeight: "700", color: "#334155", marginBottom: "4px" }}>
-            Commercial Terms &amp; Quota Policy:
+        {/* Mandatory Commercial Disclaimers Required by Specification */}
+        <div
+          style={{
+            marginTop: "36px",
+            padding: "20px 24px",
+            background: "#f8fafc",
+            borderRadius: "14px",
+            border: "1px solid #e2e8f0",
+            fontSize: "12.5px",
+            color: "#475569",
+            lineHeight: 1.6,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "800", color: "#0f172a", marginBottom: "6px" }}>
+            <Info size={16} color="#0052cc" />
+            <span>Commercial Terms, Quota Allocation &amp; Compliance Disclosure</span>
           </div>
-          <div>
-            Interactive proposed pricing design. Prices are pending commercial sign-off; exclude GST and third-party messaging carrier charges. Annual subscriptions retain monthly scan resets.
-          </div>
-          <div style={{ marginTop: "4px" }}>
-            Need custom volume beyond Franchise 50? <Link to="/contact" style={{ color: "#004ac6", fontWeight: "700", textDecoration: "none" }}>Contact our Enterprise Sales team →</Link>
-          </div>
+          <ul style={{ margin: 0, paddingLeft: "20px" }}>
+            <li>
+              <strong>Proposed Values:</strong> Displayed pricing tables represent proposed configuration values pending commercial sign-off.
+            </li>
+            <li>
+              <strong>Taxes &amp; Carrier Fees:</strong> Prices exclude applicable 18% GST. WhatsApp / SMS communication triggers carrier charges (~₹1/message) under verified opt-in consent.
+            </li>
+            <li>
+              <strong>Annual Quota Resets:</strong> Annual subscriptions reflect 17% savings (2 months free marketing shorthand). Scans reset monthly and are not accessible all at once.
+            </li>
+            <li>
+              <strong>Franchise Pooling:</strong> Franchise scan quotas are pooled across active outlets. Outlets may be added, transferred, or reassigned within tier caps.
+            </li>
+            <li>
+              <strong>Enterprise Entitlements:</strong> Dedicated success managers, custom SLA guarantees, POS/ERP APIs, and private hosting require signed commercial delivery agreements.
+            </li>
+          </ul>
         </div>
       </div>
     </section>

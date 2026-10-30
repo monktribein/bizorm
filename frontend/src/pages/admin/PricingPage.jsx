@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { BUSINESS_PLANS, FRANCHISE_PLANS, PRICING_DISCLAIMERS } from "../../constants/plans";
 import {
   CreditCard,
   Plus,
@@ -24,6 +25,7 @@ import {
   Zap,
   X,
   Award,
+  MoreHorizontal,
 } from "lucide-react";
 
 export const PricingPage = () => {
@@ -35,11 +37,13 @@ export const PricingPage = () => {
   const [activeTab, setActiveTab] = useState(
     tabParam === "multiple" || tabParam === "marketplace" ? tabParam : "single"
   );
+  const [annualBilling, setAnnualBilling] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [selectingPlanId, setSelectingPlanId] = useState(null);
   const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error' | 'info', message: '' }
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Custom Quote State
   const [submittingCustom, setSubmittingCustom] = useState(false);
@@ -251,9 +255,76 @@ export const PricingPage = () => {
     }
   };
 
-  const filteredPackages = packages.filter(
+  // Canonical order mapping
+  const singleOrder = { starter: 1, growth: 2, professional: 3, "business pro": 4 };
+  const franchiseOrder = { "franchise 10": 1, "franchise 25": 2, "franchise 50": 3, "franchise 100 / corporate": 4 };
+
+  const getPlanDetails = (pkg) => {
+    const pkgName = pkg.packageName?.toLowerCase() || "";
+    if (pkg.businessType === "single") {
+      const matched = BUSINESS_PLANS.find(
+        (b) => b.packageName.toLowerCase() === pkgName
+      );
+      if (matched) {
+        return {
+          tagline: matched.tagline,
+          displayPrice: annualBilling ? Math.round(matched.annualPrice / 12) : matched.monthlyPrice,
+          annualTotal: matched.annualPrice,
+          scansDisplay: matched.scansDisplay,
+          features: matched.features,
+          popular: matched.popular,
+          locationsDisplay: matched.locationsDisplay,
+        };
+      }
+    } else if (pkg.businessType === "multiple") {
+      const matched = FRANCHISE_PLANS.find(
+        (f) => f.packageName.toLowerCase() === pkgName
+      );
+      if (matched) {
+        return {
+          tagline: matched.tagline,
+          displayPrice:
+            matched.monthlyPrice === "Custom" || pkg.isCustomQuote
+              ? "Custom"
+              : annualBilling && typeof matched.annualPrice === "number"
+              ? Math.round(matched.annualPrice / 12)
+              : matched.monthlyPrice,
+          annualTotal: typeof matched.annualPrice === "number" ? matched.annualPrice : null,
+          scansDisplay: matched.scansDisplay,
+          features: matched.features,
+          popular: matched.popular,
+          locationsDisplay: matched.locationsDisplay,
+        };
+      }
+    }
+    // Marketplace or Fallback
+    return {
+      tagline: pkg.category,
+      displayPrice: pkg.price,
+      annualTotal: null,
+      scansDisplay: `${Number(pkg.reviewLimit || 500).toLocaleString("en-IN")} Reviews / Month`,
+      features: pkg.featuresList || [],
+      popular: Boolean(pkg.popularBadge),
+      locationsDisplay: pkg.businessType === "marketplace" ? `${pkg.productsLimit || 5} Products` : "1 Branch",
+    };
+  };
+
+  const rawTabPackages = packages.filter(
     (p) => (p.businessType || "single") === activeTab
   );
+
+  // Filter out any standalone trial tier from the subscription purchase cards
+  const filteredPackages = rawTabPackages.filter(
+    (p) => p.category !== "Trial" && !p.packageName.toLowerCase().includes("trial")
+  );
+
+  if (activeTab === "single") {
+    filteredPackages.sort((a, b) => (singleOrder[a.packageName.toLowerCase()] || 99) - (singleOrder[b.packageName.toLowerCase()] || 99));
+  } else if (activeTab === "multiple") {
+    filteredPackages.sort((a, b) => (franchiseOrder[a.packageName.toLowerCase()] || 99) - (franchiseOrder[b.packageName.toLowerCase()] || 99));
+  } else {
+    filteredPackages.sort((a, b) => (a.displayOrder || 1) - (b.displayOrder || 1));
+  }
 
   const currentUserPlan = packages.find(
     (p) => currentActivePlanId && String(p._id) === String(currentActivePlanId)
@@ -262,10 +333,10 @@ export const PricingPage = () => {
   const activePlan = currentUserPlan || (user?.pricingPackageId && typeof user.pricingPackageId === "object" ? user.pricingPackageId : null);
 
   return (
-    <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+    <div className="animate-fade-in" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       {/* Top Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
-        <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", width: "100%" }}>
+        <div style={{ flex: "1 1 320px", minWidth: 0 }}>
           <h1 style={{ fontSize: "28px", fontWeight: "900", color: "#0f172a", margin: 0, letterSpacing: "-0.5px" }}>
             {isSuperAdmin ? "SaaS Pricing Plans & Packages" : "Subscription Plans & Upgrade"}
           </h1>
@@ -276,71 +347,133 @@ export const PricingPage = () => {
           </p>
         </div>
 
-        {isSuperAdmin ? (
-          <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-            <Plus size={16} />
-            <span>Create New Plan</span>
-          </button>
-        ) : (
-          activePlan && (
+        <div className="pricing-active-plan-wrapper">
+          {isSuperAdmin ? (
+            <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <Plus size={16} />
+              <span>Create New Plan</span>
+            </button>
+          ) : (
+            activePlan && (
+              <div className="pricing-active-plan-card">
+                <div
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "12px",
+                    background: "#dcfce7",
+                    border: "1px solid #86efac",
+                    color: "#16a34a",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <CheckCircle2 size={22} />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: "800", color: "#15803d", letterSpacing: "0.6px", textTransform: "uppercase" }}>
+                      Active Plan
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "10.5px",
+                        fontWeight: "700",
+                        padding: "2px 8px",
+                        borderRadius: "9999px",
+                        background: "#ecfdf5",
+                        border: "1px solid #a7f3d0",
+                        color: "#166534",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#16a34a" }} />
+                      Active
+                    </span>
+                  </div>
+                  <div style={{ fontSize: "15px", fontWeight: "900", color: "#0f172a", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                    <span>{activePlan.packageName}</span>
+                    <span
+                      style={{
+                        fontSize: "11.5px",
+                        fontWeight: "700",
+                        color: "#0369a1",
+                        background: "#f0f9ff",
+                        border: "1px solid #bae6fd",
+                        padding: "2px 8px",
+                        borderRadius: "6px",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {Number(activePlan.reviewLimit || 100).toLocaleString("en-IN")} Valid Scans/mo
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Trial Alert Notification Banner */}
+      {activePlan && (activePlan.packageName?.toLowerCase().includes("trial") || activePlan.category === "Trial") && (
+        <div
+          style={{
+            padding: "16px 20px",
+            borderRadius: "14px",
+            background: "linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%)",
+            border: "1.5px solid #bfdbfe",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "12px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div
               style={{
-                display: "inline-flex",
+                width: "36px",
+                height: "36px",
+                borderRadius: "10px",
+                backgroundColor: "#dbeafe",
+                color: "#0052cc",
+                display: "flex",
                 alignItems: "center",
-                gap: "12px",
-                background: "linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)",
-                border: "1.5px solid #86efac",
-                borderRadius: "14px",
-                padding: "8px 16px",
-                boxShadow: "0 2px 10px rgba(16, 185, 129, 0.08)",
+                justifyContent: "center",
+                flexShrink: 0,
               }}
             >
-              <div
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "10px",
-                  background: "#dcfce7",
-                  border: "1px solid #86efac",
-                  color: "#16a34a",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <CheckCircle2 size={20} />
+              <Zap size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: "14.5px", fontWeight: "800", color: "#0f172a" }}>
+                You are currently exploring on the Free 7-Day Trial (100 Valid Scans Included)
               </div>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span style={{ fontSize: "10.5px", fontWeight: "800", color: "#15803d", letterSpacing: "0.5px", textTransform: "uppercase" }}>
-                    Active Plan
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: "700",
-                      padding: "1px 6px",
-                      borderRadius: "9999px",
-                      background: "#ecfdf5",
-                      border: "1px solid #a7f3d0",
-                      color: "#166534",
-                    }}
-                  >
-                    Active
-                  </span>
-                </div>
-                <div style={{ fontSize: "14.5px", fontWeight: "900", color: "#0f172a", marginTop: "1px", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span>{activePlan.packageName}</span>
-                  <span style={{ fontSize: "12px", fontWeight: "700", color: "#0284c7" }}>
-                    • {activePlan.reviewLimit || 100} Reviews/mo
-                  </span>
-                </div>
+              <div style={{ fontSize: "12.5px", color: "#64748b" }}>
+                Choose any plan below to upgrade your monthly scan quota and unlock continuous multi-platform reputation features.
               </div>
             </div>
-          )
-        )}
-      </div>
+          </div>
+          <span
+            style={{
+              fontSize: "12px",
+              fontWeight: "700",
+              color: "#166534",
+              backgroundColor: "#dcfce7",
+              border: "1px solid #86efac",
+              padding: "4px 12px",
+              borderRadius: "9999px",
+            }}
+          >
+            Trial Active
+          </span>
+        </div>
+      )}
 
       {/* Feedback Alert */}
       {feedback && (
@@ -372,16 +505,19 @@ export const PricingPage = () => {
         </div>
       )}
 
-      {/* Segmented Switcher (Single Business vs Multiple Business vs Marketplace) */}
-      <div style={{ display: "flex", justifyContent: "center", margin: "4px 0" }}>
+      {/* Sleek, Lightweight Navigation & Billing Switcher */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+        {/* Category Tabs (Desktop) */}
         <div
+          className="pricing-tabs-desktop"
           style={{
-            display: "inline-flex",
-            background: "#f1f5f9",
-            padding: "5px",
-            borderRadius: "16px",
+            alignItems: "center",
+            background: "#ffffff",
+            padding: "3px",
+            borderRadius: "10px",
             border: "1px solid #e2e8f0",
-            gap: "6px",
+            gap: "2px",
+            boxShadow: "0 1px 3px rgba(0, 0, 0, 0.02)",
             flexWrap: "wrap",
             justifyContent: "center",
           }}
@@ -390,34 +526,33 @@ export const PricingPage = () => {
             type="button"
             onClick={() => handleTabChange("single")}
             style={{
-              padding: "10px 20px",
-              borderRadius: "12px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               border: "none",
-              fontWeight: "700",
-              fontSize: "13.5px",
+              fontWeight: activeTab === "single" ? "700" : "500",
+              fontSize: "12.5px",
               cursor: "pointer",
-              background: activeTab === "single" ? "#ffffff" : "transparent",
+              background: activeTab === "single" ? "#f1f5f9" : "transparent",
               color: activeTab === "single" ? "#0f172a" : "#64748b",
-              boxShadow: activeTab === "single" ? "0 4px 12px rgba(0,0,0,0.06)" : "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "8px",
-              transition: "all 0.2s ease",
+              gap: "6px",
+              transition: "all 0.15s ease",
             }}
           >
-            <Building2 size={16} />
+            <Building2 size={14} color={activeTab === "single" ? "#0052cc" : "#64748b"} />
             <span>Single Business Plans</span>
             <span
               style={{
-                fontSize: "11px",
-                fontWeight: "800",
-                padding: "2px 8px",
-                borderRadius: "9999px",
-                background: activeTab === "single" ? "#0f172a" : "#e2e8f0",
-                color: activeTab === "single" ? "#ffffff" : "#64748b",
+                fontSize: "10.5px",
+                fontWeight: "600",
+                padding: "1px 5px",
+                borderRadius: "4px",
+                background: activeTab === "single" ? "#e2e8f0" : "#f8fafc",
+                color: activeTab === "single" ? "#0f172a" : "#94a3b8",
               }}
             >
-              {packages.filter((p) => (p.businessType || "single") === "single").length}
+              {packages.filter((p) => (p.businessType || "single") === "single" && p.category !== "Trial" && !p.packageName.toLowerCase().includes("trial")).length}
             </span>
           </button>
 
@@ -425,31 +560,30 @@ export const PricingPage = () => {
             type="button"
             onClick={() => handleTabChange("multiple")}
             style={{
-              padding: "10px 20px",
-              borderRadius: "12px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               border: "none",
-              fontWeight: "700",
-              fontSize: "13.5px",
+              fontWeight: activeTab === "multiple" ? "700" : "500",
+              fontSize: "12.5px",
               cursor: "pointer",
-              background: activeTab === "multiple" ? "#ffffff" : "transparent",
+              background: activeTab === "multiple" ? "#f1f5f9" : "transparent",
               color: activeTab === "multiple" ? "#0f172a" : "#64748b",
-              boxShadow: activeTab === "multiple" ? "0 4px 12px rgba(0,0,0,0.06)" : "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "8px",
-              transition: "all 0.2s ease",
+              gap: "6px",
+              transition: "all 0.15s ease",
             }}
           >
-            <Layers size={16} />
+            <Layers size={14} color={activeTab === "multiple" ? "#0052cc" : "#64748b"} />
             <span>Multiple Business Plans</span>
             <span
               style={{
-                fontSize: "11px",
-                fontWeight: "800",
-                padding: "2px 8px",
-                borderRadius: "9999px",
-                background: activeTab === "multiple" ? "#0f172a" : "#e2e8f0",
-                color: activeTab === "multiple" ? "#ffffff" : "#64748b",
+                fontSize: "10.5px",
+                fontWeight: "600",
+                padding: "1px 5px",
+                borderRadius: "4px",
+                background: activeTab === "multiple" ? "#e2e8f0" : "#f8fafc",
+                color: activeTab === "multiple" ? "#0f172a" : "#94a3b8",
               }}
             >
               {packages.filter((p) => p.businessType === "multiple").length}
@@ -460,45 +594,314 @@ export const PricingPage = () => {
             type="button"
             onClick={() => handleTabChange("marketplace")}
             style={{
-              padding: "10px 20px",
-              borderRadius: "12px",
+              padding: "6px 14px",
+              borderRadius: "7px",
               border: "none",
-              fontWeight: "700",
-              fontSize: "13.5px",
+              fontWeight: activeTab === "marketplace" ? "700" : "500",
+              fontSize: "12.5px",
               cursor: "pointer",
-              background: activeTab === "marketplace" ? "#ffffff" : "transparent",
+              background: activeTab === "marketplace" ? "#f1f5f9" : "transparent",
               color: activeTab === "marketplace" ? "#0f172a" : "#64748b",
-              boxShadow: activeTab === "marketplace" ? "0 4px 12px rgba(0,0,0,0.06)" : "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "8px",
-              transition: "all 0.2s ease",
+              gap: "6px",
+              transition: "all 0.15s ease",
             }}
           >
-            <ShoppingBag size={16} />
+            <ShoppingBag size={14} color={activeTab === "marketplace" ? "#0052cc" : "#64748b"} />
             <span>Marketplace (Products)</span>
             <span
               style={{
-                fontSize: "11px",
-                fontWeight: "800",
-                padding: "2px 8px",
-                borderRadius: "9999px",
-                background: activeTab === "marketplace" ? "#0f172a" : "#e2e8f0",
-                color: activeTab === "marketplace" ? "#ffffff" : "#64748b",
+                fontSize: "10.5px",
+                fontWeight: "600",
+                padding: "1px 5px",
+                borderRadius: "4px",
+                background: activeTab === "marketplace" ? "#e2e8f0" : "#f8fafc",
+                color: activeTab === "marketplace" ? "#0f172a" : "#94a3b8",
               }}
             >
               {packages.filter((p) => p.businessType === "marketplace").length}
             </span>
           </button>
         </div>
+
+        {/* Category Tabs (Mobile 3-dots switcher) */}
+        <div
+          className="pricing-tabs-mobile"
+          style={{
+            width: "100%",
+            maxWidth: "380px",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "8px",
+            position: "relative",
+          }}
+        >
+          {/* Active Category Row Card with 3-Dots Button */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              borderRadius: "10px",
+              padding: "7px 12px",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {activeTab === "single" && <Building2 size={16} color="#0052cc" />}
+              {activeTab === "multiple" && <Layers size={16} color="#0052cc" />}
+              {activeTab === "marketplace" && <ShoppingBag size={16} color="#0052cc" />}
+              <span style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>
+                {activeTab === "single"
+                  ? "Single Business Plans"
+                  : activeTab === "multiple"
+                  ? "Multiple Business Plans"
+                  : "Marketplace (Products)"}
+              </span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  padding: "1px 6px",
+                  borderRadius: "5px",
+                  background: "#eff6ff",
+                  color: "#0052cc",
+                }}
+              >
+                {activeTab === "single"
+                  ? packages.filter((p) => (p.businessType || "single") === "single" && p.category !== "Trial" && !p.packageName.toLowerCase().includes("trial")).length
+                  : activeTab === "multiple"
+                  ? packages.filter((p) => p.businessType === "multiple").length
+                  : packages.filter((p) => p.businessType === "marketplace").length}
+              </span>
+            </div>
+
+            {/* 3-Dots Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label="Toggle plan categories menu"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "30px",
+                height: "30px",
+                borderRadius: "7px",
+                border: "1px solid #e2e8f0",
+                background: mobileMenuOpen ? "#eff6ff" : "#f8fafc",
+                color: mobileMenuOpen ? "#0052cc" : "#64748b",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <MoreHorizontal size={17} />
+            </button>
+          </div>
+
+          {/* 3 Indicator Dots (● ○ ○) for fast direct tap */}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
+            {[
+              { id: "single", label: "Single Business" },
+              { id: "multiple", label: "Multiple Business" },
+              { id: "marketplace", label: "Marketplace" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  handleTabChange(tab.id);
+                  setMobileMenuOpen(false);
+                }}
+                title={tab.label}
+                aria-label={tab.label}
+                style={{
+                  width: activeTab === tab.id ? "20px" : "7px",
+                  height: "7px",
+                  borderRadius: "4px",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  background: activeTab === tab.id ? "#0052cc" : "#cbd5e1",
+                  transition: "all 0.2s ease",
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Mobile Dropdown Popover */}
+          {mobileMenuOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "calc(100% + 4px)",
+                left: 0,
+                right: 0,
+                background: "#ffffff",
+                border: "1px solid #e2e8f0",
+                borderRadius: "12px",
+                boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05)",
+                padding: "6px",
+                zIndex: 40,
+                display: "flex",
+                flexDirection: "column",
+                gap: "4px",
+              }}
+            >
+              {[
+                {
+                  id: "single",
+                  label: "Single Business Plans",
+                  icon: Building2,
+                  count: packages.filter(
+                    (p) =>
+                      (p.businessType || "single") === "single" &&
+                      p.category !== "Trial" &&
+                      !p.packageName.toLowerCase().includes("trial")
+                  ).length,
+                },
+                {
+                  id: "multiple",
+                  label: "Multiple Business Plans",
+                  icon: Layers,
+                  count: packages.filter((p) => p.businessType === "multiple").length,
+                },
+                {
+                  id: "marketplace",
+                  label: "Marketplace (Products)",
+                  icon: ShoppingBag,
+                  count: packages.filter((p) => p.businessType === "marketplace").length,
+                },
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isSelected = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => {
+                      handleTabChange(tab.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "none",
+                      background: isSelected ? "#f0fdf4" : "transparent",
+                      color: isSelected ? "#166534" : "#334155",
+                      fontWeight: isSelected ? "700" : "500",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background 0.15s ease",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Icon size={15} color={isSelected ? "#16a34a" : "#64748b"} />
+                      <span>{tab.label}</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: "700",
+                          padding: "1px 6px",
+                          borderRadius: "4px",
+                          background: isSelected ? "#dcfce7" : "#f1f5f9",
+                          color: isSelected ? "#15803d" : "#64748b",
+                        }}
+                      >
+                        {tab.count}
+                      </span>
+                      {isSelected && <Check size={14} color="#16a34a" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Lightweight Billing Toggle */}
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "2px",
+            background: "#f8fafc",
+            padding: "2px",
+            borderRadius: "8px",
+            border: "1px solid #e2e8f0",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setAnnualBilling(false)}
+            style={{
+              padding: "4px 14px",
+              borderRadius: "6px",
+              border: "none",
+              background: !annualBilling ? "#ffffff" : "transparent",
+              color: !annualBilling ? "#0052cc" : "#64748b",
+              fontSize: "12px",
+              fontWeight: !annualBilling ? "700" : "500",
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+              boxShadow: !annualBilling ? "0 1px 2px rgba(0, 0, 0, 0.05)" : "none",
+            }}
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            onClick={() => setAnnualBilling(true)}
+            style={{
+              padding: "4px 14px",
+              borderRadius: "6px",
+              border: "none",
+              background: annualBilling ? "#ffffff" : "transparent",
+              color: annualBilling ? "#0052cc" : "#64748b",
+              fontSize: "12px",
+              fontWeight: annualBilling ? "700" : "500",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "all 0.15s ease",
+              boxShadow: annualBilling ? "0 1px 2px rgba(0, 0, 0, 0.05)" : "none",
+            }}
+          >
+            <span>Annual</span>
+            <span
+              style={{
+                fontSize: "10px",
+                background: "#ecfdf5",
+                color: "#059669",
+                border: "1px solid #a7f3d0",
+                padding: "1px 5px",
+                borderRadius: "4px",
+                fontWeight: "700",
+              }}
+            >
+              Save ~17% (2 Mo. Free)
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Package Cards Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "20px", alignItems: "stretch" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "24px", marginTop: "6px", alignItems: "stretch" }}>
         {filteredPackages.map((pkg) => {
           const isCurrentActive = Boolean(currentActivePlanId && String(currentActivePlanId) === String(pkg._id));
-          const isTrial = pkg.category === "Trial" && pkg.price === 0;
           const isSelecting = selectingPlanId === pkg._id;
+          const details = getPlanDetails(pkg);
 
           return (
             <div
@@ -524,13 +927,13 @@ export const PricingPage = () => {
                 background: "#ffffff",
                 border: isCurrentActive
                   ? "2px solid #10b981"
-                  : pkg.popularBadge
-                  ? "2px solid #2563eb"
+                  : details.popular
+                  ? "2px solid #0052cc"
                   : "1px solid #e2e8f0",
                 boxShadow: isCurrentActive
                   ? "0 16px 36px -8px rgba(16, 185, 129, 0.18)"
-                  : pkg.popularBadge
-                  ? "0 18px 40px -8px rgba(37, 99, 235, 0.18)"
+                  : details.popular
+                  ? "0 18px 40px -8px rgba(0, 82, 204, 0.16)"
                   : "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
                 display: "flex",
                 flexDirection: "column",
@@ -567,21 +970,21 @@ export const PricingPage = () => {
                 </div>
               )}
 
-              {pkg.popularBadge && !isCurrentActive && (
+              {details.popular && !isCurrentActive && (
                 <div
                   style={{
                     position: "absolute",
                     top: "-13px",
                     left: "50%",
                     transform: "translateX(-50%)",
-                    background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                    background: "linear-gradient(135deg, #0052cc 0%, #1d4ed8 100%)",
                     color: "#ffffff",
                     fontSize: "11px",
                     fontWeight: "800",
                     letterSpacing: "0.5px",
                     padding: "4px 14px",
                     borderRadius: "9999px",
-                    boxShadow: "0 4px 12px rgba(37, 99, 235, 0.35)",
+                    boxShadow: "0 4px 12px rgba(0, 82, 204, 0.35)",
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "5px",
@@ -599,12 +1002,12 @@ export const PricingPage = () => {
                     style={{
                       fontSize: "12px",
                       fontWeight: "800",
-                      color: pkg.popularBadge ? "#2563eb" : isCurrentActive ? "#059669" : "#64748b",
+                      color: details.popular ? "#0052cc" : isCurrentActive ? "#059669" : "#64748b",
                       textTransform: "uppercase",
                       letterSpacing: "0.8px",
                     }}
                   >
-                    {pkg.businessType === "single" && pkg.category === "Enterprise" ? "Supreme" : pkg.category}
+                    {details.popular ? "POPULAR" : pkg.category || "STANDARD"}
                   </span>
                   <span
                     style={{
@@ -617,29 +1020,39 @@ export const PricingPage = () => {
                       color: "#475569",
                     }}
                   >
-                    {pkg.businessType === "marketplace"
-                      ? (pkg.isCustomQuote ? "Custom Catalog" : `${pkg.productsLimit || 5} Products`)
-                      : pkg.businessType === "multiple"
-                      ? (pkg.maxBusinesses > 1 ? `${pkg.maxBusinesses} Branches` : "1 Base Branch")
-                      : "1 Branch"}
+                    {details.locationsDisplay}
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: "21px", fontWeight: "900", color: "#0f172a", margin: "0 0 10px", letterSpacing: "-0.4px" }}>
+                <h3 style={{ fontSize: "22px", fontWeight: "900", color: "#0f172a", margin: "0 0 6px", letterSpacing: "-0.4px" }}>
                   {pkg.packageName}
                 </h3>
+                <p style={{ fontSize: "12.5px", color: "#64748b", margin: "0 0 14px 0", minHeight: "36px", lineHeight: "1.4" }}>
+                  {details.tagline}
+                </p>
 
                 {/* Price Display */}
-                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", margin: "14px 0 10px" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "4px", margin: "10px 0 4px" }}>
                   <span style={{ fontSize: "38px", fontWeight: "900", color: "#0f172a", letterSpacing: "-1.5px" }}>
-                    {pkg.isCustomQuote || (pkg.price === 0 && pkg.billingType === "Custom")
+                    {details.displayPrice === "Custom" || pkg.isCustomQuote
                       ? "Custom"
-                      : `₹${Number(pkg.price).toLocaleString("en-IN")}`}
+                      : `₹${Number(details.displayPrice).toLocaleString("en-IN")}`}
                   </span>
                   <span style={{ fontSize: "14px", fontWeight: "600", color: "#64748b" }}>
-                    /{pkg.billingType}
+                    {details.displayPrice === "Custom" || pkg.isCustomQuote ? "" : "/month"}
                   </span>
                 </div>
+
+                {annualBilling && details.annualTotal && typeof details.annualTotal === "number" && (
+                  <div style={{ fontSize: "11.5px", color: "#0052cc", fontWeight: "700", marginBottom: "12px" }}>
+                    Billed annually at ₹{Number(details.annualTotal).toLocaleString("en-IN")}/yr (Save ~17%)
+                  </div>
+                )}
+                {(!annualBilling || !details.annualTotal) && (
+                  <div style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "600", marginBottom: "12px" }}>
+                    Billed on monthly renewal
+                  </div>
+                )}
 
                 {/* Quota Highlight Box */}
                 <div
@@ -647,22 +1060,16 @@ export const PricingPage = () => {
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",
-                    padding: "8px 12px",
+                    padding: "9px 12px",
                     borderRadius: "10px",
-                    background: "rgba(37, 99, 235, 0.06)",
-                    border: "1px solid rgba(37, 99, 235, 0.15)",
-                    marginBottom: "16px",
+                    background: "rgba(0, 82, 204, 0.06)",
+                    border: "1px solid rgba(0, 82, 204, 0.15)",
+                    marginBottom: "14px",
                   }}
                 >
-                  <Zap size={15} color="#2563eb" />
-                  <span style={{ fontSize: "12px", fontWeight: "700", color: "#1e40af" }}>
-                    {pkg.isCustomQuote
-                      ? "⚡ Custom Product Volume & Reviews Quota"
-                      : pkg.businessType === "marketplace"
-                      ? `⚡ ${Number(pkg.reviewLimit || 500).toLocaleString("en-IN")} Reviews • ${pkg.productsLimit || 5} Products`
-                      : pkg.billingType === "7 Days" || pkg.category === "Trial"
-                      ? `⚡ ${Number(pkg.reviewLimit || 100).toLocaleString("en-IN")} Reviews Included`
-                      : `⚡ ${Number(pkg.reviewLimit || 500).toLocaleString("en-IN")} Monthly Reviews Included`}
+                  <Zap size={15} color="#0052cc" />
+                  <span style={{ fontSize: "12px", fontWeight: "700", color: "#0052cc" }}>
+                    ⚡ {details.scansDisplay}
                   </span>
                 </div>
 
@@ -688,7 +1095,7 @@ export const PricingPage = () => {
 
                 {/* Feature Bullet List */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "22px" }}>
-                  {pkg.featuresList?.map((feat, i) => (
+                  {details.features?.map((feat, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", color: "#334155" }}>
                       <div
                         style={{
@@ -787,8 +1194,8 @@ export const PricingPage = () => {
                       padding: "13px",
                       borderRadius: "12px",
                       border: "none",
-                      background: pkg.popularBadge
-                        ? "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                      background: details.popular
+                        ? "linear-gradient(135deg, #0052cc 0%, #1d4ed8 100%)"
                         : "#0f172a",
                       color: "#ffffff",
                       fontWeight: "800",
@@ -798,8 +1205,8 @@ export const PricingPage = () => {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "8px",
-                      boxShadow: pkg.popularBadge
-                        ? "0 6px 18px rgba(37, 99, 235, 0.35)"
+                      boxShadow: details.popular
+                        ? "0 6px 18px rgba(0, 82, 204, 0.35)"
                         : "0 4px 14px rgba(15, 23, 42, 0.18)",
                       transition: "all 0.2s ease",
                     }}
@@ -811,7 +1218,7 @@ export const PricingPage = () => {
                       </>
                     ) : (
                       <>
-                        <span>{isTrial ? "Start Free Trial" : "Select & Activate Plan"}</span>
+                        <span>Select &amp; Activate Plan</span>
                         <ArrowRight size={15} />
                       </>
                     )}
@@ -911,10 +1318,10 @@ export const PricingPage = () => {
           </div>
           <div>
             <h4 style={{ fontSize: "14px", fontWeight: "800", color: "#0f172a", margin: "0 0 4px" }}>
-              Star-Gating Auto-Included
+              Smart Feedback &amp; Resolution
             </h4>
             <p style={{ fontSize: "12px", color: "var(--text-muted)", margin: 0, lineHeight: "1.5" }}>
-              Every plan automatically filters negative ratings (1-3 stars) to keep your public Google score 100% protected.
+              Every plan connects customers with neutral public review links while alerting managers to resolve private issues in real time.
             </p>
           </div>
         </div>
@@ -992,6 +1399,40 @@ export const PricingPage = () => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Statutory Pricing Terms & Compliance Disclaimers */}
+      <div
+        style={{
+          marginTop: "8px",
+          padding: "20px 24px",
+          borderRadius: "16px",
+          background: "#ffffff",
+          border: "1px solid #e2e8f0",
+          fontSize: "12.5px",
+          color: "#64748b",
+          lineHeight: 1.6,
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.02)",
+        }}
+      >
+        <div style={{ fontWeight: "800", color: "#0f172a", marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
+          <ShieldCheck size={16} color="#0052cc" />
+          <span>Statutory Pricing Terms &amp; Compliance Standards:</span>
+        </div>
+        <ul style={{ margin: "0 0 0 20px", padding: 0 }}>
+          <li style={{ marginBottom: "4px" }}>
+            <strong>GST Notice:</strong> All listed prices are statutory net fees exclusive of 18% Goods and Services Tax (GST), added upon checkout invoice.
+          </li>
+          <li style={{ marginBottom: "4px" }}>
+            <strong>Annual Billing &amp; 2 Months Free:</strong> Annual plans are billed upfront for 12 months with rounded 17% savings (equivalent to 2 months free). Scan quotas reset on the 1st of every calendar month and do not roll over.
+          </li>
+          <li style={{ marginBottom: "4px" }}>
+            <strong>Valid Scan Quotas:</strong> Scans reflect deduplicated customer QR scans with active feedback interaction within a 30-minute deduplication window.
+          </li>
+          <li>
+            <strong>Neutral Review Routing:</strong> In strict compliance with Google Review policies and FTC regulations, BizORM does not condition, filter, or gate review destinations based on customer star rating.
+          </li>
+        </ul>
       </div>
 
       {/* Plan Create / Edit Modal (Portaled) */}

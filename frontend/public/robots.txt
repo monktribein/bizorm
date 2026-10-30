@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /report
+Disallow: /platforms
+Disallow: /account
+
+Sitemap: https://bizorm.com/sitemap.xml
+

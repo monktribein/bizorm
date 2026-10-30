@@ -358,33 +358,22 @@ export const CustomerReviewPage = () => {
   };
 
 
-  // Submit Step 1
-  const handleSubmitReview = async (e) => {
-    e.preventDefault();
+  // Submit Step 1: Neutral Customer Flow (Anti-Gating Compliant)
+  const handleSubmitReview = async (e, actionType = "public") => {
+    if (e) e.preventDefault();
     setSubmitting(true);
     setError(null);
 
     const cleanName = name ? name.trim() : "";
-    if (star <= 3 && !cleanName) {
-      setError("Please enter your name so management can assist you.");
-      setSubmitting(false);
-      return;
-    }
-
     const cleanMobile = mobile ? mobile.replace(/\D/g, "").slice(0, 10) : "";
-    if (star <= 3) {
-      if (!cleanMobile || cleanMobile.length !== 10) {
-        setError("Please enter a valid 10-digit mobile number so we can contact you.");
-        setSubmitting(false);
-        return;
-      }
-    } else if (cleanMobile && cleanMobile.length > 0 && cleanMobile.length !== 10) {
+
+    if (cleanMobile && cleanMobile.length > 0 && cleanMobile.length !== 10) {
       setError("Mobile number must be exactly 10 digits.");
       setSubmitting(false);
       return;
     }
 
-    // Compute final text to ensure it's never empty for 4-5 stars
+    // Compute review text
     let finalReview = review ? review.trim() : "";
     if (!finalReview && star >= 4) {
       const bizName = context?.user?.cmpy || context?.branding?.cmpyName || "this business";
@@ -392,50 +381,43 @@ export const CustomerReviewPage = () => {
       setReview(finalReview);
     }
 
-    // INSTANT COPY: Trigger clipboard write directly inside the user's click gesture
-    if (star >= 4 && finalReview) {
+    // Direct clipboard copy on user action
+    if (finalReview) {
       await copyTextToClipboard(finalReview);
     }
+
+    const destination = selectedPlatform?.webLink || context?.branding?.googleReviewLink || "https://g.page/r/CewgBPDQRwDXEBM/review";
 
     try {
       const res = await api.saveRating({
         star,
         title,
         review: finalReview,
-        name: cleanName || "Happy Customer",
+        name: cleanName || (star >= 4 ? "Happy Customer" : "Customer"),
         mobile: cleanMobile || "N/A",
         staffMember: (staffMember || "").trim(),
         deviceId: getDeviceId(),
         webId: selectedPlatform?._id,
         webName: selectedPlatform?.webName || "Google Reviews",
-        webLink: selectedPlatform?.webLink || "https://g.page/r/CewgBPDQRwDXEBM/review",
+        webLink: destination,
         formKey,
       });
 
-      if (res.isPositive) {
-        // Re-affirm clipboard copy
+      if (actionType === "public") {
         if (finalReview) {
           await copyTextToClipboard(finalReview);
         }
-
-        const destination = res.redirectUrl || selectedPlatform?.webLink || "https://g.page/r/CewgBPDQRwDXEBM/review";
+        setRedirectUrl(destination);
+        setCompleted(true);
         if (destination) {
-          // Allow OS clipboard to flush before navigating tab
           await new Promise((resolve) => setTimeout(resolve, 350));
           window.location.assign(destination);
           return;
         }
       } else {
-        // 1-3 Stars: Star-Gating in action -> Load private survey questions
+        // Customer chose to send feedback to management
         setRatingId(res.ratingId);
-        const questionsRes = await api.getActiveQuestions();
-        if (questionsRes.success) {
-          setSurveyQuestions(questionsRes.questions);
-          const initial = {};
-          questionsRes.questions.forEach((q) => { initial[q._id] = 3; });
-          setSurveyAnswers(initial);
-        }
-        setIsGatedSurveyStep(true);
+        setCompleted(true);
       }
     } catch (err) {
       setError(err.message || "Failed to submit review");
@@ -1282,8 +1264,8 @@ export const CustomerReviewPage = () => {
                 )}
               </div>
 
-              {/* Multi-Platform Destination Selector for 4-5 Stars */}
-              {star >= 4 && context?.platforms?.length > 1 && (
+              {/* Multi-Platform Destination Selector (Neutral, Available for All Star Ratings) */}
+              {context?.platforms?.length > 1 && (
                 <div style={{ marginBottom: "14px" }}>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#334155", display: "block", marginBottom: "8px" }}>
                     Select Where to Post Your Review:
@@ -1337,82 +1319,79 @@ export const CustomerReviewPage = () => {
                 </div>
               )}
 
-              {/* Dynamic Submit Buttons - 100% Policy Compliant */}
-              {star >= 4 ? (
-                <div>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    style={{
-                      width: "100%",
-                      padding: "12px",
-                      fontSize: "14px",
-                      fontWeight: "700",
-                      borderRadius: "10px",
-                      background: selectedPlatform?.webName?.toLowerCase().includes("glassdoor") ? "#16a34a" : "#0f172a",
-                      color: "#ffffff",
-                      border: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      cursor: submitting ? "not-allowed" : "pointer",
-                      boxShadow: "0 4px 12px rgba(15, 23, 42, 0.18)",
-                      transition: "all 0.2s ease",
-                      marginTop: "4px",
-                    }}
-                  >
-                    {selectedPlatform?.webName?.toLowerCase().includes("google") ? (
-                      <svg viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                      </svg>
-                    ) : selectedPlatform?.webName?.toLowerCase().includes("glassdoor") ? (
-                      <div style={{ width: 18, height: 18, borderRadius: 4, background: "#ffffff", color: "#16a34a", fontSize: 10, fontWeight: 900, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        GD
-                      </div>
-                    ) : (
-                      <ExternalLink size={16} />
-                    )}
-                    <span>
-                      {submitting
-                        ? "Preparing Review..."
-                        : `Copy Review & Post on ${selectedPlatform?.webName || "Review Platform"}`}
-                    </span>
-                    {!submitting && <ArrowRight size={15} />}
-                  </button>
-                </div>
-              ) : (
-                <div style={{ marginTop: "4px" }}>
-                  {/* 1-3 Stars: Strictly Captured Privately on BizORM */}
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    style={{
-                      width: "100%",
-                      padding: "13px",
-                      fontSize: "13.5px",
-                      fontWeight: "700",
-                      borderRadius: "10px",
-                      background: "#0f172a",
-                      color: "#ffffff",
-                      border: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      cursor: submitting ? "not-allowed" : "pointer",
-                      boxShadow: "0 4px 12px rgba(15, 23, 42, 0.15)",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    <ShieldCheck size={16} color="#34d399" />
-                    <span>{submitting ? "Submitting..." : "Submit Feedback to Management"}</span>
-                  </button>
-                </div>
-              )}
+              {/* Neutral & Compliant Action Choices (Public Review or Direct Management Feedback) */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+                {/* 1. Public Review Platform Submission */}
+                <button
+                  type="button"
+                  onClick={(e) => handleSubmitReview(e, "public")}
+                  disabled={submitting}
+                  style={{
+                    width: "100%",
+                    padding: "13px",
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    borderRadius: "10px",
+                    background: selectedPlatform?.webName?.toLowerCase().includes("glassdoor") ? "#16a34a" : "#0f172a",
+                    color: "#ffffff",
+                    border: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    cursor: submitting ? "not-allowed" : "pointer",
+                    boxShadow: "0 4px 12px rgba(15, 23, 42, 0.18)",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {selectedPlatform?.webName?.toLowerCase().includes("google") ? (
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                  ) : selectedPlatform?.webName?.toLowerCase().includes("glassdoor") ? (
+                    <div style={{ width: 18, height: 18, borderRadius: 4, background: "#ffffff", color: "#16a34a", fontSize: 10, fontWeight: 900, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      GD
+                    </div>
+                  ) : (
+                    <ExternalLink size={16} />
+                  )}
+                  <span>
+                    {submitting
+                      ? "Preparing..."
+                      : `Post Review on ${selectedPlatform?.webName || "Google Reviews"}`}
+                  </span>
+                  {!submitting && <ArrowRight size={15} />}
+                </button>
+
+                {/* 2. Direct Private Line to Management */}
+                <button
+                  type="button"
+                  onClick={(e) => handleSubmitReview(e, "private")}
+                  disabled={submitting}
+                  style={{
+                    width: "100%",
+                    padding: "11px 14px",
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    borderRadius: "10px",
+                    background: "#f8fafc",
+                    color: "#334155",
+                    border: "1.5px solid #cbd5e1",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "7px",
+                    cursor: submitting ? "not-allowed" : "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  <ShieldCheck size={16} color="#059669" />
+                  <span>Send Directly to Management for Resolution</span>
+                </button>
+              </div>
             </form>
           )}
         </div>

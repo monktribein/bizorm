@@ -202,7 +202,7 @@ export const ClientDetailsModal = ({ client, onClose }) => {
 
             <div style={{ background: "#fef2f2", padding: "14px", borderRadius: "12px", border: "1px solid #fecaca" }}>
               <div style={{ fontSize: "11px", fontWeight: "700", color: "#991b1b", textTransform: "uppercase" }}>
-                Gated (1-3★)
+                Issues (1-3★)
               </div>
               <div style={{ fontSize: "22px", fontWeight: "800", color: "#b91c1c", marginTop: "4px" }}>
                 {stats.criticalReviews}

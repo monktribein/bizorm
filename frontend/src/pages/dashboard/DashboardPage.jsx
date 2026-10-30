@@ -113,11 +113,11 @@ export const DashboardPage = () => {
               fontWeight: "700"
             }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981" }} />
-              Live Protection Active
+              Feedback Intelligence Active
             </span>
           </div>
           <p style={{ fontSize: "13.5px", color: "#64748b", margin: "4px 0 0" }}>
-            Real-time star-gating performance, review redirects, and branch diagnostics
+            Real-time customer feedback resolution, review metrics, and branch diagnostics
           </p>
         </div>
 
@@ -301,7 +301,7 @@ export const DashboardPage = () => {
               </a>
             )}
             <Link to="/report" style={{ color: "var(--primary)", fontWeight: "600", textDecoration: "none" }}>
-              View Gated Logs ({stats?.criticalCount || 0}) →
+              View Complaint Logs ({stats?.criticalCount || 0}) →
             </Link>
           </div>
         </div>

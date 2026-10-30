@@ -811,7 +811,7 @@ export const EditBusinessModal = ({ isOpen, onClose, onSuccess, initialTab = "ge
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                       <AlertTriangle size={16} color="#ef4444" />
                       <span style={{ fontSize: "13px", fontWeight: "800", color: "#991b1b" }}>
-                        Private Shield Concern Tags (1★-3★ Gated Intercept)
+                        Customer Service Concern Tags (1★-3★ Resolution)
                       </span>
                     </div>
                     <span style={{ fontSize: "11px", color: "#b91c1c", fontWeight: "700" }}>

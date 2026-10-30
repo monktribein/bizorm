@@ -596,7 +596,7 @@ export const StaffDashboard = ({ user, companyDetails, stats, recentReviews = []
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
                       <span>Customer: <strong>{r.name || "Customer"}</strong></span>
                       <span className={`badge ${isPositive ? "badge-success" : "badge-danger"}`} style={{ fontSize: "10px", padding: "1px 6px" }}>
-                        {r.webName || (isPositive ? "Google Redirect" : "Private Intercept")}
+                        {r.webName || (isPositive ? "Public Review" : "Private Resolution")}
                       </span>
                     </div>
                   </div>

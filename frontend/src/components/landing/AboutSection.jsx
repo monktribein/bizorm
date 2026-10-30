@@ -83,7 +83,7 @@ export const AboutSection = () => {
               </p>
             </div>
 
-            {/* Core Stats Bar */}
+            {/* Core Capabilities Bar (Verifiable Features) */}
             <div
               style={{
                 display: "grid",
@@ -98,27 +98,27 @@ export const AboutSection = () => {
               className="about-stats-bar"
             >
               <div>
-                <div style={{ fontSize: "26px", fontWeight: "800", color: "#004ac6", fontFamily: "'Plus Jakarta Sans'" }}>
-                  2,400+
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#004ac6", fontFamily: "'Plus Jakarta Sans'" }}>
+                  300 DPI
                 </div>
                 <div style={{ fontSize: "12px", fontWeight: "600", color: "#64748b", marginTop: "2px" }}>
-                  Active Businesses
+                  Print-Ready Standees
                 </div>
               </div>
               <div>
-                <div style={{ fontSize: "26px", fontWeight: "800", color: "#10b981", fontFamily: "'Plus Jakarta Sans'" }}>
-                  4.9 ★
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#10b981", fontFamily: "'Plus Jakarta Sans'" }}>
+                  20+
                 </div>
                 <div style={{ fontSize: "12px", fontWeight: "600", color: "#64748b", marginTop: "2px" }}>
-                  Average Rating Achieved
+                  Review Destinations
                 </div>
               </div>
               <div>
-                <div style={{ fontSize: "26px", fontWeight: "800", color: "#0f172a", fontFamily: "'Plus Jakarta Sans'" }}>
-                  99.9%
+                <div style={{ fontSize: "24px", fontWeight: "800", color: "#0f172a", fontFamily: "'Plus Jakarta Sans'" }}>
+                  100%
                 </div>
                 <div style={{ fontSize: "12px", fontWeight: "600", color: "#64748b", marginTop: "2px" }}>
-                  Platform Uptime
+                  Neutral Routing
                 </div>
               </div>
             </div>

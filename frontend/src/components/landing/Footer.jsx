@@ -193,9 +193,9 @@ export const LandingFooter = () => {
             &copy; {new Date().getFullYear()} BizORM™. All rights reserved. Enterprise Customer Experience Platform.
           </div>
           <div style={{ display: "flex", gap: "20px" }}>
-            <a href="#privacy" className="footer-hover-link" style={{ fontSize: "13px" }}>Privacy Policy</a>
-            <a href="#terms" className="footer-hover-link" style={{ fontSize: "13px" }}>Terms of Service</a>
-            <a href="#security" className="footer-hover-link" style={{ fontSize: "13px" }}>Security &amp; GDPR</a>
+            <Link to="/about#privacy" className="footer-hover-link" style={{ fontSize: "13px" }}>Privacy Policy</Link>
+            <Link to="/about#terms" className="footer-hover-link" style={{ fontSize: "13px" }}>Terms of Service</Link>
+            <Link to="/about#security" className="footer-hover-link" style={{ fontSize: "13px" }}>Security &amp; Anti-Gating</Link>
           </div>
         </div>
       </div>

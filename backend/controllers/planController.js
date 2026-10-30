@@ -30,10 +30,25 @@ export const seedPlans = async (req, res, next) => {
 export const getActivePricingPackages = async (req, res, next) => {
   try {
     const obsoleteCount = await Pricing.countDocuments({
-      packageName: { $in: ["Enterprise Supreme", "Multi-Business Trial (7 Days)", "Multi-Business Starter (2 Biz)"] }
+      packageName: {
+        $in: [
+          "Enterprise Supreme",
+          "Multi-Business Trial (7 Days)",
+          "Multi-Business Starter (2 Biz)",
+          "Multi-Business Pro (5 Biz)",
+          "Multi-Business Enterprise (10 Biz)",
+          "Multi-Business Base Plan",
+          "Multi-Branch Growth (3 Branches)",
+          "Multi-Branch Franchise (5 Branches)",
+          "Starter Review Plan",
+          "Growth Professional",
+          "Professional Supreme",
+        ],
+      },
     });
+    const starterExists = await Pricing.countDocuments({ packageName: "Starter" });
     const marketplaceCount = await Pricing.countDocuments({ businessType: "marketplace" });
-    if (marketplaceCount === 0 || obsoleteCount > 0) {
+    if (marketplaceCount === 0 || obsoleteCount > 0 || starterExists === 0) {
       await seedPkgFn(true);
     }
     const filter = { status: "active" };
@@ -50,10 +65,25 @@ export const getActivePricingPackages = async (req, res, next) => {
 export const getPricingPackages = async (req, res, next) => {
   try {
     const obsoleteCount = await Pricing.countDocuments({
-      packageName: { $in: ["Enterprise Supreme", "Multi-Business Trial (7 Days)", "Multi-Business Starter (2 Biz)"] }
+      packageName: {
+        $in: [
+          "Enterprise Supreme",
+          "Multi-Business Trial (7 Days)",
+          "Multi-Business Starter (2 Biz)",
+          "Multi-Business Pro (5 Biz)",
+          "Multi-Business Enterprise (10 Biz)",
+          "Multi-Business Base Plan",
+          "Multi-Branch Growth (3 Branches)",
+          "Multi-Branch Franchise (5 Branches)",
+          "Starter Review Plan",
+          "Growth Professional",
+          "Professional Supreme",
+        ],
+      },
     });
+    const starterExists = await Pricing.countDocuments({ packageName: "Starter" });
     const marketplaceCount = await Pricing.countDocuments({ businessType: "marketplace" });
-    if (marketplaceCount === 0 || obsoleteCount > 0) {
+    if (marketplaceCount === 0 || obsoleteCount > 0 || starterExists === 0) {
       await seedPkgFn(true);
     }
     const filter = {};

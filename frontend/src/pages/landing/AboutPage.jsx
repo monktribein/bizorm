@@ -83,7 +83,50 @@ export const AboutPage = () => {
               </div>
               <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0f172a", marginBottom: "8px" }}>Customer First Support</h3>
               <p style={{ fontSize: "14px", color: "#64748b", lineHeight: 1.6 }}>
-                Our team provides dedicated onboarding assistance, custom acrylic standee design checks, and continuous support to maximize your ROI.
+                Our team provides dedicated onboarding assistance, custom acrylic standee design checks, and continuous support to maximize your customer experience.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Compliance, Privacy & Terms of Service Section (Satisfies QA-10 / Footer Links) */}
+      <section style={{ padding: "48px 0 60px", backgroundColor: "#ffffff", borderTop: "1px solid #e2e8f0" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 24px" }}>
+          <div style={{ textAlign: "center", marginBottom: "36px" }}>
+            <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "28px", fontWeight: "800", color: "#0f172a", marginBottom: "10px" }}>
+              Governance, Privacy &amp; Legal Policies
+            </h2>
+            <p style={{ fontSize: "15px", color: "#64748b", margin: 0 }}>
+              Full disclosure on consumer privacy, platform anti-gating compliance, and subscription terms.
+            </p>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+            <div id="privacy" style={{ background: "#f8fafc", padding: "24px", borderRadius: "16px", border: "1px solid #e2e8f0" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", marginBottom: "8px" }}>
+                1. Privacy Policy &amp; Data Protection
+              </h3>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                BizORM collects customer feedback data strictly on behalf of the subscribed business. We never sell, rent, or trade end-customer personal details. In-store QR scans are deduplicated using non-reversible cryptographic device hashes. Mobile numbers collected during private feedback submissions are used solely by management for direct service recovery and are encrypted in transit and at rest.
+              </p>
+            </div>
+
+            <div id="terms" style={{ background: "#f8fafc", padding: "24px", borderRadius: "16px", border: "1px solid #e2e8f0" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", marginBottom: "8px" }}>
+                2. Terms of Service &amp; Quota Entitlements
+              </h3>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                Subscription packages provide valid QR scan quotas reset on a monthly basis across both monthly and annual billing agreements. Unused scans expire at the end of each billing period. Annual subscriptions reflect a 17% discount equivalent to 2 months free. All public reviews are subject to the independent terms and guidelines of third-party platforms (e.g., Google, Justdial, Facebook).
+              </p>
+            </div>
+
+            <div id="security" style={{ background: "#f8fafc", padding: "24px", borderRadius: "16px", border: "1px solid #e2e8f0" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", marginBottom: "8px" }}>
+                3. Security, Anti-Gating &amp; Regulatory Compliance
+              </h3>
+              <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+                BizORM strictly enforces anti-gating compliance in alignment with Google Business Profile policies and international consumer protection standards. Customers are provided a neutral, unconditioned opportunity to leave public reviews regardless of rating or sentiment. Enterprise subscriptions feature multi-tenant RBAC isolation, HTTPS TLS 1.3 encryption, and rate-limiting anti-abuse safeguards.
               </p>
             </div>
           </div>

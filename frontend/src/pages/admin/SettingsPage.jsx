@@ -71,7 +71,7 @@ export const SettingsPage = () => {
           Private Survey Settings
         </h1>
         <p style={{ fontSize: "14px", color: "var(--text-muted)" }}>
-          Customize the questions shown to dissatisfied customers (1–3 stars) during the star-gated feedback workflow
+          Customize feedback survey questions shown during customer service recovery and operational follow-up
         </p>
       </div>
 

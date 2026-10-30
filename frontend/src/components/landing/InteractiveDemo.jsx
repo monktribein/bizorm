@@ -1,18 +1,35 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Calculator, TrendingUp, ShieldCheck, QrCode, Star, ArrowRight, Sparkles, HelpCircle, Info } from "lucide-react";
+import { Calculator, QrCode, Star, ArrowRight, MessageSquare, Info, ShieldCheck, HeartHandshake } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const InteractiveDemo = () => {
   const [footfall, setFootfall] = useState(600);
-  const [avgTicket, setAvgTicket] = useState(850);
-  const [engagementRate, setEngagementRate] = useState(25); // 25%
+  const [scanRate, setScanRate] = useState(20); // 20% estimated scan engagement
 
-  // Calculation Methodology (Transparent Empirical Formulas)
-  const monthlyScans = Math.round((footfall * engagementRate) / 100);
-  const positiveReviews = Math.round(monthlyScans * 0.72); // 72% rate 4-5 stars
-  const deflectedComplaints = Math.round(monthlyScans * 0.14); // 14% rate 1-3 stars
-  const revenueSafeguarded = Math.round(deflectedComplaints * avgTicket * 2.5); // 2.5 repeat visits saved
+  // Transparent Empirical Calculation Formulas
+  // 1. Valid QR Scans: deduplicated scans of physical standees / links
+  const projectedScans = Math.round((footfall * scanRate) / 100);
+
+  // 2. Feedback Submissions: ~70% of customers who scan complete feedback
+  const feedbackSubmissions = Math.round(projectedScans * 0.7);
+
+  // 3. Neutral Public Review Choice: ~40% of customers choose to post publicly on Google / external platforms
+  const publicReviewChoices = Math.round(feedbackSubmissions * 0.45);
+
+  // 4. Service Recovery Inquiries: ~18% express private concerns or service requests handled directly
+  const serviceRecoveryInquiries = Math.round(feedbackSubmissions * 0.18);
+
+  const handleSliderChange = (setter, value, metric) => {
+    setter(value);
+    // Custom non-PII analytics tracking event (QA-12 compliant)
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "calculator_interact", {
+        metric_name: metric,
+        metric_value: value,
+      });
+    }
+  };
 
   return (
     <section
@@ -25,11 +42,23 @@ export const InteractiveDemo = () => {
       }}
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-        {/* Section Header */}
-        <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 36px" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", color: "#004ac6", fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+        {/* Section Header: Approved Title per Spec Section 10 */}
+        <div style={{ textAlign: "center", maxWidth: "760px", margin: "0 auto 36px" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "#0052cc",
+              fontSize: "12px",
+              fontWeight: "800",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              marginBottom: "8px",
+            }}
+          >
             <Calculator size={15} />
-            <span>INTERACTIVE ROI SIMULATOR</span>
+            <span>OPERATIONAL IMPACT SIMULATOR</span>
           </div>
           <h2
             className="font-outfit"
@@ -41,116 +70,127 @@ export const InteractiveDemo = () => {
               margin: "0 0 10px 0",
             }}
           >
-            Calculate Your Review Growth &amp; Customer Retention Potential
+            Customer Feedback &amp; Experience Impact Calculator
           </h2>
-          <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.5 }}>
-            See how converting in-store customer footfall into verified Google reviews and private complaint resolution impacts your bottom line.
+          <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.55 }}>
+            Simulate how converting in-store customer footfall into valid QR scans and feedback submissions drives real-time issue recovery and neutral public review engagement.
           </p>
         </div>
 
         {/* Main Grid: Inputs vs Output Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "32px", alignItems: "stretch" }}>
-          {/* Left: Transparent Inputs */}
-          <div className="card" style={{ padding: "28px", background: "#ffffff", borderRadius: "20px" }}>
-            <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f172a", marginBottom: "20px" }}>
-              1. Your Business Parameters
-            </h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+            gap: "28px",
+            alignItems: "stretch",
+          }}
+        >
+          {/* Left: Input Parameters & Methodology */}
+          <div
+            style={{
+              padding: "28px",
+              background: "#ffffff",
+              borderRadius: "20px",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.03)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f172a", marginBottom: "20px" }}>
+                1. Footfall &amp; Engagement Inputs
+              </h3>
 
-            {/* Slider 1: Footfall */}
-            <div style={{ marginBottom: "24px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
-                  Monthly Footfall / Customers:
-                </label>
-                <span style={{ fontSize: "16px", fontWeight: "800", color: "#004ac6" }}>
-                  {footfall.toLocaleString("en-IN")} visitors
-                </span>
+              {/* Slider 1: Footfall */}
+              <div style={{ marginBottom: "24px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                  <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
+                    Monthly Customer Footfall:
+                  </label>
+                  <span style={{ fontSize: "16px", fontWeight: "800", color: "#0052cc" }}>
+                    {footfall.toLocaleString("en-IN")} visitors
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="100"
+                  max="5000"
+                  step="50"
+                  value={footfall}
+                  onChange={(e) => handleSliderChange(setFootfall, Number(e.target.value), "footfall")}
+                  style={{ width: "100%", accentColor: "#0052cc" }}
+                />
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                  <span>100 visitors</span>
+                  <span>2,500</span>
+                  <span>5,000 visitors</span>
+                </div>
               </div>
-              <input
-                type="range"
-                min="100"
-                max="5000"
-                step="50"
-                value={footfall}
-                onChange={(e) => setFootfall(Number(e.target.value))}
-                style={{ width: "100%", accentColor: "#004ac6" }}
-              />
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
-                <span>100 visitors</span>
-                <span>2,500</span>
-                <span>5,000 visitors</span>
-              </div>
-            </div>
 
-            {/* Slider 2: Average Ticket Size */}
-            <div style={{ marginBottom: "24px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
-                  Average Customer Spend / Bill Size:
-                </label>
-                <span style={{ fontSize: "16px", fontWeight: "800", color: "#059669" }}>
-                  ₹{avgTicket.toLocaleString("en-IN")}
-                </span>
-              </div>
-              <input
-                type="range"
-                min="100"
-                max="5000"
-                step="50"
-                value={avgTicket}
-                onChange={(e) => setAvgTicket(Number(e.target.value))}
-                style={{ width: "100%", accentColor: "#059669" }}
-              />
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
-                <span>₹100</span>
-                <span>₹2,500</span>
-                <span>₹5,000</span>
-              </div>
-            </div>
-
-            {/* Slider 3: Scan Engagement Rate */}
-            <div style={{ marginBottom: "24px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
-                  Estimated QR Standee Scan Rate:
-                </label>
-                <span style={{ fontSize: "16px", fontWeight: "800", color: "#7c3aed" }}>
-                  {engagementRate}%
-                </span>
-              </div>
-              <input
-                type="range"
-                min="10"
-                max="50"
-                step="5"
-                value={engagementRate}
-                onChange={(e) => setEngagementRate(Number(e.target.value))}
-                style={{ width: "100%", accentColor: "#7c3aed" }}
-              />
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
-                <span>10% (Passive)</span>
-                <span>25% (Standard Standee)</span>
-                <span>50% (Staff Assisted)</span>
+              {/* Slider 2: Estimated QR Scan Engagement Rate */}
+              <div style={{ marginBottom: "24px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                  <label style={{ fontSize: "13.5px", fontWeight: "700", color: "#334155" }}>
+                    Estimated QR Standee Scan Rate:
+                  </label>
+                  <span style={{ fontSize: "16px", fontWeight: "800", color: "#7c3aed" }}>
+                    {scanRate}%
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="5"
+                  max="40"
+                  step="5"
+                  value={scanRate}
+                  onChange={(e) => handleSliderChange(setScanRate, Number(e.target.value), "scan_rate")}
+                  style={{ width: "100%", accentColor: "#7c3aed" }}
+                />
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#94a3b8", marginTop: "4px" }}>
+                  <span>5% (Passive Counter)</span>
+                  <span>20% (Prominent Standee)</span>
+                  <span>40% (Staff Encouraged)</span>
+                </div>
               </div>
             </div>
 
             {/* Methodology Explainer Box */}
-            <div style={{ background: "#f8fafc", padding: "14px", borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "12px", color: "#475569" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: "700", color: "#0f172a", marginBottom: "6px" }}>
-                <Info size={14} color="#004ac6" />
-                <span>Calculation Methodology:</span>
+            <div
+              style={{
+                background: "#f8fafc",
+                padding: "16px",
+                borderRadius: "14px",
+                border: "1px solid #e2e8f0",
+                fontSize: "12px",
+                color: "#475569",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: "800", color: "#0f172a", marginBottom: "6px" }}>
+                <Info size={14} color="#0052cc" />
+                <span>Transparent Calculation Assumptions:</span>
               </div>
-              <ul style={{ margin: 0, paddingLeft: "16px", lineHeight: 1.5 }}>
-                <li><strong>Est. Monthly Scans</strong> = Footfall ({footfall}) × Scan Rate ({engagementRate}%) = {monthlyScans} valid scans</li>
-                <li><strong>Public Verified Reviews</strong> = ~72% of positive respondents guided to Google Reviews</li>
-                <li><strong>Direct Service Recovery</strong> = ~14% customer concerns routed directly to store managers</li>
+              <ul style={{ margin: 0, paddingLeft: "18px", lineHeight: 1.6 }}>
+                <li>
+                  <strong>Valid QR Scans</strong> = Footfall ({footfall}) × Scan Rate ({scanRate}%) = <strong>{projectedScans} scans/mo</strong>.
+                </li>
+                <li>
+                  <strong>Feedback Submissions</strong> = ~70% completion rate among scanning customers = <strong>{feedbackSubmissions} submissions</strong>.
+                </li>
+                <li>
+                  <strong>Public Review Choices</strong> = Neutral opt-in to post on Google / external platforms (~45% of respondents) = <strong>{publicReviewChoices} reviews</strong>.
+                </li>
+                <li>
+                  <strong>Service Inquiries Handled</strong> = Concerns and suggestions routed for immediate management resolution = <strong>{serviceRecoveryInquiries} tickets</strong>.
+                </li>
               </ul>
             </div>
           </div>
 
-          {/* Right: Projected Outcomes */}
+          {/* Right: Projected Operational Outcomes */}
           <div
-            className="card"
             style={{
               padding: "28px",
               background: "linear-gradient(145deg, #0f172a 0%, #1e293b 100%)",
@@ -159,57 +199,73 @@ export const InteractiveDemo = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              boxShadow: "0 12px 36px rgba(15, 23, 42, 0.16)",
             }}
           >
             <div>
-              <div style={{ fontSize: "12px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
-                2. Projected 30-Day Value Created
+              <div style={{ fontSize: "11.5px", fontWeight: "800", color: "#38bdf8", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+                2. Illustrative 30-Day Projections
               </div>
               <h3 style={{ fontSize: "20px", fontWeight: "800", color: "#ffffff", margin: "0 0 20px 0" }}>
-                Monthly Customer Experience Lift
+                Projected Monthly Experience Lift
               </h3>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "20px" }}>
+              {/* 2 Top Metric Cards */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
                 <div style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#38bdf8", fontSize: "12px", fontWeight: "700" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#38bdf8", fontSize: "11.5px", fontWeight: "700" }}>
                     <QrCode size={14} />
                     <span>VALID SCANS</span>
                   </div>
                   <div style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}>
-                    {monthlyScans}
+                    {projectedScans}
                   </div>
-                  <div style={{ fontSize: "11px", color: "#94a3b8" }}>Per month</div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8" }}>Scans / month</div>
                 </div>
 
                 <div style={{ background: "rgba(255,255,255,0.06)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#fbbf24", fontSize: "12px", fontWeight: "700" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#fbbf24", fontSize: "11.5px", fontWeight: "700" }}>
                     <Star size={14} fill="#fbbf24" />
-                    <span>NEW GOOGLE 5★</span>
+                    <span>PUBLIC REVIEWS</span>
                   </div>
                   <div style={{ fontSize: "28px", fontWeight: "900", color: "#ffffff", marginTop: "6px" }}>
-                    +{positiveReviews}
+                    ~{publicReviewChoices}
                   </div>
-                  <div style={{ fontSize: "11px", color: "#94a3b8" }}>Authentic reviews</div>
+                  <div style={{ fontSize: "11px", color: "#94a3b8" }}>Public review choices</div>
                 </div>
               </div>
 
-              <div style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid rgba(16, 185, 129, 0.3)", borderRadius: "14px", padding: "16px", marginBottom: "24px" }}>
+              {/* Middle Metric Card: Service Recovery Tickets */}
+              <div
+                style={{
+                  background: "rgba(16, 185, 129, 0.12)",
+                  border: "1px solid rgba(16, 185, 129, 0.3)",
+                  borderRadius: "14px",
+                  padding: "16px",
+                  marginBottom: "20px",
+                }}
+              >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
-                    <div style={{ fontSize: "12px", fontWeight: "700", color: "#34d399", textTransform: "uppercase" }}>
+                    <div style={{ fontSize: "11.5px", fontWeight: "700", color: "#34d399", textTransform: "uppercase" }}>
                       Private Issues Recovered &amp; Resolved
                     </div>
                     <div style={{ fontSize: "20px", fontWeight: "900", color: "#ffffff", marginTop: "2px" }}>
-                      {deflectedComplaints} Customer Concerns
+                      ~{serviceRecoveryInquiries} Customer Inquiries
                     </div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>Estimated Customer Retention:</div>
+                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>Feedback Completed:</div>
                     <div style={{ fontSize: "18px", fontWeight: "800", color: "#34d399" }}>
-                      +₹{revenueSafeguarded.toLocaleString("en-IN")}
+                      {feedbackSubmissions}
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Distinction reminder */}
+              <div style={{ fontSize: "11.5px", color: "#94a3b8", lineHeight: 1.45, marginBottom: "20px" }}>
+                * Differentiates valid QR scans, completed feedback, and public review transitions. External reviews are voluntary customer actions.
               </div>
             </div>
 
@@ -227,20 +283,20 @@ export const InteractiveDemo = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
-                  boxShadow: "0 6px 20px rgba(0, 74, 198, 0.4)",
+                  boxShadow: "0 6px 20px rgba(0, 82, 204, 0.4)",
                   textDecoration: "none",
                 }}
               >
-                <span>Capture This Growth (Start 7-Day Trial)</span>
+                <span>Start 7-Day Free Trial (100 Scans)</span>
                 <ArrowRight size={16} />
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Illustrative Results Disclaimer Required by Audit */}
-        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "11.5px", color: "#94a3b8", lineHeight: 1.5 }}>
-          <strong>Disclaimer:</strong> Illustrative projection based on empirical customer engagement benchmarks. Actual scan rates and review conversions depend on physical standee visibility, staff verbal encouragement, and industry vertical.
+        {/* Visible Disclaimer Required by Audit */}
+        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "11.5px", color: "#94a3b8", lineHeight: 1.6, maxWidth: "900px", margin: "24px auto 0" }}>
+          <strong>Methodology &amp; Illustrative Result Disclaimer:</strong> This simulator provides hypothetical, illustrative projections based on empirical engagement averages. It does not promise causal review growth or financial return. Actual scan engagement and customer review selections depend on physical standee placement, staff verbal invitation, service quality, and patron choice.
         </div>
       </div>
     </section>

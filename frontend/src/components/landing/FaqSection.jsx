@@ -20,7 +20,7 @@ export const FaqSection = () => {
     },
     {
       q: "How does monthly and annual billing work, and when do scan quotas reset?",
-      a: "Monthly subscriptions bill every 30 days, and your scan quota resets at the start of each billing cycle. Annual plans offer 2 months free with single annual billing, while retaining monthly scan resets so your business enjoys a fresh quota every month without rollover degradation.",
+      a: "Monthly subscriptions bill every 30 days, and your scan quota resets at the start of each billing cycle. Annual plans offer 17% savings (marketed as 2 months free) with exact annual billing upfront, while retaining monthly scan entitlement resets so your business enjoys a fresh quota every month without rollover degradation.",
     },
     {
       q: "How does Enterprise pooled scan billing work for multi-outlet franchises?",
