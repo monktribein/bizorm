@@ -37,6 +37,7 @@ export const PricingSection = ({ hideHeader = false }) => {
   const [annualBilling, setAnnualBilling] = useState(true);
   const [platformOffers, setPlatformOffers] = useState([]);
   const [copiedCode, setCopiedCode] = useState(null);
+  const [showAllCoupons, setShowAllCoupons] = useState(false);
 
   // Add-ons & Top-up Quota State
   const [showAddonModal, setShowAddonModal] = useState(false);
@@ -140,7 +141,7 @@ export const PricingSection = ({ hideHeader = false }) => {
     <section
       id="pricing"
       style={{
-        padding: hideHeader ? "20px 0 64px" : "64px 0 72px",
+        padding: hideHeader ? "10px 0 44px" : "40px 0 52px",
         backgroundColor: "#ffffff",
       }}
     >
@@ -189,19 +190,20 @@ export const PricingSection = ({ hideHeader = false }) => {
           </motion.div>
         )}
 
-        {/* Category & Billing Toggles */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", marginBottom: "40px" }}>
-          {/* Business vs Enterprise Segment Toggle */}
+        {/* Category & Billing Toggles - Streamlined & Compact */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+          {/* Segment Toggle */}
           <div
             style={{
               display: "inline-flex",
               background: "#f1f5f9",
-              padding: "4px",
-              borderRadius: "12px",
+              padding: "3px",
+              borderRadius: "10px",
               border: "1px solid #e2e8f0",
               maxWidth: "100%",
               flexWrap: "wrap",
               justifyContent: "center",
+              gap: "2px",
             }}
           >
             <motion.button
@@ -211,21 +213,21 @@ export const PricingSection = ({ hideHeader = false }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                padding: "10px 22px",
-                borderRadius: "8px",
+                gap: "6px",
+                padding: "6px 14px",
+                borderRadius: "7px",
                 border: "none",
                 background: activeTab === "business" ? "#ffffff" : "transparent",
                 color: activeTab === "business" ? "#0052cc" : "#64748b",
                 fontWeight: "700",
-                fontSize: "13.5px",
+                fontSize: "12.5px",
                 cursor: "pointer",
-                boxShadow: activeTab === "business" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+                boxShadow: activeTab === "business" ? "0 1px 4px rgba(0,0,0,0.06)" : "none",
                 transition: "all 0.15s ease",
               }}
             >
-              <Store size={16} />
-              <span>Single Business Locations</span>
+              <Store size={14} />
+              <span>Single Business</span>
             </motion.button>
             <motion.button
               type="button"
@@ -234,21 +236,21 @@ export const PricingSection = ({ hideHeader = false }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                padding: "10px 22px",
-                borderRadius: "8px",
+                gap: "6px",
+                padding: "6px 14px",
+                borderRadius: "7px",
                 border: "none",
                 background: activeTab === "enterprise" ? "#ffffff" : "transparent",
                 color: activeTab === "enterprise" ? "#0052cc" : "#64748b",
                 fontWeight: "700",
-                fontSize: "13.5px",
+                fontSize: "12.5px",
                 cursor: "pointer",
-                boxShadow: activeTab === "enterprise" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+                boxShadow: activeTab === "enterprise" ? "0 1px 4px rgba(0,0,0,0.06)" : "none",
                 transition: "all 0.15s ease",
               }}
             >
-              <Building2 size={16} />
-              <span>Multi-Outlet Franchises &amp; Corporate</span>
+              <Building2 size={14} />
+              <span>Multi-Outlet Franchise</span>
             </motion.button>
             <motion.button
               type="button"
@@ -257,31 +259,31 @@ export const PricingSection = ({ hideHeader = false }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                padding: "10px 22px",
-                borderRadius: "8px",
+                gap: "6px",
+                padding: "6px 14px",
+                borderRadius: "7px",
                 border: "none",
                 background: activeTab === "marketplace" ? "#ffffff" : "transparent",
                 color: activeTab === "marketplace" ? "#0052cc" : "#64748b",
                 fontWeight: "700",
-                fontSize: "13.5px",
+                fontSize: "12.5px",
                 cursor: "pointer",
-                boxShadow: activeTab === "marketplace" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+                boxShadow: activeTab === "marketplace" ? "0 1px 4px rgba(0,0,0,0.06)" : "none",
                 transition: "all 0.15s ease",
               }}
             >
-              <ShoppingBag size={16} />
-              <span>Marketplace (Products)</span>
+              <ShoppingBag size={14} />
+              <span>Marketplace Products</span>
             </motion.button>
           </div>
 
-          {/* Monthly / Annual Billing Toggle & Capacity Add-ons Button */}
+          {/* Billing Switcher & Add-ons Button in a sleek single row */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "12px",
+              gap: "10px",
               flexWrap: "wrap",
             }}
           >
@@ -289,9 +291,9 @@ export const PricingSection = ({ hideHeader = false }) => {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "8px",
+                gap: "4px",
                 background: "#f8fafc",
-                padding: "4px 8px",
+                padding: "3px 4px",
                 borderRadius: "999px",
                 border: "1px solid #e2e8f0",
               }}
@@ -301,30 +303,30 @@ export const PricingSection = ({ hideHeader = false }) => {
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setAnnualBilling(false)}
                 style={{
-                  padding: "6px 16px",
+                  padding: "5px 14px",
                   borderRadius: "999px",
                   border: "none",
                   background: !annualBilling ? "#0052cc" : "transparent",
                   color: !annualBilling ? "#ffffff" : "#475569",
-                  fontSize: "13px",
+                  fontSize: "12px",
                   fontWeight: "700",
                   cursor: "pointer",
                   transition: "all 0.15s ease",
                 }}
               >
-                Monthly Billing
+                Monthly
               </motion.button>
               <motion.button
                 type="button"
                 whileTap={{ scale: 0.96 }}
                 onClick={() => setAnnualBilling(true)}
                 style={{
-                  padding: "6px 16px",
+                  padding: "5px 12px",
                   borderRadius: "999px",
                   border: "none",
                   background: annualBilling ? "#0052cc" : "transparent",
                   color: annualBilling ? "#ffffff" : "#475569",
-                  fontSize: "13px",
+                  fontSize: "12px",
                   fontWeight: "700",
                   cursor: "pointer",
                   display: "flex",
@@ -333,18 +335,18 @@ export const PricingSection = ({ hideHeader = false }) => {
                   transition: "all 0.15s ease",
                 }}
               >
-                <span>Annual Billing</span>
+                <span>Annual</span>
                 <span
                   style={{
-                    fontSize: "10.5px",
+                    fontSize: "9.5px",
                     background: "#10b981",
                     color: "#ffffff",
-                    padding: "1px 7px",
+                    padding: "1px 6px",
                     borderRadius: "999px",
                     fontWeight: "800",
                   }}
                 >
-                  SAVE 25% (Carryforward Quotas)
+                  SAVE 25%
                 </span>
               </motion.button>
             </div>
@@ -353,32 +355,31 @@ export const PricingSection = ({ hideHeader = false }) => {
             <motion.button
               type="button"
               whileTap={{ scale: 0.96 }}
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.02 }}
               onClick={() => setShowAddonModal(true)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "7px",
-                padding: "8px 18px",
+                gap: "6px",
+                padding: "5px 14px",
                 borderRadius: "999px",
-                border: "1px solid #7dd3fc",
-                background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
-                color: "#ffffff",
-                fontSize: "13px",
+                border: "1px solid #bae6fd",
+                background: "#f0f9ff",
+                color: "#0284c7",
+                fontSize: "12px",
                 fontWeight: "700",
                 cursor: "pointer",
-                boxShadow: "0 4px 14px rgba(2, 132, 199, 0.28)",
                 transition: "all 0.15s ease",
               }}
             >
-              <Zap size={15} />
+              <Zap size={13} />
               <span>Add-ons &amp; Top-up Quota</span>
               <span
                 style={{
-                  fontSize: "10px",
-                  background: "#ffffff",
-                  color: "#0369a1",
-                  padding: "1px 7px",
+                  fontSize: "9.5px",
+                  background: "#0284c7",
+                  color: "#ffffff",
+                  padding: "1px 6px",
                   borderRadius: "999px",
                   fontWeight: "800",
                 }}
@@ -389,96 +390,107 @@ export const PricingSection = ({ hideHeader = false }) => {
           </div>
         </div>
 
-        {/* Active Platform Promotional Coupons Banner */}
+        {/* Sleek Compact Promo Ribbon */}
         {platformOffers && platformOffers.length > 0 && (
-          <div style={{ marginBottom: "36px" }}>
+          <div style={{ marginBottom: "18px" }}>
             <div
               style={{
+                margin: "0 auto",
+                maxWidth: "1120px",
+                backgroundColor: "#f8fafc",
+                border: "1px dashed #cbd5e1",
+                borderRadius: "10px",
+                padding: "6px 14px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 flexWrap: "wrap",
-                gap: "10px",
-                marginBottom: "16px",
+                gap: "8px",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <div
-                  style={{
-                    width: "28px",
-                    height: "28px",
-                    borderRadius: "8px",
-                    background: "linear-gradient(135deg, #0052cc, #6366f1)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#ffffff",
-                  }}
-                >
-                  <Ticket size={16} />
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "#0052cc", fontSize: "12px", fontWeight: "800" }}>
+                  <Ticket size={14} />
+                  <span>PROMO CODES:</span>
                 </div>
-                <div>
-                  <h3
-                    style={{
-                      margin: 0,
-                      fontSize: "16px",
-                      fontWeight: "800",
-                      color: "#0f172a",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                    }}
-                  >
-                    <span>Active Platform Promo Coupons</span>
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        fontWeight: "700",
-                        color: "#059669",
-                        backgroundColor: "#ecfdf5",
-                        border: "1px solid #a7f3d0",
-                        padding: "1px 8px",
-                        borderRadius: "999px",
-                      }}
-                    >
-                      Limited Time
-                    </span>
-                  </h3>
-                  <p style={{ margin: "2px 0 0", fontSize: "12.5px", color: "#64748b" }}>
-                    Copy any code below and paste it during checkout or registration for instant bonus value.
-                  </p>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                  {platformOffers.map((offer) => {
+                    const isCopied = copiedCode === offer.code;
+                    const shortBadge = offer.offerType === "FREE_BRANCH"
+                      ? `+${offer.extraBranches || 1} Branch`
+                      : offer.offerType === "WSP_QUOTA_BOOST"
+                      ? `+${(offer.extraWspQuota || 1000).toLocaleString()} Scans`
+                      : offer.discountPercent
+                      ? `${offer.discountPercent}% OFF`
+                      : `₹${offer.discountFlat} OFF`;
+
+                    return (
+                      <button
+                        key={offer._id || offer.code}
+                        type="button"
+                        onClick={() => handleCopyCode(offer.code)}
+                        title={offer.title || offer.bannerText || "Click to copy code"}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          padding: "3px 8px",
+                          borderRadius: "6px",
+                          border: isCopied ? "1px solid #10b981" : "1px solid #cbd5e1",
+                          backgroundColor: isCopied ? "#ecfdf5" : "#ffffff",
+                          color: isCopied ? "#059669" : "#1e293b",
+                          fontSize: "11.5px",
+                          fontWeight: "700",
+                          cursor: "pointer",
+                          transition: "all 0.15s ease",
+                        }}
+                      >
+                        <span style={{ fontFamily: "monospace", color: isCopied ? "#059669" : "#0052cc" }}>{offer.code}</span>
+                        <span style={{ fontSize: "10.5px", color: "#64748b", fontWeight: "500" }}>({shortBadge})</span>
+                        {isCopied ? <CheckCheck size={11} color="#059669" /> : <Copy size={11} color="#94a3b8" />}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {copiedCode && (
-                <div
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                {copiedCode && (
+                  <span style={{ fontSize: "11px", color: "#059669", fontWeight: "700" }}>
+                    ✓ Code {copiedCode} copied!
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowAllCoupons(!showAllCoupons)}
                   style={{
+                    background: "none",
+                    border: "none",
+                    color: "#64748b",
+                    fontSize: "11px",
+                    fontWeight: "700",
+                    cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
-                    gap: "6px",
-                    padding: "6px 12px",
-                    borderRadius: "8px",
-                    backgroundColor: "#ecfdf5",
-                    border: "1px solid #a7f3d0",
-                    color: "#059669",
-                    fontSize: "12.5px",
-                    fontWeight: "700",
+                    gap: "3px",
+                    padding: "2px 4px",
                   }}
                 >
-                  <CheckCheck size={15} />
-                  <span>Coupon {copiedCode} copied! Paste at checkout.</span>
-                </div>
-              )}
+                  <span>{showAllCoupons ? "Hide Tickets ▲" : "View Tickets ▼"}</span>
+                </button>
+              </div>
             </div>
 
-            {/* Coupons Ticket Row */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 330px), 1fr))",
-                gap: "16px",
-              }}
-            >
+            {/* Optional Expanded Detailed Ticket Cards */}
+            {showAllCoupons && (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 310px), 1fr))",
+                  gap: "12px",
+                  marginTop: "12px",
+                }}
+              >
               {platformOffers.map((offer) => {
                 const isFreeBranch = offer.offerType === "FREE_BRANCH";
                 const isWspQuota = offer.offerType === "WSP_QUOTA_BOOST";
@@ -750,6 +762,7 @@ export const PricingSection = ({ hideHeader = false }) => {
                 );
               })}
             </div>
+            )}
           </div>
         )}
 
@@ -852,28 +865,22 @@ export const PricingSection = ({ hideHeader = false }) => {
                   </div>
 
                   {annualBilling && isNumeric && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginBottom: "14px" }}>
+                    <div style={{ marginBottom: "12px" }}>
                       <div style={{ fontSize: "12px", color: "#0052cc", fontWeight: "700" }}>
-                        Effective ₹{effectiveMonthly.toLocaleString("en-IN")}/mo (Save 25% • 3 Mo. Free)
-                      </div>
-                      <div style={{ fontSize: "11px", color: "#059669", fontWeight: "700" }}>
-                        🔄 100% Unused Quota Carryforward (Jan ➔ Feb Rollover)
+                        Effective ₹{effectiveMonthly.toLocaleString("en-IN")}/mo (Save 25%)
                       </div>
                     </div>
                   )}
                   {!annualBilling && isNumeric && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginBottom: "14px" }}>
+                    <div style={{ marginBottom: "12px" }}>
                       <div style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "600" }}>
                         Billed on monthly renewal
-                      </div>
-                      <div style={{ fontSize: "11px", color: "#dc2626", fontWeight: "600" }}>
-                        ⚠️ Monthly reset (Unused scans expire at month-end)
                       </div>
                     </div>
                   )}
 
                   {/* Quota Highlights Box */}
-                  <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "18px", border: "1px solid #f1f5f9" }}>
+                  <div style={{ background: "#f8fafc", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px", border: "1px solid #f1f5f9" }}>
                     <div style={{ fontSize: "13px", fontWeight: "800", color: "#0052cc" }}>
                       🔍 {plan.scansDisplay}
                     </div>
@@ -882,12 +889,12 @@ export const PricingSection = ({ hideHeader = false }) => {
                     </div>
                     {annualBilling && isNumeric && (
                       <div style={{ fontSize: "11px", color: "#059669", marginTop: "4px", fontWeight: "700" }}>
-                        🔄 100% Carryforward Quota Active (Jan ➔ Feb)
+                        🔄 100% Carryforward Quota (Jan ➔ Feb Rollover)
                       </div>
                     )}
                     {!annualBilling && isNumeric && (
-                      <div style={{ fontSize: "11px", color: "#dc2626", marginTop: "4px", fontWeight: "600" }}>
-                        ⚠️ Monthly Reset: No Rollover
+                      <div style={{ fontSize: "11px", color: "#64748b", marginTop: "4px", fontWeight: "600" }}>
+                        Monthly scan reset
                       </div>
                     )}
                   </div>

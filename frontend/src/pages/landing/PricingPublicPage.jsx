@@ -12,7 +12,7 @@ export const PricingPublicPage = () => {
       <LandingNavbar />
 
       {/* Hero Header */}
-      <section style={{ paddingTop: "clamp(110px, 9vw, 124px)", paddingBottom: "20px", backgroundColor: "#f0f3ff", textAlign: "center" }}>
+      <section style={{ paddingTop: "clamp(84px, 6.5vw, 100px)", paddingBottom: "12px", backgroundColor: "#f0f3ff", textAlign: "center" }}>
         <div style={{ maxWidth: "860px", margin: "0 auto", padding: "0 24px" }}>
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -22,17 +22,17 @@ export const PricingPublicPage = () => {
             <h1
               style={{
                 fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(24px, 3.2vw, 34px)",
+                fontSize: "clamp(22px, 2.8vw, 30px)",
                 fontWeight: "800",
                 color: "#0f172a",
                 lineHeight: 1.2,
-                marginBottom: "6px",
+                marginBottom: "4px",
               }}
             >
-              Subscription Plans & Packages
+              Subscription Plans &amp; Packages
             </h1>
-            <p style={{ fontSize: "14.5px", lineHeight: 1.5, color: "#475569" }}>
-              Choose the perfect plan for your single store, dental clinic, restaurant, or multi-branch franchise. All plans include our <strong>7-Day Free Trial</strong>.
+            <p style={{ fontSize: "14px", lineHeight: 1.5, color: "#64748b", margin: 0 }}>
+              Transparent pricing with valid QR scan quotas, neutral public review links, and dedicated service triage.
             </p>
           </motion.div>
         </div>

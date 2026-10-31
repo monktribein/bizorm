@@ -11,10 +11,10 @@ export const BizormLogo = ({
   style = {},
 }) => {
   const heightMap = {
-    sm: 32,
-    md: 42,
-    lg: 52,
-    xl: 64,
+    sm: 36,
+    md: 46,
+    lg: 56,
+    xl: 68,
   };
   const heightPx = typeof size === "number" ? size : heightMap[size] || 42;
 
