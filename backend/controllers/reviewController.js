@@ -181,7 +181,7 @@ export const getLandingTestimonials = async (req, res, next) => {
       review: { $exists: true, $ne: "" },
     })
       .sort({ createdAt: -1 })
-      .limit(10)
+      .limit(50)
       .lean();
 
     const realReviews = dbRatings
@@ -207,6 +207,7 @@ export const getLandingTestimonials = async (req, res, next) => {
           stars: r.star || 5,
           metric: `${r.star}.0★ Verified Rating`,
           platform: r.platformName || "Google Reviews",
+          tag: "Verified Review",
           quote: r.review.replace(/Kashish's Business/g, "Bizoram").replace(/Bizwoke/g, "Bizoram"),
           date: r.createdAt
             ? new Date(r.createdAt).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" })
@@ -220,9 +221,11 @@ export const getLandingTestimonials = async (req, res, next) => {
         name: "Dr. Piyush Sharma",
         role: "Clinical Director",
         business: "Apex Healthcare & Dental Clinic",
+        location: "Mumbai, MH",
         avatar: "PS",
         avatarBg: "#004ac6",
         stars: 5,
+        tag: "Healthcare & Dental",
         metric: "Multi-Platform Feedback",
         platform: "Google Reviews",
         quote:
@@ -232,10 +235,12 @@ export const getLandingTestimonials = async (req, res, next) => {
       {
         name: "Riya Kapoor",
         role: "Operations Head",
-        business: "The Grand Bistro & Cafe, Indiranagar",
+        business: "The Grand Bistro & Cafe",
+        location: "Bengaluru, KA",
         avatar: "RK",
         avatarBg: "#0284c7",
         stars: 5,
+        tag: "Restaurant & Cafe",
         metric: "Real-Time Complaint Desk",
         platform: "Google & Direct",
         quote:
@@ -245,10 +250,12 @@ export const getLandingTestimonials = async (req, res, next) => {
       {
         name: "Monu Verma",
         role: "Regional General Manager",
-        business: "Fitness First & Gym Franchise (5 Branches)",
+        business: "Fitness First & Gym Franchise",
+        location: "NCR Region (6 Branches)",
         avatar: "MV",
         avatarBg: "#2563eb",
         stars: 5,
+        tag: "Franchise (6 Outlets)",
         metric: "Multi-Outlet Franchise Command",
         platform: "Google & Justdial",
         quote:
@@ -259,18 +266,81 @@ export const getLandingTestimonials = async (req, res, next) => {
         name: "Mayank Singhal",
         role: "Founder & Lead Stylist",
         business: "Glow Luxury Salon & Wellness Spa",
+        location: "New Delhi, DL",
         avatar: "MS",
         avatarBg: "#7c3aed",
         stars: 5,
+        tag: "Luxury Salon & Spa",
         metric: "Acrylic QR Standees",
         platform: "WhatsApp & Google",
         quote:
           "The 300 DPI print-ready standees matched our premium salon aesthetic seamlessly. Customers simply scan the QR code on the mirror station and choose their preferred platform to share their experience.",
         date: "Verified Salon & Spa Client",
       },
+      {
+        name: "Vikram Mehta",
+        role: "Managing Director",
+        business: "Mehta Fine Jewels & Ornaments",
+        location: "Jaipur, RJ",
+        avatar: "VM",
+        avatarBg: "#059669",
+        stars: 5,
+        tag: "Fine Jewelry Retail",
+        metric: "Counter QR Standees",
+        platform: "Google Reviews",
+        quote:
+          "Counter QR standees increased our Google review volume by over 300% in the first month without any friction for our walk-in clients. High-ticket buyers trust verified public feedback.",
+        date: "Verified Jewelry Retail Client",
+      },
+      {
+        name: "Ananya Deshmukh",
+        role: "Customer Service Director",
+        business: "SpeedZone Multi-Brand Motors",
+        location: "Pune, MH",
+        avatar: "AD",
+        avatarBg: "#d97706",
+        stars: 5,
+        tag: "Automobile Service",
+        metric: "WhatsApp Sentiment Routing",
+        platform: "WhatsApp & Google",
+        quote:
+          "Sending post-service WhatsApp follow-ups with instant sentiment routing helped us catch minor repair grievances before customers left negative feedback. Our service CSAT jumped to 4.9.",
+        date: "Verified Automotive Client",
+      },
+      {
+        name: "Rajesh Khanna",
+        role: "Operations Head",
+        business: "FreshBasket Hypermarkets",
+        location: "Hyderabad, TS",
+        avatar: "RK",
+        avatarBg: "#0891b2",
+        stars: 5,
+        tag: "Hypermarket Chain",
+        metric: "Checkout QR Stations",
+        platform: "Google Reviews",
+        quote:
+          "With 12 checkout aisles, customer queue feedback is vital. The acrylic counter displays empower shoppers to leave instant ratings in under 10 seconds, helping us optimize aisle staffing.",
+        date: "Verified Retail Client",
+      },
+      {
+        name: "Sneha Rao",
+        role: "Store Lead",
+        business: "Orbit Tech World Electronics",
+        location: "Chennai, TN",
+        avatar: "SR",
+        avatarBg: "#4f46e5",
+        stars: 5,
+        tag: "Electronics Retail",
+        metric: "Verified Badge Integration",
+        platform: "Google & Trustpilot",
+        quote:
+          "Customer trust is paramount in consumer electronics. BizORM's verified badges and multi-platform review distribution have bolstered our store's reputation across the city.",
+        date: "Verified Electronics Client",
+      },
     ];
 
-    const combined = [...realReviews, ...curatedBizoramReviews].slice(0, 6);
+    // Combine real DB reviews with curated reviews
+    const combined = [...realReviews, ...curatedBizoramReviews];
 
     res.json({
       success: true,

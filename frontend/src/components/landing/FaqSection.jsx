@@ -20,7 +20,7 @@ export const FaqSection = () => {
     },
     {
       q: "How does monthly and annual billing work, and when do scan quotas reset?",
-      a: "Monthly subscriptions bill every 30 days, and your scan quota resets at the start of each billing cycle. Annual plans offer 17% savings (marketed as 2 months free) with exact annual billing upfront, while retaining monthly scan entitlement resets so your business enjoys a fresh quota every month without rollover degradation.",
+      a: "Monthly subscriptions bill every 30 days and reset each month with no carryforward (unused scans expire at month-end). In contrast, Annual subscriptions offer a massive 25% discount (equivalent to 3 months free) plus 100% Unused Quota Carryforward: if you don't use all your QR scans, reviews, or WhatsApp messages in January, your remaining balance rolls over directly into February and accumulates throughout the year!",
     },
     {
       q: "How does Enterprise pooled scan billing work for multi-outlet franchises?",

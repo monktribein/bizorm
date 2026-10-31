@@ -136,13 +136,14 @@ export const api = {
   createPricingPackage: (data) => request("/plans/pricing", { method: "POST", body: JSON.stringify(data) }),
   updatePricingPackage: (id, data) => request(`/plans/pricing/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deletePricingPackage: (id) => request(`/plans/pricing/${id}`, { method: "DELETE" }),
-  selectPlan: (packageId) => request(`/plans/pricing/select/${packageId}`, { method: "POST" }),
+  selectPlan: (packageId, data = {}) => request(`/plans/pricing/select/${packageId}`, { method: "POST", body: JSON.stringify(data) }),
   requestCustomQuote: (data) => request("/plans/pricing/custom-quote", { method: "POST", body: JSON.stringify(data) }),
   getPlans: () => request("/plans"),
 
   // Quota & Activity & Settings
   getUserQuota: (userId) => request(`/quota/user/${userId || ""}`),
   checkQuotaStatus: (formKey) => request(`/quota/status/${formKey}`),
+  purchaseAddon: (data) => request("/quota/purchase-addon", { method: "POST", body: data }),
   getActivityLogs: (params = {}) => {
     const q = new URLSearchParams(params).toString();
     return request(`/activity${q ? `?${q}` : ""}`);
@@ -165,4 +166,25 @@ export const api = {
   getPublicProductByCode: (code) => request(`/seller/public/product/${code}`),
   submitProductFeedback: (code, data) =>
     request(`/seller/public/feedback/${code}`, { method: "POST", body: JSON.stringify(data) }),
+
+  // Campaigns & Offers
+  getCampaigns: () => request("/campaigns"),
+  createCampaign: (data) => request("/campaigns", { method: "POST", body: JSON.stringify(data) }),
+  updateCampaign: (id, data) => request(`/campaigns/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  deleteCampaign: (id) => request(`/campaigns/${id}`, { method: "DELETE" }),
+  getCampaignAudience: () => request("/campaigns/audience/customers"),
+  sendCampaignOffer: (campaignId, data) =>
+    request(`/campaigns/${campaignId}/send`, { method: "POST", body: JSON.stringify(data) }),
+  getPublicVoucher: (code) => request(`/campaigns/voucher/${code}`),
+
+  // SaaS Platform Offers & Website Promo Coupons
+  getPublicPlatformOffers: () => request("/campaigns/platform-offers"),
+  validatePlatformOffer: (data) =>
+    request("/campaigns/platform-offers/validate", { method: "POST", body: JSON.stringify(data) }),
+  getAdminPlatformOffers: () => request("/campaigns/admin/platform-offers"),
+  createAdminPlatformOffer: (data) =>
+    request("/campaigns/admin/platform-offers", { method: "POST", body: JSON.stringify(data) }),
+  updateAdminPlatformOffer: (id, data) =>
+    request(`/campaigns/admin/platform-offers/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  deleteAdminPlatformOffer: (id) => request(`/campaigns/admin/platform-offers/${id}`, { method: "DELETE" }),
 };

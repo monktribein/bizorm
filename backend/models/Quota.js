@@ -48,6 +48,15 @@ const quotaSchema = new mongoose.Schema(
       default: null,
       index: true,
     },
+    billingCycle: {
+      type: String,
+      enum: ["Monthly", "Annual"],
+      default: "Monthly",
+    },
+    isCarryForward: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -55,3 +64,4 @@ const quotaSchema = new mongoose.Schema(
 );
 
 export const Quota = mongoose.model("Quota", quotaSchema);
+export default Quota;

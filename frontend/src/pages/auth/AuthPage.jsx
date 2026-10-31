@@ -25,6 +25,10 @@ import {
   Trash2,
   Eye,
   EyeOff,
+  Ticket,
+  Tag,
+  Gift,
+  Scissors,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -166,10 +170,95 @@ export const AuthPage = ({ defaultTab }) => {
   ]);
 
   const [planBusinessType, setPlanBusinessType] = useState(
-    urlBusinessType === "multiple" ? "multiple" : "single"
+    urlBusinessType === "multiple"
+      ? "multiple"
+      : urlBusinessType === "marketplace"
+      ? "marketplace"
+      : "single"
   );
   const [selectedPlanId, setSelectedPlanId] = useState(urlPlanId || "");
   const [packages, setPackages] = useState([]);
+
+  // Promotional Coupon State
+  const urlCoupon = searchParams.get("coupon") || "";
+  const [couponInput, setCouponInput] = useState(urlCoupon);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponValidating, setCouponValidating] = useState(false);
+  const [couponFeedback, setCouponFeedback] = useState(null);
+
+  const selectedPackage = packages.find((p) => p._id === selectedPlanId) || null;
+
+  const handleApplyCoupon = async (codeToValidate) => {
+    const code = (codeToValidate || couponInput || "").trim().toUpperCase();
+    if (!code) {
+      setCouponFeedback({ type: "error", message: "Please enter a valid coupon code." });
+      return;
+    }
+    setCouponValidating(true);
+    setCouponFeedback(null);
+    try {
+      const price = selectedPackage?.price || 999;
+      const res = await api.validatePlatformOffer({
+        code,
+        price,
+        businessType: planBusinessType,
+      });
+      if (res?.success && res.offer) {
+        setAppliedCoupon(res.offer);
+        setCouponInput(res.offer.code);
+        setCouponFeedback({
+          type: "success",
+          message: res.message || `Coupon '${res.offer.code}' applied!`,
+        });
+      } else {
+        setAppliedCoupon(null);
+        setCouponFeedback({
+          type: "error",
+          message: res?.message || "Invalid or expired promo code.",
+        });
+      }
+    } catch (err) {
+      setAppliedCoupon(null);
+      setCouponFeedback({
+        type: "error",
+        message: err.message || "Failed to validate coupon.",
+      });
+    } finally {
+      setCouponValidating(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput("");
+    setCouponFeedback(null);
+  };
+
+  // Re-calculate coupon discount if package selection changes
+  useEffect(() => {
+    if (appliedCoupon && selectedPackage) {
+      const price = selectedPackage.price || 0;
+      let discountAmount = 0;
+      if (appliedCoupon.discountPercent > 0) {
+        discountAmount = Math.round(price * (appliedCoupon.discountPercent / 100));
+      } else if (appliedCoupon.discountFlat > 0) {
+        discountAmount = Math.min(price, appliedCoupon.discountFlat);
+      }
+      setAppliedCoupon((prev) => ({
+        ...prev,
+        originalPrice: price,
+        discountAmount,
+        finalPrice: Math.max(0, price - discountAmount),
+      }));
+    }
+  }, [selectedPlanId]);
+
+  // Auto-apply coupon from URL query param if present
+  useEffect(() => {
+    if (urlCoupon && packages.length > 0 && !appliedCoupon) {
+      handleApplyCoupon(urlCoupon);
+    }
+  }, [urlCoupon, packages.length]);
 
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState(null);
@@ -179,16 +268,21 @@ export const AuthPage = ({ defaultTab }) => {
     api.getActivePricing()
       .then((res) => {
         if (res.success && res.packages?.length > 0) {
-          setPackages(res.packages);
-          const matched = res.packages.find((p) => p._id === urlPlanId);
+          // Exclude free trial packages so subscription plan selection shows the 4 paid plans
+          const paidPackages = res.packages.filter(
+            (p) => p.price > 0 && !p.packageName.toLowerCase().includes("trial")
+          );
+          const availablePackages = paidPackages.length > 0 ? paidPackages : res.packages;
+          setPackages(availablePackages);
+          const matched = availablePackages.find((p) => p._id === urlPlanId);
           if (matched) {
             setSelectedPlanId(matched._id);
             if (matched.businessType) setPlanBusinessType(matched.businessType);
           } else {
-            const firstOfType = res.packages.find(
+            const firstOfType = availablePackages.find(
               (p) => (p.businessType || "single") === (urlBusinessType || "single")
             );
-            setSelectedPlanId(firstOfType ? firstOfType._id : res.packages[0]._id);
+            setSelectedPlanId(firstOfType ? firstOfType._id : availablePackages[0]._id);
           }
         }
       })
@@ -355,6 +449,7 @@ export const AuthPage = ({ defaultTab }) => {
         googleReviewLink: finalGoogleReviewLink,
         platforms: validPlatforms,
         pricingPackageId: selectedPlanId,
+        appliedCouponCode: appliedCoupon?.code || couponInput.trim().toUpperCase() || "",
       });
 
       if (res.success) {
@@ -1263,16 +1358,17 @@ export const AuthPage = ({ defaultTab }) => {
                       }}
                     >
                       <label className="form-label" style={{ fontWeight: "700", margin: 0, fontSize: "13.5px" }}>
-                        Select Subscription Plan (7-Day Free Trial Included)
+                        Select Subscription Plan
                       </label>
 
-                      {/* Single vs Multiple Toggle */}
+                      {/* Single vs Multiple vs Marketplace Toggle */}
                       <div
                         style={{
                           display: "inline-flex",
                           background: "#e2e8f0",
                           padding: "2px",
                           borderRadius: "8px",
+                          gap: "2px",
                         }}
                       >
                         <button
@@ -1280,7 +1376,10 @@ export const AuthPage = ({ defaultTab }) => {
                           onClick={() => {
                             setPlanBusinessType("single");
                             const firstSingle = packages.find(
-                              (p) => (p.businessType || "single") === "single"
+                              (p) =>
+                                (p.businessType || "single") === "single" &&
+                                p.price > 0 &&
+                                !p.packageName.toLowerCase().includes("trial")
                             );
                             if (firstSingle) setSelectedPlanId(firstSingle._id);
                           }}
@@ -1302,7 +1401,10 @@ export const AuthPage = ({ defaultTab }) => {
                           onClick={() => {
                             setPlanBusinessType("multiple");
                             const firstMulti = packages.find(
-                              (p) => (p.businessType || "single") === "multiple"
+                              (p) =>
+                                (p.businessType || "single") === "multiple" &&
+                                p.price > 0 &&
+                                !p.packageName.toLowerCase().includes("trial")
                             );
                             if (firstMulti) setSelectedPlanId(firstMulti._id);
                           }}
@@ -1319,14 +1421,39 @@ export const AuthPage = ({ defaultTab }) => {
                         >
                           Multiple Business
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPlanBusinessType("marketplace");
+                            const firstMarketplace = packages.find(
+                              (p) =>
+                                (p.businessType || "single") === "marketplace" &&
+                                p.price > 0 &&
+                                !p.packageName.toLowerCase().includes("trial")
+                            );
+                            if (firstMarketplace) setSelectedPlanId(firstMarketplace._id);
+                          }}
+                          style={{
+                            padding: "4px 10px",
+                            borderRadius: "6px",
+                            border: "none",
+                            fontSize: "11.5px",
+                            fontWeight: "700",
+                            cursor: "pointer",
+                            background: planBusinessType === "marketplace" ? "#ffffff" : "transparent",
+                            color: planBusinessType === "marketplace" ? "#004ac6" : "#64748b",
+                          }}
+                        >
+                          Marketplace
+                        </button>
                       </div>
                     </div>
 
-                    {/* Plan Cards Grid */}
+                    {/* Plan Cards Grid - 4 cards */}
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(145px, 1fr))",
                         gap: "10px",
                       }}
                     >
@@ -1334,7 +1461,9 @@ export const AuthPage = ({ defaultTab }) => {
                         .filter(
                           (p) =>
                             (p.businessType || "single").toLowerCase() ===
-                            planBusinessType.toLowerCase()
+                              planBusinessType.toLowerCase() &&
+                            p.price > 0 &&
+                            !p.packageName.toLowerCase().includes("trial")
                         )
                         .map((pkg) => {
                           const isSelected = selectedPlanId === pkg._id;
@@ -1370,7 +1499,9 @@ export const AuthPage = ({ defaultTab }) => {
                                   marginTop: "2px",
                                 }}
                               >
-                                {pkg.price === 0 ? "₹0 (Free Trial)" : `₹${pkg.price}/mo`}
+                                {pkg.price === 0 || pkg.isCustomQuote
+                                  ? "Custom Quote"
+                                  : `₹${pkg.price}/mo`}
                               </div>
                               <div
                                 style={{
@@ -1379,11 +1510,308 @@ export const AuthPage = ({ defaultTab }) => {
                                   marginTop: "4px",
                                 }}
                               >
-                                {pkg.reviewLimit} Reviews / month
+                                {pkg.businessType === "marketplace"
+                                  ? `${pkg.productsLimit ? `${pkg.productsLimit} SKUs · ` : ""}${pkg.reviewLimit} Reviews/mo`
+                                  : pkg.businessType === "multiple"
+                                  ? `${pkg.maxBusinesses ? `${pkg.maxBusinesses} Outlets · ` : ""}${pkg.reviewLimit} Scans/mo`
+                                  : `${pkg.reviewLimit} Reviews / month`}
                               </div>
                             </div>
                           );
                         })}
+                    </div>
+
+                    {/* Promo Coupon / Referral Code Box */}
+                    <div
+                      style={{
+                        marginTop: "16px",
+                        padding: "14px",
+                        borderRadius: "12px",
+                        backgroundColor: "#f8fafc",
+                        border: "1px solid #e2e8f0",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          <Ticket size={16} color="#004ac6" />
+                          <span
+                            style={{
+                              fontSize: "12.5px",
+                              fontWeight: "700",
+                              color: "#0f172a",
+                            }}
+                          >
+                            Have a Promo Coupon or SaaS Voucher?
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            fontSize: "10.5px",
+                            fontWeight: "600",
+                            color: "#64748b",
+                          }}
+                        >
+                          Rate discount · Free branch · Quota boost
+                        </span>
+                      </div>
+
+                      {!appliedCoupon ? (
+                        <div>
+                          <div style={{ display: "flex", gap: "8px" }}>
+                            <input
+                              type="text"
+                              value={couponInput}
+                              onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                              placeholder="e.g. EXTRAFREE, BIZ20, BOOSTWSP"
+                              style={{
+                                flex: 1,
+                                padding: "9px 12px",
+                                borderRadius: "8px",
+                                border: "1px solid #cbd5e1",
+                                fontSize: "13px",
+                                fontFamily: "monospace",
+                                fontWeight: "700",
+                                letterSpacing: "0.05em",
+                                textTransform: "uppercase",
+                                backgroundColor: "#ffffff",
+                                outline: "none",
+                              }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleApplyCoupon()}
+                              disabled={couponValidating}
+                              style={{
+                                padding: "9px 18px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#004ac6",
+                                color: "#ffffff",
+                                fontSize: "12.5px",
+                                fontWeight: "700",
+                                cursor: couponValidating ? "not-allowed" : "pointer",
+                                transition: "all 0.15s ease",
+                              }}
+                            >
+                              {couponValidating ? "Verifying..." : "Apply"}
+                            </button>
+                          </div>
+
+                          {couponFeedback && (
+                            <p
+                              style={{
+                                margin: "6px 0 0",
+                                fontSize: "11.5px",
+                                fontWeight: "600",
+                                color: couponFeedback.type === "error" ? "#dc2626" : "#059669",
+                              }}
+                            >
+                              {couponFeedback.message}
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        /* Authentic Physical Ticket Applied Coupon Card */
+                        <div
+                          style={{
+                            position: "relative",
+                            display: "flex",
+                            backgroundColor: "#f0fdf4",
+                            borderRadius: "12px",
+                            border: "1.5px dashed #10b981",
+                            boxShadow: "0 2px 10px rgba(16, 185, 129, 0.08)",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {/* Top Punch Hole Notch */}
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "-7px",
+                              left: "95px",
+                              width: "14px",
+                              height: "14px",
+                              borderRadius: "50%",
+                              backgroundColor: "#f8fafc",
+                              border: "1px solid #10b981",
+                              zIndex: 2,
+                            }}
+                          />
+                          {/* Bottom Punch Hole Notch */}
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: "-7px",
+                              left: "95px",
+                              width: "14px",
+                              height: "14px",
+                              borderRadius: "50%",
+                              backgroundColor: "#f8fafc",
+                              border: "1px solid #10b981",
+                              zIndex: 2,
+                            }}
+                          />
+
+                          {/* Ticket Left Stub */}
+                          <div
+                            style={{
+                              width: "102px",
+                              flexShrink: 0,
+                              background: "linear-gradient(135deg, #059669, #10b981)",
+                              color: "#ffffff",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              padding: "10px 6px",
+                              textAlign: "center",
+                              borderRight: "2px dashed rgba(255, 255, 255, 0.4)",
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: "8.5px",
+                                fontWeight: "800",
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase",
+                                opacity: 0.9,
+                              }}
+                            >
+                              COUPON
+                            </span>
+                            <span
+                              style={{
+                                fontSize: "14px",
+                                fontWeight: "900",
+                                margin: "2px 0",
+                              }}
+                            >
+                              {appliedCoupon.offerType === "FREE_BRANCH"
+                                ? `+${appliedCoupon.extraBranches || 1} FREE`
+                                : appliedCoupon.offerType === "WSP_QUOTA_BOOST"
+                                ? `+${(appliedCoupon.extraWspQuota || 1000).toLocaleString()}`
+                                : appliedCoupon.discountPercent
+                                ? `${appliedCoupon.discountPercent}% OFF`
+                                : `₹${appliedCoupon.discountFlat} OFF`}
+                            </span>
+                            <span
+                              style={{
+                                fontSize: "9px",
+                                fontWeight: "800",
+                                letterSpacing: "0.05em",
+                                opacity: 0.95,
+                              }}
+                            >
+                              {appliedCoupon.offerType === "FREE_BRANCH"
+                                ? "BRANCH"
+                                : appliedCoupon.offerType === "WSP_QUOTA_BOOST"
+                                ? "WSP SCANS"
+                                : "SAVINGS"}
+                            </span>
+                          </div>
+
+                          {/* Ticket Right Body */}
+                          <div
+                            style={{
+                              flex: 1,
+                              padding: "10px 14px",
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: "8px",
+                              }}
+                            >
+                              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                <CheckCircle2 size={15} color="#059669" />
+                                <span
+                                  style={{
+                                    fontSize: "12.5px",
+                                    fontWeight: "800",
+                                    color: "#065f46",
+                                  }}
+                                >
+                                  {appliedCoupon.title}
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleRemoveCoupon}
+                                style={{
+                                  background: "transparent",
+                                  border: "none",
+                                  color: "#991b1b",
+                                  fontSize: "11px",
+                                  fontWeight: "700",
+                                  cursor: "pointer",
+                                  padding: "2px 6px",
+                                  borderRadius: "4px",
+                                  textDecoration: "underline",
+                                }}
+                              >
+                                Remove
+                              </button>
+                            </div>
+
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginTop: "6px",
+                                flexWrap: "wrap",
+                                gap: "6px",
+                              }}
+                            >
+                              <div style={{ fontSize: "11.5px", color: "#047857", fontWeight: "600" }}>
+                                {appliedCoupon.discountAmount > 0 && (
+                                  <span>
+                                    Rate Discount: <strong>₹{appliedCoupon.discountAmount} OFF</strong>{" "}
+                                    (Payable: ₹{appliedCoupon.finalPrice}/mo) ·{" "}
+                                  </span>
+                                )}
+                                {appliedCoupon.extraBranches > 0 && (
+                                  <span>
+                                    🎉 <strong>+{appliedCoupon.extraBranches} Free Multi-Branch</strong> included ·{" "}
+                                  </span>
+                                )}
+                                {appliedCoupon.extraWspQuota > 0 && (
+                                  <span>
+                                    💬 <strong>+{(appliedCoupon.extraWspQuota).toLocaleString()} Bonus WhatsApp Scans</strong> included
+                                  </span>
+                                )}
+                              </div>
+                              <span
+                                style={{
+                                  padding: "2px 8px",
+                                  backgroundColor: "#dcfce7",
+                                  border: "1px solid #86efac",
+                                  borderRadius: "6px",
+                                  fontFamily: "monospace",
+                                  fontSize: "11px",
+                                  fontWeight: "800",
+                                  color: "#166534",
+                                }}
+                              >
+                                {appliedCoupon.code}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

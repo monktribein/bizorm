@@ -40,6 +40,7 @@ import { SharePage } from "./pages/dashboard/SharePage";
 import { ReportsPage } from "./pages/dashboard/ReportsPage";
 import { AccountPage } from "./pages/dashboard/AccountPage";
 import { SellerIntelligencePage } from "./pages/dashboard/SellerIntelligencePage";
+import { CampaignsPage } from "./pages/dashboard/CampaignsPage";
 
 // Admin Pages
 import { BranchesPage } from "./pages/admin/BranchesPage";
@@ -53,6 +54,7 @@ import { CustomerReviewPage } from "./pages/public/CustomerReviewPage";
 import { ProductFeedbackPage } from "./pages/public/ProductFeedbackPage";
 import { ReviewWidgetPage } from "./pages/public/ReviewWidgetPage";
 import { ReviewBadgeWidgetPage } from "./pages/public/ReviewBadgeWidgetPage";
+import { VoucherPublicPage } from "./pages/public/VoucherPublicPage";
 
 function SmartPricingRoute() {
   const { user, loading } = useAuth();
@@ -89,6 +91,7 @@ export default function App() {
           <Route path="/pfe/:code" element={<ProductFeedbackPage />} />
           <Route path="/embed/reviews/:formKey" element={<ReviewWidgetPage />} />
           <Route path="/embed/badge/:formKey" element={<ReviewBadgeWidgetPage />} />
+          <Route path="/voucher/:code" element={<VoucherPublicPage />} />
 
           {/* Dedicated Auth routes */}
           <Route path="/auth" element={<LoginPage />} />
@@ -101,6 +104,7 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/seller-intelligence" element={<SellerIntelligencePage />} />
+              <Route path="/campaigns" element={<CampaignsPage />} />
               <Route path="/platform" element={<PlatformsPage />} />
               <Route path="/share" element={<SharePage />} />
               <Route path="/report" element={<ReportsPage />} />

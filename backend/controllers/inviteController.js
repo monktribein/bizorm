@@ -2,6 +2,7 @@ import { ReviewInvite } from "../models/ReviewInvite.js";
 import { Rating } from "../models/Rating.js";
 import { Quota } from "../models/Quota.js";
 import { Activity } from "../models/Activity.js";
+import { WhatsAppDispatch } from "../models/WhatsAppDispatch.js";
 
 // Protected: Log or create a review invite (Dispatched via WhatsApp, SMS, or Link)
 export const logReviewInvite = async (req, res, next) => {
@@ -76,14 +77,45 @@ export const logReviewInvite = async (req, res, next) => {
       });
     }
 
-    // Decrement WhatsApp / SMS quota if available
-    try {
-      const quotaField = channel === "SMS" ? "smsQuota" : "whatsappQuota";
-      await Quota.findOneAndUpdate(
-        { byUserId: userId, [quotaField]: { $gt: 0 } },
-        { $inc: { [quotaField]: -1 } }
-      );
-    } catch {}
+    // WhatsApp quota deduction with 12-hour deduplication window
+    let quotaDeducted = false;
+    if (channel === "WHATSAPP") {
+      const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000;
+      const twelveHoursAgo = new Date(Date.now() - TWELVE_HOURS_MS);
+
+      const recentDispatch = await WhatsAppDispatch.findOne({
+        userId,
+        customerMobile: cleanMobile,
+        sentAt: { $gte: twelveHoursAgo },
+      }).sort({ sentAt: -1 });
+
+      if (!recentDispatch) {
+        // Need to deduct 1 quota
+        const currentQuota = await Quota.findOne({ byUserId: userId });
+        if (!currentQuota || (currentQuota.whatsappQuota ?? 0) <= 0) {
+          return res.status(403).json({
+            success: false,
+            quotaExhausted: true,
+            message: "WhatsApp quota exhausted (0 remaining). Please refill your quota from Subscription & Add-ons.",
+          });
+        }
+
+        await Quota.findOneAndUpdate(
+          { byUserId: userId, whatsappQuota: { $gt: 0 } },
+          { $inc: { whatsappQuota: -1 } }
+        );
+        quotaDeducted = true;
+      }
+
+      await WhatsAppDispatch.create({
+        userId,
+        customerMobile: cleanMobile,
+        customerName: customerName.trim(),
+        channel: "WhatsApp",
+        quotaDeducted,
+        sentAt: new Date(),
+      });
+    }
 
     // Activity log
     await Activity.create({

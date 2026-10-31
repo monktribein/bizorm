@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { BizormLogo } from "../common/BizormLogo";
 import {
   LayoutDashboard,
   Globe,
@@ -15,6 +16,7 @@ import {
   Settings,
   ShieldAlert,
   Package,
+  Gift,
 } from "lucide-react";
 
 export const Sidebar = ({ isOpen, onClose }) => {
@@ -43,6 +45,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <aside className={`app-sidebar ${isOpen ? "open" : ""}`}>
+      <div style={{ padding: "4px 8px 14px", borderBottom: "1px solid var(--border)", marginBottom: "12px" }}>
+        <BizormLogo size="sm" to="/dashboard" />
+      </div>
+
       <div style={{ fontSize: "11px", fontWeight: "700", textTransform: "uppercase", color: "var(--text-subtle)", padding: "0 10px 6px" }}>
         {isStaffOnly ? "Staff Menu" : "Menu"}
       </div>
@@ -85,6 +91,25 @@ export const Sidebar = ({ isOpen, onClose }) => {
           }}
         >
           NEW
+        </span>
+      </NavLink>
+
+      <NavLink to="/campaigns" style={linkStyle} onClick={handleLinkClick}>
+        <Gift size={18} />
+        <span>Campaigns</span>
+        <span
+          style={{
+            marginLeft: "auto",
+            fontSize: "9.5px",
+            fontWeight: "800",
+            backgroundColor: "#10b981",
+            color: "#ffffff",
+            padding: "1px 6px",
+            borderRadius: "999px",
+            letterSpacing: "0.4px",
+          }}
+        >
+          OFFER
         </span>
       </NavLink>
 

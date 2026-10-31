@@ -190,7 +190,7 @@ export const LandingFooter = () => {
           }}
         >
           <div>
-            &copy; {new Date().getFullYear()} BizORM™. All rights reserved. Enterprise Customer Experience Platform.
+            &copy; {new Date().getFullYear()} BizORM™. All rights reserved. Enterprise Customer Experience Platform. Designed and developed by Bizwoke Nova.
           </div>
           <div style={{ display: "flex", gap: "20px" }}>
             <Link to="/about#privacy" className="footer-hover-link" style={{ fontSize: "13px" }}>Privacy Policy</Link>

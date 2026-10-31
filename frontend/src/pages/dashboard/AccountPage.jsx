@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { BUSINESS_CATEGORIES } from "../../constants/categories";
 import { getCleanBrandName } from "../../utils/brand";
@@ -18,6 +19,7 @@ import {
   AlertTriangle,
   Sparkles,
   MessageSquare,
+  Zap,
 } from "lucide-react";
 
 export const AccountPage = () => {
@@ -76,16 +78,35 @@ export const AccountPage = () => {
         </div>
       </div>
 
-      {/* Quotas Grid */}
-      <div className="grid-4">
-        <div className="card" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <div style={{ padding: "12px", borderRadius: "var(--radius-md)", background: "var(--primary-light)", color: "var(--primary)" }}>
-            <Globe size={20} />
+      {/* Quotas Grid (Clean 3-Pillar Quotas: Web Scans, Email, and WhatsApp - SMS removed) */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "16px" }}>
+        <div className="card" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "14px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <div style={{ padding: "12px", borderRadius: "var(--radius-md)", background: "var(--primary-light)", color: "var(--primary)" }}>
+              <Globe size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Web Platforms Quota</div>
+              <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a" }}>{quota?.webQuota ?? 0} remaining</div>
+            </div>
           </div>
-          <div>
-            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Web Platforms Quota</div>
-            <div style={{ fontSize: "20px", fontWeight: "800" }}>{quota?.webQuota ?? 0} remaining</div>
-          </div>
+          <Link
+            to="/subscription?tab=single&addon=scans"
+            style={{
+              fontSize: "11.5px",
+              fontWeight: "700",
+              color: "#0052cc",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "3px",
+              padding: "4px 8px",
+              borderRadius: "6px",
+              background: "#eff6ff",
+            }}
+          >
+            <span>+ Add Scans →</span>
+          </Link>
         </div>
 
         <div className="card" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -94,28 +115,55 @@ export const AccountPage = () => {
           </div>
           <div>
             <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Email Campaign Quota</div>
-            <div style={{ fontSize: "20px", fontWeight: "800" }}>{quota?.emailQuota ?? 0} emails</div>
+            <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a" }}>{quota?.emailQuota ?? 0} emails</div>
           </div>
         </div>
 
-        <div className="card" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <div style={{ padding: "12px", borderRadius: "var(--radius-md)", background: "var(--accent-light)", color: "var(--accent)" }}>
-            <Phone size={20} />
+        <div
+          className="card"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "14px",
+            flexWrap: "wrap",
+            border: (quota?.whatsappQuota ?? 0) < 50 ? "1px solid #fde68a" : "1px solid var(--border)",
+            backgroundColor: (quota?.whatsappQuota ?? 0) < 50 ? "#fffbeb" : "#ffffff",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <div style={{ padding: "12px", borderRadius: "var(--radius-md)", background: "#ede9fe", color: "#7c3aed" }}>
+              <MessageCircle size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>WhatsApp Quota</div>
+              <div style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a" }}>
+                {quota?.whatsappQuota ?? 0} messages
+              </div>
+            </div>
           </div>
-          <div>
-            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>SMS Quota</div>
-            <div style={{ fontSize: "20px", fontWeight: "800" }}>{quota?.smsQuota ?? 0} messages</div>
-          </div>
-        </div>
 
-        <div className="card" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <div style={{ padding: "12px", borderRadius: "var(--radius-md)", background: "#ede9fe", color: "#7c3aed" }}>
-            <MessageCircle size={20} />
-          </div>
-          <div>
-            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>WhatsApp Quota</div>
-            <div style={{ fontSize: "20px", fontWeight: "800" }}>{quota?.whatsappQuota ?? 0} messages</div>
-          </div>
+          {/* Fill / Top-up Quota Button redirecting to Image 2 Plans */}
+          <Link
+            to="/subscription?tab=single&addon=wsp"
+            className="btn btn-primary btn-sm"
+            style={{
+              padding: "7px 14px",
+              fontSize: "12px",
+              fontWeight: "700",
+              borderRadius: "8px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              textDecoration: "none",
+              background: "linear-gradient(135deg, #16a34a, #059669)",
+              color: "#ffffff",
+              boxShadow: "0 2px 10px rgba(22, 163, 74, 0.25)",
+            }}
+          >
+            <Zap size={14} />
+            <span>Refill / Fill Quota</span>
+          </Link>
         </div>
       </div>
 

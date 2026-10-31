@@ -117,7 +117,7 @@ export const AboutPage = () => {
                 2. Terms of Service &amp; Quota Entitlements
               </h3>
               <p style={{ fontSize: "14px", color: "#475569", lineHeight: 1.6, margin: 0 }}>
-                Subscription packages provide valid QR scan quotas reset on a monthly basis across both monthly and annual billing agreements. Unused scans expire at the end of each billing period. Annual subscriptions reflect a 17% discount equivalent to 2 months free. All public reviews are subject to the independent terms and guidelines of third-party platforms (e.g., Google, Justdial, Facebook).
+                Subscription packages provide valid QR scan quotas reset on a monthly basis for monthly billing agreements (where unused scans expire at the end of each billing period with no rollover). In contrast, Annual subscriptions reflect a 25% discount (equivalent to 3 months free) and feature 100% Unused Quota Carryforward: all unused QR scans, reviews, and WhatsApp quotas automatically roll over from month to month (Jan ➔ Feb) throughout your active annual subscription. All public reviews are subject to the independent terms and guidelines of third-party platforms (e.g., Google, Justdial, Facebook).
               </p>
             </div>
 

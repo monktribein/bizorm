@@ -168,10 +168,10 @@ export const MarketplaceSellersPage = () => {
       skus: "10 SKUs",
       scans: "200 Valid scans/mo",
       monthly: 299,
-      annual: 2990,
+      annual: 2690,
       features: [
         "10 Product SKU QRs",
-        "200 Customer scans / month",
+        "200 Customer scans / month (Annual Rollover Included)",
         "Standard packaging insert templates (PDF)",
         "Amazon & Flipkart compliance profiles",
         "Defect classification & alert emails",
@@ -187,10 +187,10 @@ export const MarketplaceSellersPage = () => {
       skus: "50 SKUs",
       scans: "1,000 Valid scans/mo",
       monthly: 799,
-      annual: 7990,
+      annual: 7190,
       features: [
         "50 Product SKU & Batch QRs",
-        "1,000 Customer scans / month",
+        "1,000 Customer scans / month (Annual Rollover Included)",
         "Custom branded packaging inserts (300 DPI)",
         "Amazon, Flipkart, Shopify & Swiggy profiles",
         "Complaint Intelligence & SLA tracking",
@@ -208,10 +208,10 @@ export const MarketplaceSellersPage = () => {
       skus: "200 SKUs",
       scans: "5,000 Valid scans/mo",
       monthly: 1999,
-      annual: 19990,
+      annual: 17990,
       features: [
         "200 Product SKUs & Batch tracking",
-        "5,000 Customer scans / month",
+        "5,000 Customer scans / month (Annual Rollover Included)",
         "Bulk QR Generator & CSV uploads",
         "All 6 Marketplace Compliance Profiles",
         "Full Complaint Management & case assignment",
@@ -754,9 +754,9 @@ export const MarketplaceSellersPage = () => {
                   gap: "6px",
                 }}
               >
-                <span>Annual (2 Months Free)</span>
+                <span>Annual (3 Months Free)</span>
                 <span style={{ fontSize: "10px", background: "#10b981", color: "#fff", padding: "1px 6px", borderRadius: "999px" }}>
-                  SAVE 17%
+                  SAVE 25% (Rollover)
                 </span>
               </button>
             </div>
@@ -800,12 +800,33 @@ export const MarketplaceSellersPage = () => {
                     {plan.tagline}
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "16px" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "4px" }}>
                     <span style={{ fontSize: "36px", fontWeight: "900", color: "#ffffff" }}>
                       {priceDisplay}
                     </span>
-                    <span style={{ fontSize: "13px", color: "#94a3b8" }}>{cycleLabel}</span>
+                    <span style={{ fontSize: "14px", color: "#94a3b8", fontWeight: "700" }}>{cycleLabel}</span>
                   </div>
+
+                  {annualBilling && typeof plan.monthly === "number" && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginBottom: "14px" }}>
+                      <div style={{ fontSize: "12px", color: "#38bdf8", fontWeight: "700" }}>
+                        Effective ₹{Math.round(plan.annual / 12).toLocaleString("en-IN")}/mo (Save 25% • 3 Mo. Free)
+                      </div>
+                      <div style={{ fontSize: "11px", color: "#10b981", fontWeight: "700" }}>
+                        🔄 100% Unused Quota Rollover (Jan ➔ Feb)
+                      </div>
+                    </div>
+                  )}
+                  {!annualBilling && typeof plan.monthly === "number" && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginBottom: "14px" }}>
+                      <div style={{ fontSize: "11.5px", color: "#94a3b8", fontWeight: "600" }}>
+                        Billed on monthly renewal
+                      </div>
+                      <div style={{ fontSize: "11px", color: "#f87171", fontWeight: "600" }}>
+                        ⚠️ Monthly scan reset: Unused quota expires at month-end
+                      </div>
+                    </div>
+                  )}
 
                   {/* Quota Highlights */}
                   <div style={{ background: "rgba(15, 23, 42, 0.6)", borderRadius: "10px", padding: "10px 14px", marginBottom: "20px" }}>
@@ -847,7 +868,7 @@ export const MarketplaceSellersPage = () => {
           </div>
 
           <div style={{ textAlign: "center", marginTop: "24px", fontSize: "12px", color: "#64748b" }}>
-            *Prices exclude 18% GST. Pilot accounts include full onboarding assistance and 300 DPI packaging insert design files.
+            *Prices include 18% GST. Pilot accounts include full onboarding assistance and 300 DPI packaging insert design files.
           </div>
         </div>
       </section>

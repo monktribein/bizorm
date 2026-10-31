@@ -86,7 +86,7 @@ export const FranchiseIntelligenceSection = () => {
                 margin: "0 0 10px 0",
               }}
             >
-              Scale Across 10 to 100+ Outlets With Complete Centralized Governance
+              Scale Across 10 to 10000+ Outlets With Complete Centralized Governance
             </h2>
             <p style={{ fontSize: "15px", color: "#64748b", margin: 0, lineHeight: 1.55 }}>
               Give corporate head office real-time reputation visibility, regional scorecards, and territory RBAC while allowing local branch managers to resolve complaints on the ground.

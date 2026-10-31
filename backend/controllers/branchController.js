@@ -63,7 +63,7 @@ export const createBranch = async (req, res, next) => {
       if (user?.pricingPackageId) {
         const pkg = await Pricing.findById(user.pricingPackageId);
         if (pkg) {
-          allowedBusinesses = pkg.maxBusinesses || (pkg.businessType === "multiple" ? 2 : 1);
+          allowedBusinesses = (pkg.maxBusinesses || (pkg.businessType === "multiple" ? 2 : 1)) + (user.extraBranchesAllowed || 0);
           planName = pkg.packageName;
         }
       }

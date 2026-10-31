@@ -56,7 +56,7 @@ export const BranchesPage = () => {
     (user?.pricingPackageId?.maxBusinesses && user.pricingPackageId.maxBusinesses > 1)
   );
 
-  const maxAllowed = isSuperAdmin ? 999 : (pricingPackage?.maxBusinesses || 1);
+  const maxAllowed = isSuperAdmin ? 999 : (pricingPackage?.maxBusinesses || 1) + (user?.extraBranchesAllowed || 0);
   const isLimitReached = !isSuperAdmin && branches.length >= maxAllowed;
 
   const handleAddNewClick = () => {

@@ -20,7 +20,13 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import inviteRoutes from "./routes/inviteRoutes.js";
 import sellerRoutes from "./routes/sellerRoutes.js";
+import campaignRoutes from "./routes/campaignRoutes.js";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, ".env") });
 dotenv.config();
 
 const app = express();
@@ -70,6 +76,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/invites", inviteRoutes);
 app.use("/api/seller", sellerRoutes);
+app.use("/api/campaigns", campaignRoutes);
 
 // 404 & Error Handling
 app.use(notFound);

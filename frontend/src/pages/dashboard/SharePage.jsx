@@ -35,7 +35,7 @@ import { ReviewBoosterQueue } from "../../components/dashboard/ReviewBoosterQueu
 import { getCleanBrandName } from "../../utils/brand";
 
 export const SharePage = () => {
-  const { user, companyDetails, isStaffOnly } = useAuth();
+  const { user, companyDetails, isStaffOnly, quota, reloadProfile } = useAuth();
   const myStaffName = [user?.fname, user?.lname].filter(Boolean).join(" ").trim() || user?.uname || "";
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedMsg, setCopiedMsg] = useState(false);
@@ -97,6 +97,10 @@ export const SharePage = () => {
   const cleanBrandName = getCleanBrandName(user, companyDetails);
 
   const handleDispatch = async (channel = "WHATSAPP") => {
+    if (channel === "WHATSAPP" && (quota?.whatsappQuota ?? 0) <= 0) {
+      alert("⚠️ Your WhatsApp quota is exhausted (0 remaining). Please refill your quota from Subscription & Add-ons to send messages.");
+      return;
+    }
     if (custName.trim() && custMobile.trim()) {
       try {
         await api.logReviewInvite({
@@ -107,7 +111,11 @@ export const SharePage = () => {
           templateId: selectedTemplate,
         });
         setInviteLoggedCounter((prev) => prev + 1);
+        if (reloadProfile) reloadProfile();
       } catch (err) {
+        if (err?.message?.includes("quota exhausted") || err?.quotaExhausted) {
+          alert("⚠️ WhatsApp quota exhausted. Please top up your quota from Subscription & Add-ons.");
+        }
         console.error("Failed to log review invite:", err);
       }
     }
@@ -343,7 +351,7 @@ export const SharePage = () => {
           Share &amp; Collect Customer Reviews
         </h1>
         <p style={{ fontSize: "14px", color: "var(--text-muted)", marginTop: "4px" }}>
-          Send 1-click personalized WhatsApp &amp; SMS invitations, generate branded QR codes, or print counter standees.
+          Send 1-click personalized WhatsApp invitations, generate branded QR codes, or print counter standees.
         </p>
 
         {/* Connected Platforms Bar */}
@@ -658,7 +666,7 @@ export const SharePage = () => {
                 1-Click Customer Review Dispatcher
               </h2>
               <p style={{ fontSize: "13px", color: "#166534", margin: "2px 0 0 0" }}>
-                Generate personalized WhatsApp &amp; SMS invitations with prefilled customer name &amp; staff attribution
+                Generate personalized WhatsApp invitations with prefilled customer name &amp; staff attribution
               </p>
             </div>
           </div>
@@ -813,26 +821,6 @@ export const SharePage = () => {
               >
                 <MessageCircle size={17} />
                 <span>Send WhatsApp</span>
-              </a>
-
-              <a
-                href={smsUrl}
-                onClick={() => handleDispatch("SMS")}
-                style={{
-                  background: "#0f172a",
-                  color: "#ffffff",
-                  padding: "12px 16px",
-                  borderRadius: "10px",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  textDecoration: "none",
-                }}
-              >
-                <Send size={15} />
-                <span>SMS</span>
               </a>
 
               <button

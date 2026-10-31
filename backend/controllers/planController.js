@@ -32,6 +32,11 @@ export const getActivePricingPackages = async (req, res, next) => {
     const obsoleteCount = await Pricing.countDocuments({
       packageName: {
         $in: [
+          "Free Trial (7 Days)",
+          "Marketplace Basic",
+          "Marketplace Growth",
+          "Marketplace Scale",
+          "Marketplace Custom Enterprise",
           "Enterprise Supreme",
           "Multi-Business Trial (7 Days)",
           "Multi-Business Starter (2 Biz)",
@@ -67,6 +72,11 @@ export const getPricingPackages = async (req, res, next) => {
     const obsoleteCount = await Pricing.countDocuments({
       packageName: {
         $in: [
+          "Free Trial (7 Days)",
+          "Marketplace Basic",
+          "Marketplace Growth",
+          "Marketplace Scale",
+          "Marketplace Custom Enterprise",
           "Enterprise Supreme",
           "Multi-Business Trial (7 Days)",
           "Multi-Business Starter (2 Biz)",
@@ -244,7 +254,12 @@ export const selectUserPlan = async (req, res, next) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
+    const { billingCycle = "Monthly", annualBilling = false } = req.body || {};
+    const isAnnual = billingCycle === "Annual" || Boolean(annualBilling);
+    const resolvedCycle = isAnnual ? "Annual" : "Monthly";
+
     user.pricingPackageId = pkg._id;
+    user.billingCycle = resolvedCycle;
     const trialDays = pkg.trialDays || (pkg.price === 0 ? 7 : 0);
     if (trialDays > 0) {
       user.trialStartDate = Date.now();
@@ -255,19 +270,29 @@ export const selectUserPlan = async (req, res, next) => {
     }
     await user.save();
 
-    // Allocate review quotas based on plan review limit
+    // Allocate review quotas based on plan review limit & billing carryforward rules
     let quota = await Quota.findOne({ byUserId: user._id });
     const limit = pkg.reviewLimit || 500;
     const whatsappQuota = Math.ceil(limit * 0.4);
-    const smsQuota = Math.ceil(limit * 0.3);
+    const smsQuota = 0; // SMS removed per platform specification
     const emailQuota = Math.ceil(limit * 0.3);
     const webQuota = limit;
 
     if (quota) {
-      quota.whatsappQuota = whatsappQuota;
-      quota.smsQuota = smsQuota;
-      quota.emailQuota = emailQuota;
-      quota.webQuota = webQuota;
+      // Annual Plan Rollover Benefit: Carry forward any existing unused quota!
+      // Monthly Plan: Strict monthly reset (no rollover/carryforward)
+      if (isAnnual) {
+        quota.whatsappQuota = (quota.whatsappQuota || 0) + whatsappQuota;
+        quota.webQuota = (quota.webQuota || 0) + webQuota;
+        quota.emailQuota = (quota.emailQuota || 0) + emailQuota;
+      } else {
+        quota.whatsappQuota = whatsappQuota;
+        quota.webQuota = webQuota;
+        quota.emailQuota = emailQuota;
+      }
+      quota.smsQuota = 0;
+      quota.billingCycle = resolvedCycle;
+      quota.isCarryForward = isAnnual;
       quota.amount = pkg.price;
       quota.balance = pkg.price;
       await quota.save();
@@ -276,9 +301,11 @@ export const selectUserPlan = async (req, res, next) => {
         byUserId: user._id,
         byFormKey: user.formKey,
         whatsappQuota,
-        smsQuota,
+        smsQuota: 0,
         emailQuota,
         webQuota,
+        billingCycle: resolvedCycle,
+        isCarryForward: isAnnual,
         amount: pkg.price,
         balance: pkg.price,
       });

@@ -124,6 +124,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    extraBranchesAllowed: {
+      type: Number,
+      default: 0,
+    },
+    extraProductsAllowed: {
+      type: Number,
+      default: 0,
+    },
+    billingCycle: {
+      type: String,
+      enum: ["Monthly", "Annual"],
+      default: "Monthly",
+    },
   },
   {
     timestamps: true,
@@ -142,3 +155,4 @@ userSchema.methods.getNormalizedRole = function () {
 };
 
 export const User = mongoose.model("User", userSchema);
+export default User;

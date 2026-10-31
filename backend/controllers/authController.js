@@ -5,6 +5,7 @@ import { CompanyDetail } from "../models/CompanyDetail.js";
 import { Website } from "../models/Website.js";
 import { Activity } from "../models/Activity.js";
 import { Pricing } from "../models/Pricing.js";
+import PlatformOffer from "../models/PlatformOffer.js";
 import { generateToken } from "../utils/jwt.js";
 import { sendVerificationEmail } from "../utils/email.js";
 import { logger } from "../utils/logger.js";
@@ -25,6 +26,8 @@ export const register = async (req, res, next) => {
       googleReviewLink = "",
       platforms = [],
       pricingPackageId,
+      couponCode = "",
+      appliedCouponCode = "",
     } = req.body;
 
     if (!email || !password || !uname || !mobile) {
@@ -110,12 +113,44 @@ export const register = async (req, res, next) => {
 
           const limit = pkg.reviewLimit || 500;
           whatsappQuota = Math.ceil(limit * 0.4); // 40% WhatsApp
-          smsQuota = Math.ceil(limit * 0.3);      // 30% SMS
+          smsQuota = 0;                           // SMS removed per user specification
           emailQuota = Math.ceil(limit * 0.3);    // 30% Email
           webQuota = limit;                       // 100% of Review Quota
         }
       } catch (err) {
         logger.warn(`Could not fetch pricing package: ${err.message}`);
+      }
+    }
+
+    // Apply platform promotional coupon if provided
+    const promoCodeToApply = (appliedCouponCode || couponCode || "").trim().toUpperCase();
+    if (promoCodeToApply) {
+      try {
+        const promoOffer = await PlatformOffer.findOne({
+          code: promoCodeToApply,
+          isActive: true,
+        });
+        if (promoOffer) {
+          // 1. Rate Discount
+          if (promoOffer.discountPercent > 0) {
+            const discount = Math.round(amount * (promoOffer.discountPercent / 100));
+            amount = Math.max(0, amount - discount);
+          } else if (promoOffer.discountFlat > 0) {
+            amount = Math.max(0, amount - promoOffer.discountFlat);
+          }
+
+          // 2. WhatsApp Quota Booster
+          if (promoOffer.extraWspQuota > 0) {
+            whatsappQuota += promoOffer.extraWspQuota;
+            webQuota += promoOffer.extraWspQuota;
+          }
+
+          // Increment times used
+          await PlatformOffer.findByIdAndUpdate(promoOffer._id, { $inc: { timesUsed: 1 } });
+          logger.info(`Platform promo coupon '${promoOffer.code}' applied to registration for ${email}`);
+        }
+      } catch (couponErr) {
+        logger.warn(`Failed to apply promo coupon ${promoCodeToApply}: ${couponErr.message}`);
       }
     }
 
