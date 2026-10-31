@@ -941,7 +941,62 @@ export const SellerIntelligencePage = () => {
                 />
               </div>
 
-              {/* SKU & Sales Channel */}
+              {/* Row 2: Sales Channel & QR Architecture Dropdowns (Positioned in upper half so dropdown menus never overflow card bottom) */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "14px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                    Sales Channel
+                  </label>
+                  <select
+                    value={newProdChannel}
+                    onChange={(e) => setNewProdChannel(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      fontSize: "13px",
+                      backgroundColor: "#ffffff",
+                      boxSizing: "border-box",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <option value="AMAZON">Amazon FBA / FBM</option>
+                    <option value="FLIPKART">Flipkart / Shopsy</option>
+                    <option value="SHOPIFY_D2C">Shopify / D2C</option>
+                    <option value="SWIGGY_ZOMATO">Swiggy / Zomato</option>
+                    <option value="MEESHO">Meesho</option>
+                    <option value="MANUFACTURER">Manufacturer</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                    QR Architecture
+                  </label>
+                  <select
+                    value={newProdQrType}
+                    onChange={(e) => setNewProdQrType(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      fontSize: "13px",
+                      backgroundColor: "#ffffff",
+                      boxSizing: "border-box",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <option value="SKU">SKU QR (Recommended)</option>
+                    <option value="BATCH">Batch QR</option>
+                    <option value="BRAND">Brand QR</option>
+                    <option value="UNIT">Unit Serial QR</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 3: SKU Code & Warranty */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "14px" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
@@ -964,35 +1019,7 @@ export const SellerIntelligencePage = () => {
                     }}
                   />
                 </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
-                    Sales Channel
-                  </label>
-                  <select
-                    value={newProdChannel}
-                    onChange={(e) => setNewProdChannel(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "9px 12px",
-                      borderRadius: "8px",
-                      border: "1px solid #cbd5e1",
-                      fontSize: "13px",
-                      backgroundColor: "#ffffff",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <option value="AMAZON">Amazon FBA / FBM</option>
-                    <option value="FLIPKART">Flipkart / Shopsy</option>
-                    <option value="SHOPIFY_D2C">Shopify / D2C</option>
-                    <option value="SWIGGY_ZOMATO">Swiggy / Zomato</option>
-                    <option value="MEESHO">Meesho</option>
-                    <option value="MANUFACTURER">Manufacturer</option>
-                  </select>
-                </div>
-              </div>
 
-              {/* Warranty & Batch */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
                 <div>
                   <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
                     Warranty (Months)
@@ -1013,76 +1040,27 @@ export const SellerIntelligencePage = () => {
                     }}
                   />
                 </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
-                    Batch / Lot No. (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. LOT-2026-A"
-                    value={newProdBatch}
-                    onChange={(e) => setNewProdBatch(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "9px 12px",
-                      borderRadius: "8px",
-                      border: "1px solid #cbd5e1",
-                      fontSize: "13px",
-                      boxSizing: "border-box",
-                    }}
-                  />
-                </div>
               </div>
 
-              {/* QR Architecture Visual Select Cards - Never overflows card! */}
-              <div style={{ marginBottom: "20px" }}>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "6px" }}>
-                  QR Architecture Type
+              {/* Row 4: Batch / Lot No. */}
+              <div style={{ marginBottom: "18px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                  Batch / Lot No. {newProdQrType === "BATCH" ? "*" : "(Optional)"}
                 </label>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
-                  {[
-                    { value: "SKU", label: "SKU QR", badge: "Recommended", desc: "1 QR for entire product SKU" },
-                    { value: "BATCH", label: "Batch QR", badge: null, desc: "Track by MFG lot & batch number" },
-                    { value: "BRAND", label: "Brand QR", badge: null, desc: "Universal QR across brand catalog" },
-                    { value: "UNIT", label: "Unit Serial QR", badge: null, desc: "Unique serial code per unit box" },
-                  ].map((arch) => {
-                    const isSelected = newProdQrType === arch.value;
-                    return (
-                      <button
-                        key={arch.value}
-                        type="button"
-                        onClick={() => setNewProdQrType(arch.value)}
-                        style={{
-                          padding: "9px 12px",
-                          borderRadius: "8px",
-                          border: isSelected ? "2px solid #0052cc" : "1px solid #e2e8f0",
-                          backgroundColor: isSelected ? "#eff6ff" : "#ffffff",
-                          textAlign: "left",
-                          cursor: "pointer",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "2px",
-                          transition: "all 0.15s ease",
-                          boxSizing: "border-box",
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                          <span style={{ fontSize: "12px", fontWeight: "800", color: isSelected ? "#0052cc" : "#0f172a" }}>
-                            {arch.label}
-                          </span>
-                          {arch.badge && (
-                            <span style={{ fontSize: "9px", background: "#059669", color: "#ffffff", padding: "1px 6px", borderRadius: "999px", fontWeight: "800" }}>
-                              {arch.badge}
-                            </span>
-                          )}
-                        </div>
-                        <span style={{ fontSize: "10.5px", color: isSelected ? "#1e40af" : "#64748b", lineHeight: 1.25 }}>
-                          {arch.desc}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                <input
+                  type="text"
+                  placeholder="e.g. LOT-2026-A / MFG-OCT26"
+                  value={newProdBatch}
+                  onChange={(e) => setNewProdBatch(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "9px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid #cbd5e1",
+                    fontSize: "13px",
+                    boxSizing: "border-box",
+                  }}
+                />
               </div>
 
               {/* Modal Actions Footer */}
