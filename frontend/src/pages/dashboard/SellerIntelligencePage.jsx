@@ -860,44 +860,126 @@ export const SellerIntelligencePage = () => {
 
       {/* Modal: Add Product SKU */}
       {showAddModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.65)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", zIndex: 9999 }}>
-          <div className="card" style={{ maxWidth: "480px", width: "100%", padding: "24px", borderRadius: "16px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-              <h3 style={{ fontSize: "17px", fontWeight: "800", margin: 0 }}>Register New Product SKU</h3>
-              <button type="button" onClick={() => setShowAddModal(false)} style={{ border: "none", background: "none", fontSize: "18px", cursor: "pointer", color: "var(--text-muted)" }}>✕</button>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            zIndex: 9999,
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddModal(false);
+          }}
+        >
+          <div
+            className="card"
+            style={{
+              maxWidth: "540px",
+              width: "100%",
+              maxHeight: "92vh",
+              overflowY: "auto",
+              padding: "26px 28px",
+              borderRadius: "16px",
+              boxShadow: "0 20px 40px rgba(15, 23, 42, 0.25)",
+              border: "1px solid #e2e8f0",
+              backgroundColor: "#ffffff",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px" }}>
+              <div>
+                <h3 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", margin: 0 }}>Register New Product SKU</h3>
+                <p style={{ fontSize: "12px", color: "#64748b", margin: "2px 0 0" }}>Configure QR architecture and warranty parameters for packaging inserts</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                style={{
+                  border: "none",
+                  background: "#f1f5f9",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                  color: "#64748b",
+                }}
+              >
+                ✕
+              </button>
             </div>
 
             <form onSubmit={handleCreateProduct}>
-              <div style={{ marginBottom: "12px" }}>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>Product Title / Name *</label>
+              {/* Product Title */}
+              <div style={{ marginBottom: "14px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                  Product Title / Name *
+                </label>
                 <input
                   required
                   type="text"
                   placeholder="e.g. Stainless Steel Water Bottle (1000ml)"
                   value={newProdName}
                   onChange={(e) => setNewProdName(e.target.value)}
-                  style={{ width: "100%", padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "13px" }}
+                  style={{
+                    width: "100%",
+                    padding: "9px 12px",
+                    borderRadius: "8px",
+                    border: "1px solid #cbd5e1",
+                    fontSize: "13px",
+                    outline: "none",
+                    boxSizing: "border-box",
+                  }}
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
+              {/* SKU & Sales Channel */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "14px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>SKU Code *</label>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                    SKU Code *
+                  </label>
                   <input
                     required
                     type="text"
                     placeholder="e.g. WB-1001"
                     value={newProdSku}
                     onChange={(e) => setNewProdSku(e.target.value)}
-                    style={{ width: "100%", padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "13px", textTransform: "uppercase" }}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      fontSize: "13px",
+                      textTransform: "uppercase",
+                      boxSizing: "border-box",
+                    }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>Sales Channel</label>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                    Sales Channel
+                  </label>
                   <select
                     value={newProdChannel}
                     onChange={(e) => setNewProdChannel(e.target.value)}
-                    style={{ width: "100%", padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "13px" }}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      fontSize: "13px",
+                      backgroundColor: "#ffffff",
+                      boxSizing: "border-box",
+                    }}
                   >
                     <option value="AMAZON">Amazon FBA / FBM</option>
                     <option value="FLIPKART">Flipkart / Shopsy</option>
@@ -909,34 +991,124 @@ export const SellerIntelligencePage = () => {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "16px" }}>
+              {/* Warranty & Batch */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>QR Architecture</label>
-                  <select
-                    value={newProdQrType}
-                    onChange={(e) => setNewProdQrType(e.target.value)}
-                    style={{ width: "100%", padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "13px" }}
-                  >
-                    <option value="SKU">SKU QR (Recommended)</option>
-                    <option value="BATCH">Batch QR</option>
-                    <option value="BRAND">Brand QR</option>
-                    <option value="UNIT">Unit Serial QR</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>Warranty (Months)</label>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                    Warranty (Months)
+                  </label>
                   <input
                     type="number"
+                    min="0"
+                    max="120"
                     value={newProdWarranty}
                     onChange={(e) => setNewProdWarranty(e.target.value)}
-                    style={{ width: "100%", padding: "8px 10px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "13px" }}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      fontSize: "13px",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "5px" }}>
+                    Batch / Lot No. (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. LOT-2026-A"
+                    value={newProdBatch}
+                    onChange={(e) => setNewProdBatch(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "9px 12px",
+                      borderRadius: "8px",
+                      border: "1px solid #cbd5e1",
+                      fontSize: "13px",
+                      boxSizing: "border-box",
+                    }}
                   />
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
-                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary btn-sm">Cancel</button>
-                <button type="submit" disabled={savingProd} className="btn btn-primary btn-sm" style={{ fontWeight: "700" }}>
+              {/* QR Architecture Visual Select Cards - Never overflows card! */}
+              <div style={{ marginBottom: "20px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: "700", color: "#334155", marginBottom: "6px" }}>
+                  QR Architecture Type
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
+                  {[
+                    { value: "SKU", label: "SKU QR", badge: "Recommended", desc: "1 QR for entire product SKU" },
+                    { value: "BATCH", label: "Batch QR", badge: null, desc: "Track by MFG lot & batch number" },
+                    { value: "BRAND", label: "Brand QR", badge: null, desc: "Universal QR across brand catalog" },
+                    { value: "UNIT", label: "Unit Serial QR", badge: null, desc: "Unique serial code per unit box" },
+                  ].map((arch) => {
+                    const isSelected = newProdQrType === arch.value;
+                    return (
+                      <button
+                        key={arch.value}
+                        type="button"
+                        onClick={() => setNewProdQrType(arch.value)}
+                        style={{
+                          padding: "9px 12px",
+                          borderRadius: "8px",
+                          border: isSelected ? "2px solid #0052cc" : "1px solid #e2e8f0",
+                          backgroundColor: isSelected ? "#eff6ff" : "#ffffff",
+                          textAlign: "left",
+                          cursor: "pointer",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "2px",
+                          transition: "all 0.15s ease",
+                          boxSizing: "border-box",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <span style={{ fontSize: "12px", fontWeight: "800", color: isSelected ? "#0052cc" : "#0f172a" }}>
+                            {arch.label}
+                          </span>
+                          {arch.badge && (
+                            <span style={{ fontSize: "9px", background: "#059669", color: "#ffffff", padding: "1px 6px", borderRadius: "999px", fontWeight: "800" }}>
+                              {arch.badge}
+                            </span>
+                          )}
+                        </div>
+                        <span style={{ fontSize: "10.5px", color: isSelected ? "#1e40af" : "#64748b", lineHeight: 1.25 }}>
+                          {arch.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Modal Actions Footer */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  justifyContent: "flex-end",
+                  paddingTop: "14px",
+                  borderTop: "1px solid #f1f5f9",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="btn btn-secondary btn-sm"
+                  style={{ padding: "8px 16px", borderRadius: "8px" }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingProd}
+                  className="btn btn-primary btn-sm"
+                  style={{ fontWeight: "700", padding: "8px 20px", borderRadius: "8px" }}
+                >
                   {savingProd ? "Registering..." : "Generate SKU QR"}
                 </button>
               </div>
